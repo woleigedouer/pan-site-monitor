@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面未找到 - URL监控面板</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .error-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 60px 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .error-code {
+            font-size: 8em;
+            font-weight: bold;
+            color: #e74c3c;
+            text-shadow: 0 4px 8px rgba(231, 76, 60, 0.3);
+            margin-bottom: 20px;
+            line-height: 1;
+        }
+
+        .error-title {
+            font-size: 2em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+        }
+
+        .error-message {
+            font-size: 1.1em;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);
+        }
+
+        .btn-secondary {
+            background: #ecf0f1;
+            color: #2c3e50;
+        }
+
+        .btn-secondary:hover {
+            background: #d5dbdb;
+            transform: translateY(-1px);
+        }
+
+        .helpful-links {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid #ecf0f1;
+        }
+
+        .helpful-links h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+
+        .link-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .link-item {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 1em;
+            transition: color 0.3s ease;
+        }
+
+        .link-item:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+
+        @media (max-width: 600px) {
+            .error-container {
+                padding: 40px 20px;
+            }
+            
+            .error-code {
+                font-size: 6em;
+            }
+            
+            .error-title {
+                font-size: 1.5em;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-code">404</div>
+        <h1 class="error-title">页面未找到</h1>
+        <p class="error-message">
+            抱歉，您访问的页面不存在。可能是链接错误或页面已被移动。
+        </p>
+        
+        <div class="action-buttons">
+            <a href="/" class="btn btn-primary">
+                🏠 返回首页
+            </a>
+            <a href="javascript:history.back()" class="btn btn-secondary">
+                ↩️ 返回上页
+            </a>
+        </div>
+        
+        <div class="helpful-links">
+            <h3>🔗 常用链接</h3>
+            <div class="link-list">
+                <a href="/" class="link-item">📊 监控面板</a>
+                <a href="/test_results.json" class="link-item">📄 JSON数据</a>
+                <a href="/api/data" class="link-item">🔌 API接口</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 自动重定向逻辑
+        const currentPath = window.location.pathname;
+        
+        // 如果访问的是常见的错误路径，自动重定向
+        const redirectMap = {
+            '/index': '/',
+            '/home': '/',
+            '/dashboard': '/',
+            '/monitor': '/',
+            '/status': '/'
+        };
+        
+        if (redirectMap[currentPath]) {
+            setTimeout(() => {
+                window.location.href = redirectMap[currentPath];
+            }, 3000);
+            
+            // 显示重定向提示
+            const message = document.querySelector('.error-message');
+            message.innerHTML += '<br><br>🔄 3秒后自动跳转到首页...';
+        }
+    </script>
+</body>
+</html>

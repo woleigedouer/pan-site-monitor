@@ -1,0 +1,43 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/web/url_status_dashboard.html"
+    },
+    {
+      "source": "/index.html",
+      "destination": "/web/url_status_dashboard.html"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/web/url_status_dashboard.html"
+    },
+    {
+      "source": "/api/data",
+      "destination": "/data/test_results.json"
+    },
+    {
+      "source": "/test_results.json",
+      "destination": "/data/test_results.json"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*).json",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=300, stale-while-revalidate"
+        }
+      ]
+    }
+  ]
+}
