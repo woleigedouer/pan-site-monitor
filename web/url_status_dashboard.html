@@ -13,7 +13,7 @@
         }
 
         :root {
-            /* Modern Color Palette - Clean White Theme */
+            /* Color Palette */
             --color-primary: #2563eb;
             --color-primary-hover: #1d4ed8;
             --color-success: #10b981;
@@ -22,37 +22,29 @@
             --color-gray-50: #f9fafb;
             --color-gray-100: #f3f4f6;
             --color-gray-200: #e5e7eb;
-            --color-gray-300: #d1d5db;
             --color-gray-400: #9ca3af;
             --color-gray-500: #6b7280;
             --color-gray-600: #4b5563;
             --color-gray-700: #374151;
-            --color-gray-800: #1f2937;
             --color-gray-900: #111827;
-            
-            /* Modern Spacing System */
-            --spacing-1: 0.25rem;
+
+            /* Spacing System */
             --spacing-2: 0.5rem;
             --spacing-3: 0.75rem;
             --spacing-4: 1rem;
-            --spacing-5: 1.25rem;
             --spacing-6: 1.5rem;
             --spacing-8: 2rem;
-            --spacing-10: 2.5rem;
             --spacing-12: 3rem;
-            
-            /* Modern Typography */
+
+            /* Typography */
             --font-family-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             --font-family-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
-            
-            /* Modern Shadows */
+
+            /* Shadows */
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            
-            /* Modern Border Radius */
-            --radius-sm: 0.375rem;
+
+            /* Border Radius */
             --radius-md: 0.5rem;
             --radius-lg: 0.75rem;
             --radius-xl: 1rem;
@@ -91,9 +83,7 @@
             letter-spacing: -0.025em;
         }
 
-
-
-        /* Modern Container */
+        /* Container */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -125,64 +115,7 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Modern Error State */
-        .error {
-            background: white;
-            border: 1px solid var(--color-danger);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-8);
-            text-align: center;
-            color: var(--color-danger);
-            box-shadow: var(--shadow-sm);
-        }
 
-        .error-icon {
-            width: 4rem;
-            height: 4rem;
-            background: #fef2f2;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto var(--spacing-4);
-            font-size: 1.5rem;
-        }
-
-        .error h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: var(--spacing-2);
-        }
-
-        .error-details {
-            background: var(--color-gray-50);
-            border-radius: var(--radius-md);
-            padding: var(--spacing-4);
-            margin: var(--spacing-4) 0;
-            font-family: var(--font-family-mono);
-            font-size: 0.875rem;
-            color: var(--color-gray-700);
-        }
-
-        .retry-btn {
-            background: var(--color-primary);
-            color: white;
-            border: none;
-            padding: var(--spacing-3) var(--spacing-6);
-            border-radius: var(--radius-md);
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: var(--spacing-2);
-        }
-
-        .retry-btn:hover {
-            background: var(--color-primary-hover);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
 
         /* Modern Site Cards */
         .site-item {
@@ -356,9 +289,7 @@
             margin-right: var(--spacing-4);
         }
 
-
-
-        /* Modern Last Update */
+        /* Last Update */
         .last-update {
             text-align: center;
             color: var(--color-gray-500);
@@ -370,7 +301,7 @@
             gap: var(--spacing-2);
         }
 
-        /* Modern Responsive Design */
+        /* Responsive Design */
         @media (max-width: 768px) {
             .header {
                 padding: var(--spacing-6) 0;
@@ -409,23 +340,6 @@
                 margin-right: 0;
                 margin-bottom: var(--spacing-2);
             }
-
-
-        }
-
-        /* Modern Focus States for Accessibility */
-        .site-header:focus,
-        .retry-btn:focus {
-            outline: 2px solid var(--color-primary);
-            outline-offset: 2px;
-        }
-
-        /* Modern Animation for Smooth Interactions */
-        .site-item,
-        .latency-badge,
-        .best-url,
-        .url-text {
-            transition: all 0.2s ease;
         }
     </style>
 </head>
@@ -439,64 +353,52 @@
 
     <!-- Modern Main Container -->
     <div class="container">
-        <!-- Modern Loading State -->
+        <!-- Loading State -->
         <div id="loading" class="loading">
             <div class="loading-spinner"></div>
             <p>正在加载数据...</p>
         </div>
 
-        <!-- Modern Error State -->
-        <div id="error" class="error" style="display: none;">
-            <div class="error-icon">❌</div>
-            <h3>数据加载失败</h3>
-            <p>请确保以下文件存在：</p>
-            <div class="error-details">data/test_results.json</div>
-            <p id="error-message">请检查数据文件是否存在</p>
-            <button class="retry-btn" onclick="loadData()">
-                🔄 重试
-            </button>
-        </div>
-
-        <!-- Modern Sites Container -->
+        <!-- Sites Container -->
         <div id="sites-container"></div>
 
-        <!-- Modern Last Update Info -->
+        <!-- Last Update Info -->
         <div class="last-update" id="last-update"></div>
     </div>
 
 
 
     <script>
-        // 配置项 - 保持原有功能不变
+        // 配置项
         const CONFIG = {
-            API_ENDPOINT: '/api/data',
-            REFRESH_INTERVAL: 30000, // 30秒
             LATENCY_THRESHOLDS: {
-                GOOD: 100,    // 100ms以下为绿色
-                MEDIUM: 300   // 300ms以下为黄色，以上为红色
-            }
+                GOOD: 500,    // 500ms以下为绿色
+                MEDIUM: 1000   // 1000ms以下为黄色，以上为红色
+            },
+            LOADING_ERROR_DELAY: 3000  // 加载失败时保持加载状态的时间(毫秒)
         };
 
-        let currentData = null;
-
-        // 保持原有的格式化函数
+        // 格式化延迟等级
         function formatLatency(latency) {
             if (latency < CONFIG.LATENCY_THRESHOLDS.GOOD) return 'success';
             if (latency < CONFIG.LATENCY_THRESHOLDS.MEDIUM) return 'warning';
             return 'danger';
         }
 
-        function formatTime(isoString) {
-            const date = new Date(isoString);
-            return date.toLocaleString('zh-CN');
-        }
-
-        // 增强的切换功能，添加了现代化的交互效果
+        // 切换站点详情展开/收起
         function toggleSiteDetails(element) {
             element.classList.toggle('expanded');
         }
 
-        // 现代化的渲染函数，保持原有逻辑
+        // SVG图标定义
+        const ICONS = {
+            success: '<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>',
+            failed: '<path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>',
+            clock: '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>',
+            expand: '<path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>'
+        };
+
+        // 渲染站点列表
         function renderSites(data) {
             const container = document.getElementById('sites-container');
             container.innerHTML = '';
@@ -508,38 +410,38 @@
                 let headerContent = '';
                 if (siteData.status === 'success' && siteData.best_url) {
                     const bestUrlData = siteData.urls.find(u => u.is_best);
-                    const latencyMs = bestUrlData.latency * 1000; // 转换为毫秒
+                    const latencyMs = bestUrlData.latency * 1000;
                     const latencyClass = formatLatency(latencyMs);
 
                     headerContent = `
                         <div class="site-info">
                             <svg class="status-icon success" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                ${ICONS.success}
                             </svg>
                             <div class="site-name">${siteName}</div>
                             <div class="best-url">${siteData.best_url}</div>
                             <div class="latency-badge ${latencyClass}">
                                 <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                                    ${ICONS.clock}
                                 </svg>
                                 ${latencyMs.toFixed(0)}ms
                             </div>
                         </div>
                         <svg class="expand-icon" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            ${ICONS.expand}
                         </svg>
                     `;
                 } else {
                     headerContent = `
                         <div class="site-info">
                             <svg class="status-icon failed" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                ${ICONS.failed}
                             </svg>
                             <div class="site-name">${siteName}</div>
                             <div class="best-url failed-url">无可用URL</div>
                         </div>
                         <svg class="expand-icon" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            ${ICONS.expand}
                         </svg>
                     `;
                 }
@@ -552,14 +454,14 @@
                             <div class="site-details">
                                 <div class="url-list">
                                     ${otherUrls.map(urlData => {
-                                        const latencyMs = urlData.latency * 1000; // 转换为毫秒
+                                        const latencyMs = urlData.latency * 1000;
                                         const latencyClass = formatLatency(latencyMs);
                                         return `
                                         <div class="url-item">
                                             <div class="url-text">${urlData.url}</div>
                                             <div class="latency-badge ${latencyClass}">
                                                 <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20">
-                                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                                                    ${ICONS.clock}
                                                 </svg>
                                                 ${latencyMs.toFixed(0)}ms
                                             </div>
@@ -573,7 +475,7 @@
                 }
 
                 siteItem.innerHTML = `
-                    <div class="site-header" onclick="toggleSiteDetails(this.parentElement)" tabindex="0" role="button" aria-expanded="false">
+                    <div class="site-header" onclick="toggleSiteDetails(this.parentElement)">
                         ${headerContent}
                     </div>
                     ${detailsContent}
@@ -587,88 +489,57 @@
             if (lastUpdateElement) {
                 lastUpdateElement.innerHTML = `
                     <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
+                        ${ICONS.clock}
                     </svg>
                     最后更新: ${new Date().toLocaleString('zh-CN')}
                 `;
             }
         }
 
-        // 保持原有的数据加载逻辑
+        // 数据加载
         async function loadData() {
             const loading = document.getElementById('loading');
-            const error = document.getElementById('error');
             const container = document.getElementById('sites-container');
 
             loading.style.display = 'flex';
-            error.style.display = 'none';
             container.innerHTML = '';
 
             try {
                 let response;
                 let data;
 
-                // 首先尝试API端点（Vercel环境）
+                // 尝试API端点
                 try {
-                    response = await fetch(CONFIG.API_ENDPOINT);
+                    response = await fetch('/api/data');
                     if (response.ok) {
                         data = await response.json();
                     } else {
-                        throw new Error('API endpoint not available');
+                        throw new Error('API not available');
                     }
                 } catch (apiError) {
-                    // 如果API端点失败，尝试直接读取本地文件（本地环境）
-                    console.log('API endpoint failed, trying local file...');
-                    try {
-                        response = await fetch('../data/test_results.json');
-                        if (response.ok) {
-                            data = await response.json();
-                        } else {
-                            // 再尝试相对路径
-                            response = await fetch('./data/test_results.json');
-                            if (response.ok) {
-                                data = await response.json();
-                            } else {
-                                throw new Error('Local file not found');
-                            }
-                        }
-                    } catch (localError) {
-                        throw new Error('Both API and local file failed');
+                    // 尝试本地文件
+                    response = await fetch('../data/test_results.json');
+                    if (response.ok) {
+                        data = await response.json();
+                    } else {
+                        throw new Error('Data file not found');
                     }
                 }
 
-                currentData = data;
                 renderSites(data);
                 loading.style.display = 'none';
 
             } catch (err) {
                 console.error('Error loading data:', err);
-                loading.style.display = 'none';
-                error.style.display = 'block';
-
-                // 显示更详细的错误信息
-                const errorMessageElement = document.getElementById('error-message');
-                if (errorMessageElement) {
-                    errorMessageElement.textContent = `错误详情: ${err.message}`;
-                }
+                // 保持加载状态更长时间，然后静默隐藏
+                setTimeout(() => {
+                    loading.style.display = 'none';
+                }, CONFIG.LOADING_ERROR_DELAY);
             }
         }
 
-        // 添加键盘支持以提高可访问性
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter' || event.key === ' ') {
-                const target = event.target;
-                if (target.classList.contains('site-header')) {
-                    event.preventDefault();
-                    toggleSiteDetails(target.parentElement);
-                }
-            }
-        });
-
         // 页面加载时自动加载数据
         document.addEventListener('DOMContentLoaded', loadData);
-
-
     </script>
 </body>
 </html>
