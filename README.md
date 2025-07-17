@@ -22,18 +22,17 @@
 ```
 pan-site-monitor/
 ├── src/                    # 核心脚本
-│   ├── tvbox_manager.py    # TVBox资源管理器
-│   ├── site_url_tester.py  # 站点URL测试器
-│   └── github_uploader.py  # GitHub自动上传工具
+│   └── pan_site_monitor.py # 统一监控工具（3合1）
 ├── config/                 # 配置文件
-│   ├── config.json         # 主配置文件
-│   ├── url_tester_config.json  # URL测试配置
-│   └── github_config.json  # GitHub上传配置
+│   └── app_config.json     # 统一配置文件
 ├── web/                    # Web界面
-│   ├── url_status_dashboard.html  # 监控仪表板
-│   └── 404.html           # 错误页面
-├── data/                   # 数据文件
-└── logs/                   # 日志文件
+│   └── url_status_dashboard.html  # 监控仪表板
+├── data/                   # 数据文件目录
+├── logs/                   # 日志文件目录
+├── requirements.txt        # Python依赖包
+├── vercel.json            # Vercel部署配置
+├── .env                   # 环境变量配置（需要创建）
+└── README.md              # 项目说明文档
 ```
 
 ## 🛠️ 安装和配置
@@ -56,9 +55,16 @@ cd pan-site-monitor
 pip install -r requirements.txt
 ```
 
-3. 配置文件
+3. 配置环境变量（推荐）
+   ```bash
+   # 复制环境变量示例文件
+   cp .env.example .env
+   # 编辑.env文件，填入实际的GitHub信息
+   ```
+
+4. 或者配置文件
    - 复制并修改 `config/` 目录下的配置文件
-   - 根据需要配置GitHub token和仓库信息
+   - 根据需要配置GitHub token和仓库信息（不推荐，存在安全风险）
 
 ## 📖 使用说明
 
@@ -66,17 +72,42 @@ pip install -r requirements.txt
 
 1. **TVBox资源管理**
 ```bash
-python src/tvbox_manager.py
+python src/pan_site_monitor.py tvbox
 ```
 
 2. **站点可用性测试**
 ```bash
-python src/site_url_tester.py
+python src/pan_site_monitor.py test
 ```
 
 3. **上传到GitHub**
 ```bash
-python src/github_uploader.py
+python src/pan_site_monitor.py upload
+```
+
+4. **完整流程（推荐）**
+```bash
+python src/pan_site_monitor.py all
+```
+
+### 命令选项
+
+#### TVBox管理选项
+```bash
+# 跳过版本检查，只做数据聚合
+python src/pan_site_monitor.py tvbox --no-update
+
+# 跳过数据聚合，只检查更新
+python src/pan_site_monitor.py tvbox --no-aggregate
+
+# 完整流程但跳过TVBox版本检查
+python src/pan_site_monitor.py all --no-update
+```
+
+#### 自定义配置文件
+```bash
+# 使用自定义配置文件
+python src/pan_site_monitor.py all --config path/to/your/config.json
 ```
 
 ### 部署选项
@@ -88,9 +119,8 @@ python src/github_uploader.py
 
 ### 主要配置文件
 
-- `config/config.json`: TVBox资源管理配置
-- `config/url_tester_config.json`: URL测试参数配置
-- `config/github_config.json`: GitHub自动上传配置
+- `config/app_config.json`: 统一配置文件（包含所有功能配置）
+- `.env`: 环境变量配置（敏感信息，推荐使用）
 
 ### 支持的资源站点
 
@@ -105,6 +135,112 @@ python src/github_uploader.py
 - 响应时间统计
 - 可用性历史记录
 - 最优URL推荐
+
+## 🔒 环境变量配置
+
+为了提高安全性，本项目支持使用环境变量来管理敏感信息，避免将GitHub token等敏感数据直接存储在配置文件中。
+
+### 支持的环境变量
+
+#### GitHub相关配置
+- `GITHUB_TOKEN`: GitHub Personal Access Token（必需）
+- `GITHUB_OWNER`: GitHub用户名或组织名（必需）
+- `GITHUB_REPO`: GitHub仓库名（必需）
+- `GITHUB_BRANCH`: 目标分支，默认为 `main`
+
+#### 其他配置
+- `GITHUB_API_TIMEOUT`: API请求超时时间（秒），默认为30
+- `LOG_LEVEL`: 日志级别，默认为INFO
+
+### 配置方法
+
+#### 方法1：使用.env文件（推荐）
+
+1. 创建`.env`文件：
+```bash
+GITHUB_TOKEN=ghp_your_actual_token_here
+GITHUB_OWNER=your-username
+GITHUB_REPO=your-repo-name
+GITHUB_BRANCH=main
+```
+
+2. 运行程序时会自动加载`.env`文件中的环境变量
+
+#### 方法2：系统环境变量
+
+**Linux/macOS:**
+```bash
+export GITHUB_TOKEN=ghp_your_actual_token_here
+export GITHUB_OWNER=your-username
+export GITHUB_REPO=your-repo-name
+```
+
+**Windows (PowerShell):**
+```powershell
+$env:GITHUB_TOKEN="ghp_your_actual_token_here"
+$env:GITHUB_OWNER="your-username"
+$env:GITHUB_REPO="your-repo-name"
+```
+
+### 安全建议
+
+1. **不要将.env文件提交到版本控制系统**
+2. **定期更新GitHub token**
+3. **使用最小权限原则** - 只给token必需的权限
+4. **环境隔离** - 开发、测试、生产环境使用不同的token
+
+## 🔧 故障排除
+
+### 配置相关问题
+
+#### GitHub配置不完整
+如果看到"GitHub配置不完整"错误：
+1. 检查环境变量是否正确设置
+2. 确认.env文件是否存在且格式正确
+3. 验证token是否有效且权限足够
+
+#### 站点配置为空
+如果看到站点配置相关警告：
+1. 检查`config/app_config.json`中的sites配置
+2. 确保mapping、search_paths、keyword_validation都已配置
+3. 参考现有配置添加新站点
+
+### 网络相关问题
+
+#### SSL证书验证失败
+如果遇到SSL相关错误：
+1. 检查`config/app_config.json`中的security.verify_ssl设置
+2. 临时禁用SSL验证：设置`"verify_ssl": false`
+3. 检查网络连接和防火墙设置
+
+#### 代理配置
+如果需要使用代理：
+```json
+{
+  "url_tester": {
+    "proxy": {
+      "enabled": true,
+      "proxies": {
+        "http": "http://proxy.example.com:8080",
+        "https": "https://proxy.example.com:8080"
+      }
+    }
+  }
+}
+```
+
+### 权限相关问题
+
+#### GitHub API权限错误
+如果遇到403权限错误：
+1. 确认token具有repo权限
+2. 检查用户名和仓库名是否正确
+3. 验证token是否过期
+
+- **推荐使用环境变量**：将GitHub token等敏感信息存储在环境变量中
+- **避免配置文件存储敏感信息**：不要将token直接写入配置文件
+- **使用.env文件**：本地开发时可使用.env文件管理环境变量
+- **详细配置说明**：参见 [环境变量配置指南](docs/ENVIRONMENT_SETUP.md)
 
 ## 🔧 开发和贡献
 

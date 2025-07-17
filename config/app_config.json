@@ -1,0 +1,101 @@
+{
+  "sites": {
+    "mapping": {
+      "wogg.json": "玩偶",
+      "mogg.json": "木偶", 
+      "lb.json": "蜡笔",
+      "zz.json": "至臻",
+      "yyds.json": "多多",
+      "og.json": "欧哥",
+      "ex.json": "二小",
+      "hb.json": "虎斑",
+      "sd.json": "闪电"
+    },
+    "search_paths": {
+      "闪电": "/index.php/vod/search.html?wd=仙台有树",
+      "欧哥": "/index.php/vod/search.html?wd=仙台有树",
+      "多多": "/index.php/vod/search.html?wd=仙台有树",
+      "蜡笔": "/index.php/vod/search.html?wd=仙台有树",
+      "至臻": "/index.php/vod/search.html?wd=仙台有树",
+      "虎斑": "/index.php/vod/search.html?wd=仙台有树",
+      "玩偶": "/vodsearch/-------------.html?wd=仙台有树",
+      "木偶": "/index.php/vod/search.html?wd=仙台有树",
+      "二小": "/index.php/vod/search.html?wd=仙台有树"
+    },
+    "keyword_validation": {
+      "闪电": "class=\"search-stat\"",
+      "欧哥": "class=\"search-stat\"",
+      "多多": "class=\"search-stat\"",
+      "蜡笔": "class=\"search-stat\"",
+      "至臻": "class=\"search-stat\"",
+      "虎斑": "class=\"search-stat\"",
+      "玩偶": "class=\"search-stat\"",
+      "木偶": "class=\"search-stat\"",
+      "二小": "class=\"search-stat\""
+    },
+    "url_weights": {
+      "木偶": {
+        "https://aliii.deno.dev": 60,
+        "http://149.88.87.72:5666": 60
+      },
+      "至臻": {
+        "http://www.xhww.net": 10,
+        "http://xhww.net": 10
+      }
+    }
+  },
+  "tvbox": {
+    "api_url": "https://9877.kstore.space/Market/single.json",
+    "local_json_dir": "files/TVBoxOSC/tvbox/json",
+    "output_path": "data/test.json",
+    "version_file": "data/xs_version.txt",
+    "download_path": "data/xs.zip",
+    "extract_path": "files",
+    "old_path": "files/TVBoxOSC",
+    "api_timeout": 10,
+    "download_timeout": 60,
+    "download_chunk_size": 8192
+  },
+  "url_tester": {
+    "test_timeout": 15,
+    "default_weight": 50,
+    "proxy": {
+      "enabled": false,
+      "proxies": {
+        "http": "http://127.0.0.1:7890",
+        "https": "http://127.0.0.1:7890"
+      }
+    }
+  },
+  "github": {
+    "owner": "请设置环境变量 GITHUB_OWNER",
+    "repo": "请设置环境变量 GITHUB_REPO",
+    "branch": "main",
+    "token": "请设置环境变量 GITHUB_TOKEN",
+    "files_to_upload": [
+      {
+        "local_path": "data/test_results.json",
+        "github_path": "data/test_results.json"
+      },
+      {
+        "local_path": "data/test.json",
+        "github_path": "data/test.json"
+      }
+    ],
+    "commit_message_template": "Update test results - {timestamp}",
+    "api_timeout": 30
+  },
+  "logging": {
+    "level": "INFO",
+    "files": {
+      "tvbox_manager": "logs/tvbox_manager.log",
+      "url_tester": "logs/url_tester.log",
+      "github_uploader": "logs/github_uploader.log"
+    }
+  },
+  "security": {
+    "verify_ssl": true,
+    "ignore_ssl_warnings": false,
+    "log_sensitive_info": false
+  }
+}
