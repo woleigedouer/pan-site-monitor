@@ -487,11 +487,13 @@
             // 更新最后更新时间
             const lastUpdateElement = document.getElementById('last-update');
             if (lastUpdateElement) {
+                // 使用数据文件的时间戳，如果没有则使用当前时间
+                const dataTimestamp = data.timestamp ? new Date(data.timestamp).toLocaleString('zh-CN') : new Date().toLocaleString('zh-CN');
                 lastUpdateElement.innerHTML = `
                     <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
                         ${ICONS.clock}
                     </svg>
-                    最后更新: ${new Date().toLocaleString('zh-CN')}
+                    最后更新: ${dataTimestamp}
                 `;
             }
         }
