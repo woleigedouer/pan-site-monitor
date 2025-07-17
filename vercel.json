@@ -13,6 +13,14 @@
       "destination": "/web/index.html"
     },
     {
+      "source": "/style.css",
+      "destination": "/web/style.css"
+    },
+    {
+      "source": "/main.js",
+      "destination": "/web/main.js"
+    },
+    {
       "source": "/api/data",
       "destination": "/data/test_results.json"
     },
@@ -36,6 +44,32 @@
         {
           "key": "Cache-Control",
           "value": "s-maxage=300, stale-while-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).css",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/css"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=86400, stale-while-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/(.*).js",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "s-maxage=86400, stale-while-revalidate"
         }
       ]
     }
