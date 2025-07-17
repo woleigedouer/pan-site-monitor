@@ -346,8 +346,26 @@ class PanSiteMonitor:
             response.raise_for_status()
 
             api_data = response.json()
-            remote_version = api_data.get('version')
-            download_url = api_data.get('url')
+
+            # 处理API返回的列表格式数据
+            remote_version = None
+            download_url = None
+
+            if isinstance(api_data, list):
+                # 查找"本地包"分类
+                for category in api_data:
+                    if isinstance(category, dict) and category.get('name') == '本地包':
+                        # 在本地包的list中查找"点击下载"项目
+                        for item in category.get('list', []):
+                            if isinstance(item, dict) and item.get('name') == '点击下载':
+                                remote_version = item.get('version')
+                                download_url = item.get('url')
+                                break
+                        break
+            else:
+                # 兼容原来的字典格式（如果API格式改回来）
+                remote_version = api_data.get('version')
+                download_url = api_data.get('url')
 
             if not remote_version or not download_url:
                 logger.error("API响应缺少必要字段")
