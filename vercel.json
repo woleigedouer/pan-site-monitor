@@ -2,15 +2,15 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/web/url_status_dashboard.html"
+      "destination": "/web/index.html"
     },
     {
       "source": "/index.html",
-      "destination": "/web/url_status_dashboard.html"
+      "destination": "/web/index.html"
     },
     {
       "source": "/dashboard",
-      "destination": "/web/url_status_dashboard.html"
+      "destination": "/web/index.html"
     },
     {
       "source": "/api/data",
