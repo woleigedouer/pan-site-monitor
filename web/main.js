@@ -67,7 +67,7 @@ function renderSites(data) {
                         ${ICONS.failed}
                     </svg>
                     <div class="site-name">${siteName}</div>
-                    <div class="best-url failed-url">无可用URL</div>
+                    <div class="best-url failed-url">所有URL均不可用</div>
                 </div>
                 <svg class="expand-icon" fill="currentColor" viewBox="0 0 20 20">
                     ${ICONS.expand}
@@ -76,23 +76,34 @@ function renderSites(data) {
         }
 
         let detailsContent = '';
-        if (siteData.urls && siteData.urls.length > 1) {
-            const otherUrls = siteData.urls.filter(u => !u.is_best);
-            if (otherUrls.length > 0) {
+        if (siteData.urls && siteData.urls.length > 0) {
+            let urlsToShow = [];
+
+            if (siteData.status === 'success') {
+                // 成功站点：显示除最佳URL外的其他URL
+                urlsToShow = siteData.urls.filter(u => !u.is_best);
+            } else {
+                // 失败站点：显示所有URL
+                urlsToShow = siteData.urls;
+            }
+
+            if (urlsToShow.length > 0) {
                 detailsContent = `
                     <div class="site-details">
                         <div class="url-list">
-                            ${otherUrls.map(urlData => {
-                                const latencyMs = urlData.latency * 1000;
-                                const latencyClass = formatLatency(latencyMs);
+                            ${urlsToShow.map(urlData => {
+                                const latencyMs = urlData.latency ? urlData.latency * 1000 : 0;
+                                const latencyClass = urlData.latency ? formatLatency(latencyMs) : 'danger';
+                                const statusText = urlData.latency ? `${latencyMs.toFixed(0)}ms` : '超时/失败';
+
                                 return `
                                 <div class="url-item">
                                     <div class="url-text">${urlData.url}</div>
                                     <div class="latency-badge ${latencyClass}">
                                         <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20">
-                                            ${ICONS.clock}
+                                            ${urlData.latency ? ICONS.clock : ICONS.failed}
                                         </svg>
-                                        ${latencyMs.toFixed(0)}ms
+                                        ${statusText}
                                     </div>
                                 </div>
                                 `;

@@ -751,6 +751,7 @@ class PanSiteMonitor:
         self.log_message(f"[开始] 开始测试站点 {site_name} 的 {len(urls)} 个URL", site_name, "测试站点")
 
         url_results = {}
+        successful_urls = {}
 
         for url in urls:
             if not url or not url.strip():
@@ -758,35 +759,39 @@ class PanSiteMonitor:
 
             latency, has_keyword = self.test_url_availability(url, site_name)
 
-            if latency is not None:
-                # 获取URL权重
-                site_weights = self.config['sites'].get('url_weights', {}).get(site_name, {})
-                default_weight = self.config['url_tester'].get('default_weight', 50)
-                weight = site_weights.get(url, default_weight)
+            # 获取URL权重
+            site_weights = self.config['sites'].get('url_weights', {}).get(site_name, {})
+            default_weight = self.config['url_tester'].get('default_weight', 50)
+            weight = site_weights.get(url, default_weight)
 
-                # 计算综合得分 (延迟越低越好，有关键字加分，权重影响)
+            if latency is not None:
+                # 成功的URL：计算综合得分
                 if has_keyword:
                     score = weight / (latency + 0.1)  # 避免除零
                 else:
                     score = (weight * 0.5) / (latency + 0.1)  # 无关键字减半
 
-                url_results[url] = (latency, has_keyword, weight, score)
+                successful_urls[url] = (latency, has_keyword, weight, score)
+                url_results[url] = (latency, has_keyword, weight)
+            else:
+                # 失败的URL：记录为失败状态
+                url_results[url] = (None, False, weight)
 
-        if url_results:
+        if successful_urls:
             # 选择最佳URL（得分最高）
-            best_url = max(url_results.keys(), key=lambda u: url_results[u][3])
-            best_latency, _, best_weight, best_score = url_results[best_url]
+            best_url = max(successful_urls.keys(), key=lambda u: successful_urls[u][3])
+            best_latency, _, best_weight, best_score = successful_urls[best_url]
 
             self.log_message(f"[选择] 最佳URL: {best_url} (延迟: {best_latency:.2f}s, 权重: {best_weight}, 得分: {best_score:.2f})",
                             site_name, "选择最佳")
 
             return {
                 'best_url': best_url,
-                'url_results': {url: (lat, kw, wt) for url, (lat, kw, wt, _) in url_results.items()}
+                'url_results': url_results
             }
         else:
             self.log_message(f"[失败] 站点 {site_name} 的所有URL都无法访问", site_name, "测试站点")
-            return {'best_url': None, 'url_results': {}}
+            return {'best_url': None, 'url_results': url_results}
 
     def run_url_tester(self):
         """运行URL测试器"""
@@ -849,15 +854,15 @@ class PanSiteMonitor:
                     for url, (latency, has_keyword, weight) in result['url_results'].items():
                         url_data = {
                             "url": url,
-                            "latency": round(latency, 2),
+                            "latency": round(latency, 2) if latency is not None else None,
                             "has_keyword": has_keyword,
                             "weight": weight,
                             "is_best": url == result['best_url']
                         }
                         site_data['urls'].append(url_data)
 
-                    # 按是否为最佳URL排序，最佳的在前面
-                    site_data['urls'].sort(key=lambda x: (not x['is_best'], x['latency']))
+                    # 按是否为最佳URL排序，最佳的在前面，失败的URL排在最后
+                    site_data['urls'].sort(key=lambda x: (not x['is_best'], x['latency'] is None, x['latency'] or 999))
 
                 json_data['sites'][site_name] = site_data
 
