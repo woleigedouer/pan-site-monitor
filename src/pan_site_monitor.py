@@ -728,23 +728,27 @@ class PanSiteMonitor:
                                     site_name, "测试URL")
                     self.log_message(f"[警告] 该URL返回200但无关键字，可能存在Cloudflare盾或其他反爬机制",
                                     site_name, "测试URL")
-                return latency, has_keyword
+                return latency, has_keyword, None
             else:
-                self.log_message(f"[失败] URL {test_url_str} 返回HTTP错误: 状态码 {response.status_code}",
+                error_detail = f"状态码 {response.status_code}"
+                self.log_message(f"[失败] URL {test_url_str} 返回HTTP错误: {error_detail}",
                                 site_name, "测试URL")
-                return None, None
+                return None, None, {"type": "http_error", "detail": error_detail}
 
         except requests.exceptions.Timeout:
             timeout = self.config.get('url_tester', {}).get('test_timeout', 15)
-            self.log_message(f"[超时] URL {test_url_str} 请求超时 (>{timeout}s)",
+            error_detail = f"请求超时 (>{timeout}s)"
+            self.log_message(f"[超时] URL {test_url_str} {error_detail}",
                             site_name, "测试URL")
-            return None, None
+            return None, None, {"type": "timeout", "detail": "超时"}
         except requests.exceptions.ConnectionError:
-            self.log_message(f"[连接失败] URL {test_url_str} 连接失败", site_name, "测试URL")
-            return None, None
+            error_detail = "连接失败"
+            self.log_message(f"[连接失败] URL {test_url_str} {error_detail}", site_name, "测试URL")
+            return None, None, {"type": "connection_error", "detail": "连接失败"}
         except Exception as e:
-            self.log_message(f"[错误] URL {test_url_str} 测试异常: {e}", site_name, "测试URL")
-            return None, None
+            error_detail = f"测试异常: {e}"
+            self.log_message(f"[错误] URL {test_url_str} {error_detail}", site_name, "测试URL")
+            return None, None, {"type": "unknown_error", "detail": "未知错误"}
 
     def test_site_urls(self, site_name, urls):
         """测试单个站点的所有URL"""
@@ -757,7 +761,7 @@ class PanSiteMonitor:
             if not url or not url.strip():
                 continue
 
-            latency, has_keyword = self.test_url_availability(url, site_name)
+            latency, has_keyword, error_info = self.test_url_availability(url, site_name)
 
             # 获取URL权重
             site_weights = self.config['sites'].get('url_weights', {}).get(site_name, {})
@@ -772,10 +776,10 @@ class PanSiteMonitor:
                     score = (weight * 0.5) / (latency + 0.1)  # 无关键字减半
 
                 successful_urls[url] = (latency, has_keyword, weight, score)
-                url_results[url] = (latency, has_keyword, weight)
+                url_results[url] = (latency, has_keyword, weight, None)
             else:
-                # 失败的URL：记录为失败状态
-                url_results[url] = (None, False, weight)
+                # 失败的URL：记录为失败状态，包含错误信息
+                url_results[url] = (None, False, weight, error_info)
 
         if successful_urls:
             # 选择最佳URL（得分最高）
@@ -851,7 +855,15 @@ class PanSiteMonitor:
                 }
 
                 if 'url_results' in result and result['url_results']:
-                    for url, (latency, has_keyword, weight) in result['url_results'].items():
+                    for url, url_result in result['url_results'].items():
+                        # 处理新的数据结构：(latency, has_keyword, weight, error_info)
+                        if len(url_result) == 4:
+                            latency, has_keyword, weight, error_info = url_result
+                        else:
+                            # 兼容旧格式：(latency, has_keyword, weight)
+                            latency, has_keyword, weight = url_result
+                            error_info = None
+
                         url_data = {
                             "url": url,
                             "latency": round(latency, 2) if latency is not None else None,
@@ -859,6 +871,12 @@ class PanSiteMonitor:
                             "weight": weight,
                             "is_best": url == result['best_url']
                         }
+
+                        # 添加错误信息（如果存在）
+                        if error_info:
+                            url_data["error_type"] = error_info.get("type")
+                            url_data["error_detail"] = error_info.get("detail")
+
                         site_data['urls'].append(url_data)
 
                     # 按是否为最佳URL排序，最佳的在前面，失败的URL排在最后

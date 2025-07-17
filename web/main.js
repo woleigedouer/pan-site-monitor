@@ -1,8 +1,7 @@
 // 配置项
 const CONFIG = {
     LATENCY_THRESHOLDS: {
-        GOOD: 500,    // 500ms以下为绿色
-        MEDIUM: 1000   // 1000ms以下为黄色，以上为红色
+        GOOD: 500    // 500ms以下为绿色，以上为黄色
     },
     LOADING_ERROR_DELAY: 3000  // 加载失败时保持加载状态的时间(毫秒)
 };
@@ -10,8 +9,7 @@ const CONFIG = {
 // 格式化延迟等级
 function formatLatency(latency) {
     if (latency < CONFIG.LATENCY_THRESHOLDS.GOOD) return 'success';
-    if (latency < CONFIG.LATENCY_THRESHOLDS.MEDIUM) return 'warning';
-    return 'danger';
+    return 'warning';  // 500ms以上的正常响应都是黄色
 }
 
 // 切换站点详情展开/收起
@@ -94,7 +92,18 @@ function renderSites(data) {
                             ${urlsToShow.map(urlData => {
                                 const latencyMs = urlData.latency ? urlData.latency * 1000 : 0;
                                 const latencyClass = urlData.latency ? formatLatency(latencyMs) : 'danger';
-                                const statusText = urlData.latency ? `${latencyMs.toFixed(0)}ms` : '超时/失败';
+
+                                // 生成状态文本：优先显示详细错误信息
+                                let statusText;
+                                if (urlData.latency) {
+                                    statusText = `${latencyMs.toFixed(0)}ms`;
+                                } else if (urlData.error_detail) {
+                                    // 显示详细错误信息
+                                    statusText = urlData.error_detail;
+                                } else {
+                                    // 兜底显示
+                                    statusText = 'N/A';
+                                }
 
                                 return `
                                 <div class="url-item">
