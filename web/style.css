@@ -66,12 +66,57 @@ body {
     text-align: center;
 }
 
-.header h1 {
-    font-size: 2rem;
+/* Countdown Header Styles */
+.countdown-header {
+    text-align: center;
+}
+
+.countdown-header h1 {
+    font-size: 1.75rem;
     font-weight: 700;
     color: var(--color-gray-900);
-    margin-bottom: var(--spacing-2);
+    margin-bottom: var(--spacing-4);
     letter-spacing: -0.025em;
+}
+
+.countdown-progress-container {
+    background: var(--color-gray-200);
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: var(--spacing-4);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.countdown-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), #1d4ed8);
+    border-radius: 3px;
+    transition: width 1s ease;
+    width: 0%;
+}
+
+.countdown-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 0.875rem;
+    color: var(--color-gray-600);
+}
+
+.countdown-time-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-weight: 500;
+}
+
+.last-update-info {
+    font-weight: 500;
 }
 
 /* Container */
@@ -278,17 +323,7 @@ body {
     margin-right: var(--spacing-4);
 }
 
-/* Last Update */
-.last-update {
-    text-align: center;
-    color: var(--color-gray-500);
-    font-size: 0.875rem;
-    margin-top: var(--spacing-8);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--spacing-2);
-}
+
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -296,8 +331,14 @@ body {
         padding: var(--spacing-6) 0;
     }
 
-    .header h1 {
+    .countdown-header h1 {
         font-size: 1.5rem;
+    }
+
+    .countdown-info {
+        flex-direction: column;
+        gap: var(--spacing-2);
+        text-align: center;
     }
 
     .container {

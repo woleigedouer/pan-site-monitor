@@ -3,14 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern URL Status Dashboard</title>
+    <title>站点URL状态监控</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Modern Header with Clean Design -->
+    <!-- Modern Header with Countdown Design -->
     <div class="header">
         <div class="header-content">
-            <h1>站点URL状态监控</h1>
+            <div class="countdown-header">
+                <h1>站点URL状态监控</h1>
+                <div class="countdown-progress-container">
+                    <div class="countdown-progress-bar" id="countdown-progress"></div>
+                </div>
+                <div class="countdown-info">
+                    <div class="last-update-info" id="header-last-update">
+                        <span>上次刷新 --:--</span>
+                    </div>
+                    <div class="countdown-time-info">
+                        <span>下次更新</span>
+                        <span id="countdown-time">00:00</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -24,9 +38,6 @@
 
         <!-- Sites Container -->
         <div id="sites-container"></div>
-
-        <!-- Last Update Info -->
-        <div class="last-update" id="last-update"></div>
     </div>
 
     <script src="main.js"></script>

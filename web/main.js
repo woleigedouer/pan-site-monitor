@@ -3,13 +3,49 @@ const CONFIG = {
     LATENCY_THRESHOLDS: {
         GOOD: 500    // 500ms以下为绿色，以上为黄色
     },
-    LOADING_ERROR_DELAY: 3000  // 加载失败时保持加载状态的时间(毫秒)
+    LOADING_ERROR_DELAY: 3000,  // 加载失败时保持加载状态的时间(毫秒)
+    COUNTDOWN_INTERVAL: 60 * 60 * 1000  // 倒计时间隔：1小时（毫秒）
 };
 
 // 格式化延迟等级
 function formatLatency(latency) {
     if (latency < CONFIG.LATENCY_THRESHOLDS.GOOD) return 'success';
     return 'warning';  // 500ms以上的正常响应都是黄色
+}
+
+// 倒计时功能
+function updateCountdown() {
+    const now = new Date();
+    const nextHour = new Date(now);
+    nextHour.setHours(now.getHours() + 1, 0, 0, 0);
+
+    const diff = nextHour - now;
+    const minutes = Math.floor(diff / 60000);
+    const seconds = Math.floor((diff % 60000) / 1000);
+
+    const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+    // 更新倒计时显示
+    const countdownTimeElement = document.getElementById('countdown-time');
+    if (countdownTimeElement) {
+        countdownTimeElement.textContent = timeString;
+    }
+
+    // 更新进度条（倒计时减少）
+    const totalSeconds = 60 * 60; // 一小时总秒数
+    const remainingSeconds = minutes * 60 + seconds;
+    const progress = (remainingSeconds / totalSeconds) * 100;
+
+    const progressBar = document.getElementById('countdown-progress');
+    if (progressBar) {
+        progressBar.style.width = progress + '%';
+    }
+}
+
+// 启动倒计时
+function startCountdown() {
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
 }
 
 // 切换站点详情展开/收起
@@ -133,17 +169,20 @@ function renderSites(data) {
         container.appendChild(siteItem);
     });
 
-    // 更新最后更新时间
-    const lastUpdateElement = document.getElementById('last-update');
-    if (lastUpdateElement) {
+    // 更新顶部的最后更新时间
+    const headerLastUpdateElement = document.getElementById('header-last-update');
+    if (headerLastUpdateElement) {
         // 使用数据文件的时间戳，如果没有则使用当前时间
-        const dataTimestamp = data.timestamp ? new Date(data.timestamp).toLocaleString('zh-CN') : new Date().toLocaleString('zh-CN');
-        lastUpdateElement.innerHTML = `
-            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
-                ${ICONS.clock}
-            </svg>
-            最后更新: ${dataTimestamp}
-        `;
+        const timestamp = data.timestamp ? new Date(data.timestamp) : new Date();
+        const timeString = timestamp.toLocaleTimeString('zh-CN', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        });
+        const spanElement = headerLastUpdateElement.querySelector('span');
+        if (spanElement) {
+            spanElement.textContent = `上次刷新 ${timeString}`;
+        }
     }
 }
 
@@ -189,5 +228,8 @@ async function loadData() {
     }
 }
 
-// 页面加载时自动加载数据
-document.addEventListener('DOMContentLoaded', loadData);
+// 页面加载时自动加载数据和启动倒计时
+document.addEventListener('DOMContentLoaded', () => {
+    loadData();
+    startCountdown();
+});
