@@ -35,7 +35,7 @@ function updateCountdown() {
     }
 
     // 更新进度条（倒计时减少）
-    const totalSeconds = 60 * 60; // 一小时总秒数
+    const totalSeconds = CONFIG.COUNTDOWN_INTERVAL / 1000; // 总秒数
     const remainingSeconds = minutes * 60 + seconds;
     const progress = (remainingSeconds / totalSeconds) * 100;
 
@@ -61,8 +61,7 @@ function toggleSiteDetails(element) {
             // 展开：计算动态高度
             const urlItems = siteDetails.querySelectorAll('.url-item');
             const itemHeight = 60; // 每个备用域名项的高度
-            const padding = 32; // 上下padding总和 (16px * 2)
-            const dynamicHeight = urlItems.length * itemHeight + padding;
+            const dynamicHeight = urlItems.length * itemHeight;
 
             element.classList.add('expanded');
             siteDetails.style.maxHeight = dynamicHeight + 'px';
@@ -75,15 +74,43 @@ function toggleSiteDetails(element) {
 }
 
 // 生成状态历史数据（使用真实数据或显示无数据状态）
-function generateStatusHistory(currentStatus, urlData, siteName) {
+function generateStatusHistory(siteName, url) {
     // 始终返回固定长度的历史数据（12个点）
     const HISTORY_LENGTH = 12;
-    let history = Array(HISTORY_LENGTH).fill('no_data');
+    let history = Array(HISTORY_LENGTH).fill({status: 'no_data', timestamp: '', latency: null});
     
-    // 尝试使用真实的历史数据
-    if (siteHistoryData && siteHistoryData[siteName] && siteHistoryData[siteName].length > 0) {
-        // 将真实历史数据复制到结果数组中
-        const realData = siteHistoryData[siteName].map(record => record.status);
+    // 尝试使用URL特定的历史数据（如果提供了URL）
+    let historyRecords = null;
+    if (url && siteName && siteHistoryData[siteName] && siteHistoryData[siteName][url]) {
+        // 新的嵌套结构格式
+        historyRecords = siteHistoryData[siteName][url];
+    }
+    
+    // 如果找到了历史记录，处理它们
+    if (historyRecords && historyRecords.length > 0) {
+        // 将真实历史数据转换为带有时间信息的对象
+        const realData = historyRecords.map(record => {
+            // 将ISO时间格式转换为友好的本地时间格式
+            let formattedTime = "未知时间";
+            if (record.timestamp) {
+                const date = new Date(record.timestamp);
+                formattedTime = date.toLocaleString('zh-CN', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                });
+            }
+            
+            return {
+                status: record.status,
+                timestamp: formattedTime,
+                latency: record.latency
+            };
+        });
         
         // 计算起始位置，以确保最新的数据显示在最右侧
         const startPos = Math.max(0, HISTORY_LENGTH - realData.length);
@@ -96,14 +123,6 @@ function generateStatusHistory(currentStatus, urlData, siteName) {
     
     return history;
 }
-
-// SVG图标定义
-const ICONS = {
-    success: '<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>',
-    failed: '<path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>',
-    clock: '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>',
-    expand: '<path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>'
-};
 
 // 渲染站点列表
 function renderSites(data) {
@@ -119,7 +138,7 @@ function renderSites(data) {
             const bestUrlData = siteData.urls.find(u => u.is_best);
             const latencyMs = bestUrlData.latency * 1000;
             const latencyClass = formatLatency(latencyMs);
-            const statusHistory = generateStatusHistory('success', bestUrlData, siteName);
+            const statusHistory = generateStatusHistory(siteName, siteData.best_url);
 
             headerContent = `
                 <div class="status-indicator success"></div>
@@ -130,12 +149,19 @@ function renderSites(data) {
                 <div class="monitor-stats">
                     <div class="response-badge ${latencyClass}">${latencyMs.toFixed(0)}ms</div>
                     <div class="status-history">
-                        ${statusHistory.map(status => `<div class="status-dot ${status}"></div>`).join('')}
+                        ${statusHistory.map(item => {
+                            return `<div class="status-dot ${item.status}" 
+                                        data-time="${item.timestamp}" 
+                                        data-status="${item.status}" 
+                                        data-latency="${item.latency ? (item.latency * 1000).toFixed(0) : ''}">
+                                    <span></span>
+                                  </div>`;
+                        }).join('')}
                     </div>
                 </div>
             `;
         } else {
-            const statusHistory = generateStatusHistory('failed', null, siteName);
+            const statusHistory = generateStatusHistory(siteName, null);
 
             headerContent = `
                 <div class="status-indicator failed"></div>
@@ -146,7 +172,14 @@ function renderSites(data) {
                 <div class="monitor-stats">
                     <div class="response-badge danger">失败</div>
                     <div class="status-history">
-                        ${statusHistory.map(status => `<div class="status-dot ${status}"></div>`).join('')}
+                        ${statusHistory.map(item => {
+                            return `<div class="status-dot ${item.status}" 
+                                        data-time="${item.timestamp}" 
+                                        data-status="${item.status}" 
+                                        data-latency="${item.latency ? (item.latency * 1000).toFixed(0) : ''}">
+                                    <span></span>
+                                  </div>`;
+                        }).join('')}
                     </div>
                 </div>
             `;
@@ -171,7 +204,7 @@ function renderSites(data) {
                             ${urlsToShow.map((urlData, index) => {
                                 const latencyMs = urlData.latency ? urlData.latency * 1000 : 0;
                                 const latencyClass = urlData.latency ? formatLatency(latencyMs) : 'danger';
-                                const statusHistory = generateStatusHistory(urlData.latency ? 'success' : 'failed', urlData, siteName);
+                                const statusHistory = generateStatusHistory(siteName, urlData.url);
                                 const statusIndicatorClass = urlData.latency ? 'success' : 'failed';
 
                                 // 生成状态文本：优先显示详细错误信息
@@ -196,7 +229,14 @@ function renderSites(data) {
                                     <div class="backup-url-stats">
                                         <div class="response-badge ${latencyClass}">${statusText}</div>
                                         <div class="backup-status-history">
-                                            ${statusHistory.map(status => `<div class="status-dot ${status}"></div>`).join('')}
+                                            ${statusHistory.map(item => {
+                                                return `<div class="status-dot ${item.status}" 
+                                                            data-time="${item.timestamp}" 
+                                                            data-status="${item.status}" 
+                                                            data-latency="${item.latency ? (item.latency * 1000).toFixed(0) : ''}">
+                                                        <span></span>
+                                                      </div>`;
+                                            }).join('')}
                                         </div>
                                     </div>
                                 </div>
@@ -297,4 +337,85 @@ async function loadData() {
 document.addEventListener('DOMContentLoaded', () => {
     loadData();
     startCountdown();
+    setupTooltips();
 });
+
+// 设置自定义工具提示
+function setupTooltips() {
+    // 创建工具提示元素
+    const tooltip = document.createElement('div');
+    tooltip.className = 'tooltip';
+    document.body.appendChild(tooltip);
+    
+    // 监听所有状态点的鼠标事件
+    document.addEventListener('mouseover', function(e) {
+        const target = e.target;
+        if (target.classList.contains('status-dot') || target.parentElement.classList.contains('status-dot')) {
+            const dot = target.classList.contains('status-dot') ? target : target.parentElement;
+            
+            // 使用数据属性获取状态点的信息
+            const time = dot.dataset.time;
+            const status = dot.dataset.status;
+            const latency = dot.dataset.latency;
+            
+            // 如果有时间数据，则显示工具提示
+            if (time || status === 'no_data') {
+                let tooltipText = '';
+                
+                if (status === 'no_data') {
+                    tooltipText = '无历史数据';
+                } else {
+                    // 状态文本
+                    const statusText = (status === 'up' || status === 'success') ? '在线' : '离线';
+                    
+                    // 组装简洁的单行提示，格式: "状态 - 时间 [延迟]"
+                    tooltipText = `${statusText} - ${time}`;
+                    
+                    // 如果有延迟数据则添加
+                    if (latency && (status === 'up' || status === 'success')) {
+                        tooltipText += ` ⚡${latency}ms`;
+                    }
+                }
+                
+                tooltip.textContent = tooltipText;
+                tooltip.style.display = 'block';
+                
+                // 跟随鼠标位置
+                document.addEventListener('mousemove', updateTooltipPosition);
+                updateTooltipPosition(e);
+            }
+        }
+    });
+    
+    document.addEventListener('mouseout', function(e) {
+        const target = e.target;
+        if (target.classList.contains('status-dot') || target.parentElement.classList.contains('status-dot')) {
+            tooltip.style.display = 'none';
+            document.removeEventListener('mousemove', updateTooltipPosition);
+        }
+    });
+    
+    // 更新工具提示位置
+    function updateTooltipPosition(e) {
+        const x = e.clientX;
+        const y = e.clientY;
+        
+        const tooltipWidth = tooltip.offsetWidth;
+        const tooltipHeight = tooltip.offsetHeight;
+        
+        // 避免工具提示超出屏幕
+        let posX = x + 15; // 鼠标右侧15像素
+        let posY = y - tooltipHeight - 10; // 鼠标上方10像素
+        
+        if (posX + tooltipWidth > window.innerWidth) {
+            posX = x - tooltipWidth - 15; // 如果超出右边界，放在鼠标左侧
+        }
+        
+        if (posY < 0) {
+            posY = y + 20; // 如果超出上边界，放在鼠标下方
+        }
+        
+        tooltip.style.left = posX + 'px';
+        tooltip.style.top = posY + 'px';
+    }
+}

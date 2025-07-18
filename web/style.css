@@ -280,43 +280,80 @@ body {
 }
 
 /* Status History */
-.status-history {
+.status-history, .backup-status-history {
     display: flex;
     gap: 2px;
     margin-left: 16px;
+    height: 20px;
+    align-items: center;
 }
 
+/* 统一所有状态点样式 */
 .status-dot {
-    width: 4px;
-    height: 20px;
+    width: 6px;
+    height: 18px;
     border-radius: 2px;
     background: #e2e8f0;
     flex-shrink: 0;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.status-dot.up {
+.status-dot:hover {
+    height: 20px;
+    transform: translateY(-2px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* 自定义工具提示 */
+.tooltip {
+    position: fixed;
+    background: white;
+    color: #333;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 1000;
+    pointer-events: none;
+    max-width: 300px;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    display: none;
+    text-align: center;
+    border: 1px solid #eee;
+}
+
+/* 移除之前复杂的工具提示内部结构 */
+.tooltip .tooltip-time,
+.tooltip .tooltip-status,
+.tooltip .tooltip-latency {
+    display: inline;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+    background: transparent;
+    color: inherit;
+}
+
+.status-dot span {
+    display: none;
+}
+
+.status-dot.success, .status-dot.up {
     background: #10b981;
+    box-shadow: 0 0 2px rgba(16, 185, 129, 0.4);
 }
 
-.status-dot.down {
+.status-dot.failed, .status-dot.down {
     background: #ef4444;
+    box-shadow: 0 0 2px rgba(239, 68, 68, 0.4);
 }
 
 .status-dot.no_data {
     background: #cbd5e1;
     opacity: 0.5;
-}
-
-.expand-icon {
-    width: 1.25rem;
-    height: 1.25rem;
-    color: var(--color-gray-400);
-    transition: transform 0.2s ease;
-    flex-shrink: 0;
-}
-
-.site-item.expanded .expand-icon {
-    transform: rotate(180deg);
 }
 
 /* Backup URLs Expansion Area */
@@ -385,12 +422,6 @@ body {
     display: flex;
     gap: 2px;
     margin-left: 16px;
-}
-
-.backup-status-history .status-dot {
-    width: 4px;
-    height: 20px;
-    border-radius: 2px;
 }
 
 

@@ -54,11 +54,16 @@
     "old_path": "files_backup",
     "api_timeout": 10,
     "download_timeout": 60,
-    "download_chunk_size": 8192
+    "download_chunk_size": 8192,
+    "api_parsing_keys": {
+      "category_name": "本地包",
+      "download_item_name": "点击下载"
+    }
   },
   "url_tester": {
     "test_timeout": 15,
     "default_weight": 50,
+    "history_limit": 12,
     "proxy": {
       "enabled": false,
       "proxies": {
@@ -80,6 +85,10 @@
       {
         "local_path": "data/test.json",
         "github_path": "data/test.json"
+      },
+      {
+        "local_path": "data/history.json",
+        "github_path": "data/history.json"
       }
     ],
     "commit_message_template": "Update test results - {timestamp}",

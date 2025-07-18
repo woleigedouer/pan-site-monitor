@@ -91,7 +91,7 @@ class PanSiteMonitor:
                      "download_path": "", "extract_path": "", "old_path": "", "api_timeout": 10,
                      "download_timeout": 60, "download_chunk_size": 8192},
             "url_tester": {"test_timeout": 15, "default_weight": 50,
-                          "proxy": {"enabled": False, "proxies": {}}},
+                          "proxy": {"enabled": False, "proxies": {}}, "history_limit": 12},
             "github": {"owner": "", "repo": "", "branch": "main", "token": "",
                       "files_to_upload": [], "commit_message_template": "Update - {timestamp}",
                       "api_timeout": 30},
@@ -370,13 +370,18 @@ class PanSiteMonitor:
             remote_version = None
             download_url = None
 
+            # 从配置中获取API解析的关键字段名
+            api_parsing_keys = self.config.get('tvbox', {}).get('api_parsing_keys', {})
+            category_name = api_parsing_keys.get('category_name', '本地包')
+            download_item_name = api_parsing_keys.get('download_item_name', '点击下载')
+
             if isinstance(api_data, list):
-                # 查找"本地包"分类
+                # 查找指定分类
                 for category in api_data:
-                    if isinstance(category, dict) and category.get('name') == '本地包':
-                        # 在本地包的list中查找"点击下载"项目
+                    if isinstance(category, dict) and category.get('name') == category_name:
+                        # 在分类的list中查找下载项目
                         for item in category.get('list', []):
-                            if isinstance(item, dict) and item.get('name') == '点击下载':
+                            if isinstance(item, dict) and item.get('name') == download_item_name:
                                 remote_version = item.get('version')
                                 download_url = item.get('url')
                                 break
@@ -453,15 +458,6 @@ class PanSiteMonitor:
 
                 # 备份现有文件（如果存在）
                 if os.path.exists(extract_path):
-                    # 检查是否存在路径冲突（避免将目录移动到自己的子目录中）
-                    extract_abs = os.path.abspath(extract_path)
-                    old_abs = os.path.abspath(old_path)
-
-                    # 检查old_path是否在extract_path内部
-                    if old_abs.startswith(extract_abs + os.sep) or old_abs == extract_abs:
-                        logger.error(f"路径冲突：备份路径 {old_path} 不能在解压路径 {extract_path} 内部")
-                        raise ValueError(f"备份路径配置错误：{old_path} 不能是 {extract_path} 的子目录")
-
                     if os.path.exists(old_path):
                         shutil.rmtree(old_path)
                     shutil.move(extract_path, old_path)
@@ -477,15 +473,8 @@ class PanSiteMonitor:
                     shutil.rmtree(temp_extract_path)
 
                 if os.path.exists(old_path) and not os.path.exists(extract_path):
-                    # 检查路径冲突（恢复时也要检查）
-                    extract_abs = os.path.abspath(extract_path)
-                    old_abs = os.path.abspath(old_path)
-
-                    if not (old_abs.startswith(extract_abs + os.sep) or old_abs == extract_abs):
-                        shutil.move(old_path, extract_path)
-                        logger.info("已恢复备份文件")
-                    else:
-                        logger.warning("由于路径冲突，无法恢复备份文件")
+                    shutil.move(old_path, extract_path)
+                    logger.info("已恢复备份文件")
 
                 raise e
 
@@ -891,13 +880,8 @@ class PanSiteMonitor:
 
                 if 'url_results' in result and result['url_results']:
                     for url, url_result in result['url_results'].items():
-                        # 处理新的数据结构：(latency, has_keyword, weight, error_info)
-                        if len(url_result) == 4:
-                            latency, has_keyword, weight, error_info = url_result
-                        else:
-                            # 兼容旧格式：(latency, has_keyword, weight)
-                            latency, has_keyword, weight = url_result
-                            error_info = None
+                        # 处理数据结构：(latency, has_keyword, weight, error_info)
+                        latency, has_keyword, weight, error_info = url_result
 
                         url_data = {
                             "url": url,
@@ -924,9 +908,81 @@ class PanSiteMonitor:
                 json.dump(json_data, f, ensure_ascii=False, indent=2)
 
             self.log_message(f"[成功] 测试结果已保存到: {output_file}", step="保存结果")
+            
+            # 更新历史数据
+            self.update_history(results)
 
         except Exception as e:
             self.log_message(f"[错误] 保存测试结果失败: {e}", step="保存结果")
+            
+    def update_history(self, results):
+        """更新URL历史状态记录（按网站分类）
+        
+        将URL测试结果保存到历史记录文件(data/history.json)中，用于前端展示URL状态的历史变化。
+        采用按站点分类的嵌套格式存储: {"站点名": {"URL": [历史记录列表]}}
+        每个URL最多保留配置文件中指定数量的最新历史记录。
+        """
+        try:
+            history_file = self.base_dir / "data" / "history.json"
+            
+            # 确保data目录存在
+            os.makedirs(history_file.parent, exist_ok=True)
+            
+            # 读取现有历史记录
+            history_data = {}
+            
+            if history_file.exists():
+                try:
+                    with open(history_file, 'r', encoding='utf-8') as f:
+                        history_data = json.load(f)
+                except Exception as e:
+                    self.log_message(f"[警告] 读取历史数据失败: {e}", step="历史记录")
+            
+            # 获取当前时间戳
+            timestamp = datetime.now().isoformat()
+            
+            # 从配置文件获取历史记录保留数量限制
+            history_limit = self.config.get('url_tester', {}).get('history_limit', 12)
+            
+            # 更新每个URL的历史记录
+            for site_name, result in results.items():
+                # 确保该站点在历史数据中存在
+                if site_name not in history_data:
+                    history_data[site_name] = {}
+                
+                # 只处理URL级历史记录
+                if 'url_results' in result:
+                    for url, url_result in result['url_results'].items():
+                        # 确保该URL在该站点下存在
+                        if url not in history_data[site_name]:
+                            history_data[site_name][url] = []
+                        
+                        # 限制URL历史记录数量
+                        if len(history_data[site_name][url]) >= history_limit:
+                            history_data[site_name][url].pop(0)
+                        
+                        # 获取URL状态
+                        if len(url_result) >= 1:
+                            latency = url_result[0]  # 获取延迟时间
+                        else:
+                            latency = None
+                        
+                        # 记录URL状态
+                        history_data[site_name][url].append({
+                            "timestamp": timestamp,
+                            "status": "up" if latency is not None else "down",
+                            "latency": latency,
+                            "is_best": url == result['best_url']
+                        })
+            
+            # 保存历史数据
+            with open(history_file, 'w', encoding='utf-8') as f:
+                json.dump(history_data, f, ensure_ascii=False, indent=2)
+            
+            self.log_message(f"[成功] URL历史记录已更新: {history_file}", step="历史记录")
+        
+        except Exception as e:
+            self.log_message(f"[错误] 更新历史记录失败: {e}", step="历史记录")
 
     # ==================== GitHub上传功能 ====================
 
@@ -1204,6 +1260,9 @@ def main():
         # 在生产环境中，应该将详细错误信息记录到日志而不是打印到控制台
         # 避免在控制台输出可能包含敏感信息的完整堆栈跟踪
         try:
+            # 确保日志目录存在
+            os.makedirs("logs", exist_ok=True)
+            
             # 尝试创建一个基本的logger来记录详细错误
             import logging
             error_logger = logging.getLogger("pan_monitor_error")
@@ -1217,9 +1276,10 @@ def main():
             import traceback
             error_logger.error(f"程序异常详情: {traceback.format_exc()}")
             print("详细错误信息已记录到 logs/error.log")
-        except:
-            # 如果日志记录也失败，则只显示基本错误信息
-            print("无法记录详细错误信息")
+        except Exception as log_error:
+            # 如果日志记录也失败，则记录原始异常和日志异常
+            print(f"无法记录详细错误信息: {log_error}")
+            print(f"原始异常: {e}")
 
         sys.exit(1)
 
