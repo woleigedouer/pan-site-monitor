@@ -470,24 +470,22 @@ body {
         width: calc(100% - 20px);
     }
 
-    /* 移除所有重复和冲突的规则 */
-    
-    /* 重置为一致的布局结构 */
+    /* 重置为一致的布局结构 - 调整网格比例 */
     .site-header, .url-item {
         display: grid;
-        grid-template-columns: auto 1fr auto;
+        grid-template-columns: auto minmax(0, 2fr) auto; /* 增加中间列的比例 */
         align-items: center;
         gap: 0;
         height: 60px;
-        padding: 0 16px;
+        padding: 0 10px 0 12px; /* 减少整体内边距，但保持左侧对齐 */
         box-sizing: border-box;
     }
     
     /* 统一状态指示器样式 */
     .status-indicator {
-        width: 10px;
-        height: 10px;
-        margin: 0 10px 0 0;
+        width: 8px; /* 减小尺寸 */
+        height: 8px;
+        margin: 0 8px 0 0;
         grid-column: 1;
     }
     
@@ -497,9 +495,11 @@ body {
         display: flex;
         flex-direction: row;
         align-items: center;
-        gap: 10px;
+        gap: 6px; /* 减小间隔 */
         margin: 0;
-        width: auto; /* 移除固定宽度限制 */
+        width: auto;
+        overflow: hidden; /* 防止溢出 */
+        min-width: 0; /* 允许Grid容器收缩 */
     }
     
     /* 统一站点名称样式 */
@@ -509,37 +509,58 @@ body {
         margin: 0;
         padding: 0;
         white-space: nowrap;
-        color: #1e293b; /* 确保颜色一致 */
-        min-width: 45px; /* 确保有最小宽度 */
-        display: inline-block; /* 确保正确显示 */
+        color: #1e293b;
+        min-width: 40px; /* 略微减小最小宽度 */
+        display: inline-block;
     }
     
     /* 统一URL文本样式 */
     .best-url, .url-text {
-        font-size: 0.8rem;
+        font-size: 0.75rem; /* 缩小文字 */
         margin: 0;
         padding: 0;
         font-family: 'Courier New', monospace;
         color: #64748b;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0; /* 允许收缩 */
+        max-width: 150px; /* 设置最大宽度 */
     }
     
-    /* 统一右侧状态区域 */
+    /* 统一右侧状态区域 - 减小尺寸 */
     .monitor-stats, .backup-url-stats {
         grid-column: 3;
         display: flex;
         flex-direction: row;
         align-items: center;
-        gap: 8px;
+        gap: 4px; /* 减小间距 */
         margin: 0;
-        justify-self: end; /* 确保右对齐 */
+        justify-self: end;
     }
     
-    /* 统一状态历史点区域 */
+    /* 响应时间徽章样式 - 缩小尺寸 */
+    .response-badge {
+        font-size: 0.65rem; /* 减小字体 */
+        padding: 1px 5px; /* 减小内边距 */
+        margin: 0;
+        white-space: nowrap; /* 确保不换行 */
+    }
+    
+    /* 统一状态历史点区域 - 减小尺寸 */
     .status-history, .backup-status-history {
         display: flex;
         align-items: center;
-        gap: 2px;
-        margin: 0 0 0 5px;
+        gap: 1px; /* 减小点之间的间距 */
+        margin: 0 0 0 4px; /* 减小左边距 */
+    }
+    
+    /* 统一状态点样式 - 减小尺寸 */
+    .status-dot {
+        width: 3px; /* 更窄的点 */
+        height: 10px; /* 更短的点 */
+        border-radius: 1px;
+        margin: 0;
     }
     
     /* 删除所有其他冲突的规则 */
