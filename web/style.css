@@ -483,21 +483,18 @@ body {
     /* 统一站点名称的样式和位置 */
     .site-name, .backup-url-name {
         font-size: 0.9rem;
-        max-width: 60px;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        font-weight: 600;
+        margin: 0; /* 移除之前添加的边距 */
+        padding: 0; /* 确保无内边距 */
+        /* 移除宽度限制和溢出处理 */
         white-space: nowrap;
-        margin-left: 0; /* 移除之前添加的边距 */
-        padding-left: 0; /* 确保无内边距 */
     }
     
     /* 统一URL文本的样式和位置 */
     .best-url, .url-text {
         font-size: 0.75rem;
-        max-width: 90px;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        margin-left: 0; /* 确保无额外边距 */
+        margin: 0; /* 确保无额外边距 */
+        /* 移除宽度限制和溢出处理，允许URL完整显示 */
     }
 
     /* 统一右侧状态统计区域 */
@@ -657,11 +654,8 @@ body {
         font-weight: 600;
         margin: 0;
         padding: 0;
-        max-width: 60px; /* 限制宽度 */
-        overflow: hidden;
-        text-overflow: ellipsis;
+        /* 移除宽度限制和溢出处理 */
         white-space: nowrap;
-        flex-shrink: 0; /* 防止缩小 */
     }
     
     /* 统一URL文本样式 */
@@ -669,10 +663,7 @@ body {
         font-size: 0.75rem;
         margin: 0;
         padding: 0;
-        max-width: 90px; /* 限制URL宽度 */
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        /* 移除宽度限制和溢出处理，允许URL完整显示 */
     }
     
     /* 统一右侧状态区域 */
