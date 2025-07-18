@@ -540,12 +540,21 @@ body {
         justify-self: end;
     }
     
-    /* 响应时间徽章样式 - 缩小尺寸 */
+    /* 响应时间徽章样式 - 移动端统一尺寸 */
     .response-badge {
-        font-size: 0.65rem; /* 减小字体 */
-        padding: 1px 5px; /* 减小内边距 */
+        font-size: 0.6rem; /* 更小的字体 */
+        padding: 1px 4px; /* 减小内边距 */
         margin: 0;
         white-space: nowrap; /* 确保不换行 */
+        border-radius: 3px; /* 减小圆角 */
+        line-height: 1.4; /* 减小行高 */
+        width: 70px; /* 固定宽度，统一所有标签 */
+        min-width: unset; /* 移除最小宽度限制 */
+        max-width: unset; /* 移除最大宽度限制，使用固定宽度 */
+        text-align: center;
+        overflow: hidden; /* 隐藏溢出部分 */
+        text-overflow: ellipsis; /* 使用省略号表示溢出 */
+        box-sizing: border-box; /* 确保边框和内边距包含在宽度内 */
     }
     
     /* 统一状态历史点区域 - 减小尺寸 */
