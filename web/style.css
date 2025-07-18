@@ -446,7 +446,6 @@ body {
     }
 
     .countdown-info {
-        /* 保持水平布局，与桌面版一致 */
         flex-direction: row;
         justify-content: space-between;
         gap: 8px;
@@ -471,51 +470,98 @@ body {
         width: calc(100% - 20px);
     }
 
+    /* 修改移动端布局，保持水平排列 */
     .site-info {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
+        /* 保持水平布局 */
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        /* 控制文字大小 */
+        font-size: 0.85rem;
+    }
+    
+    .site-name {
+        font-size: 0.9rem;
+        max-width: 60px; /* 限制站点名宽度 */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .best-url {
+        font-size: 0.75rem;
+        max-width: 90px; /* 限制URL宽度 */
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .monitor-stats {
-        flex-direction: column;
-        align-items: flex-end;
+        /* 保持水平布局 */
+        flex-direction: row;
+        align-items: center;
         gap: 8px;
+    }
+    
+    .response-badge {
+        font-size: 0.7rem;
+        padding: 2px 6px;
     }
 
     .status-history {
-        margin-left: 0;
+        margin-left: 5px;
     }
-
+    
+    /* 调整URL项布局（备用URL） */
     .url-item {
-        flex-direction: column;
-        align-items: flex-start;
+        /* 保持水平布局 */
+        flex-direction: row;
+        align-items: center;
         gap: 8px;
+        padding: 12px 15px; /* 减少内边距 */
+        height: 48px; /* 减少高度 */
     }
 
     .backup-url-info {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
+        /* 保持水平布局 */
+        flex-direction: row;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.85rem;
+    }
+    
+    .backup-url-name {
+        font-size: 0.8rem;
+        max-width: 60px; /* 限制备用URL名称宽度 */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .url-text {
+        font-size: 0.7rem;
+        max-width: 90px; /* 限制URL宽度 */
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .backup-url-stats {
-        flex-direction: column;
-        align-items: flex-end;
+        /* 保持水平布局 */
+        flex-direction: row;
+        align-items: center;
         gap: 8px;
     }
 
     /* 优化状态点在移动端的显示 */
     .status-dot {
-        width: 8px;
-        height: 16px;
-        border-radius: 2px;
+        width: 4px; /* 减小点的宽度 */
+        height: 12px; /* 减小点的高度 */
+        border-radius: 1px;
     }
 
     /* 移动端禁用状态点悬浮效果 */
     .status-dot:hover {
         transform: none;
         box-shadow: none;
-        height: 16px;
+        height: 12px; /* 与上面的height保持一致 */
     }
 }
