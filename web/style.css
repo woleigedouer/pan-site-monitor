@@ -77,6 +77,9 @@ body {
     color: #1e293b;
     margin-bottom: 16px;
     letter-spacing: -0.025em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .countdown-progress-container {
@@ -88,6 +91,7 @@ body {
     max-width: 600px;
     margin-left: auto;
     margin-right: auto;
+    width: 100%;
 }
 
 .countdown-progress-bar {
@@ -450,14 +454,23 @@ body {
     }
 
     .countdown-info {
-        flex-direction: column;
-        gap: 12px;
-        text-align: center;
+        /* 保持水平布局，与桌面版一致 */
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 8px;
+        text-align: left;
+        font-size: 0.8rem;
+    }
+
+    .countdown-time-info, .last-update-info {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .countdown-progress-container {
-        margin: 0;
-        order: 2;
+        margin: 0 auto;
+        order: unset;
     }
 
     .container {
