@@ -223,7 +223,7 @@ function renderSites(data) {
                                 <div class="url-item">
                                     <div class="status-indicator ${statusIndicatorClass}"></div>
                                     <div class="backup-url-info">
-                                        <div class="backup-url-name">备用<sup>${index + 1}</sup></div>
+                                        <div class="backup-url-name">${siteName}<sup>${index + 2}</sup></div>
                                         <div class="url-text">${urlData.url}</div>
                                     </div>
                                     <div class="backup-url-stats">
