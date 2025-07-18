@@ -342,18 +342,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 设置自定义工具提示
 function setupTooltips() {
-    // 创建工具提示元素
-    const tooltip = document.createElement('div');
-    tooltip.className = 'tooltip';
-    document.body.appendChild(tooltip);
-    
     // 检测是否为移动设备
     const isMobile = window.innerWidth <= 768;
     
-    // 如果是移动设备，不添加悬浮提示功能
+    // 如果是移动设备，不添加任何工具提示相关代码
     if (isMobile) {
         return;
     }
+    
+    // 只在非移动设备上创建工具提示元素
+    const tooltip = document.createElement('div');
+    tooltip.className = 'tooltip';
+    document.body.appendChild(tooltip);
     
     // 监听所有状态点的鼠标事件
     document.addEventListener('mouseover', function(e) {
