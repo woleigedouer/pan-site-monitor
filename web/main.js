@@ -369,7 +369,7 @@ function setupTooltips() {
                     const statusText = (status === 'up' || status === 'success') ? '在线' : '离线';
                     
                     // 组装简洁的单行提示，格式: "状态 - 时间 [延迟]"
-                    tooltipText = `${statusText} - ${time}`;
+                    tooltipText = `<span class="${status === 'up' || status === 'success' ? 'status-online' : 'status-offline'}">${statusText}</span> - ${time}`;
                     
                     // 如果有延迟数据则添加
                     if (latency && (status === 'up' || status === 'success')) {
@@ -377,7 +377,7 @@ function setupTooltips() {
                     }
                 }
                 
-                tooltip.textContent = tooltipText;
+                tooltip.innerHTML = tooltipText;
                 tooltip.style.display = 'block';
                 
                 // 跟随鼠标位置

@@ -324,6 +324,17 @@ body {
     border: 1px solid #eee;
 }
 
+/* 工具提示中的状态文本颜色 */
+.tooltip .status-online {
+    color: var(--color-success);
+    font-weight: 600;
+}
+
+.tooltip .status-offline {
+    color: var(--color-danger);
+    font-weight: 600;
+}
+
 /* 移除之前复杂的工具提示内部结构 */
 .tooltip .tooltip-time,
 .tooltip .tooltip-status,
