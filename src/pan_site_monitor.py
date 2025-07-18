@@ -249,8 +249,27 @@ class PanSiteMonitor:
         if not config.get('github', {}).get('token') or config.get('github', {}).get('token', '').startswith('请设置'):
             print("提示：GitHub token未配置，GitHub上传功能将不可用")
 
+        # 检查TVBox路径配置
+        self._validate_tvbox_paths(config)
 
-    
+    def _validate_tvbox_paths(self, config):
+        """验证TVBox路径配置的合理性"""
+        tvbox_config = config.get('tvbox', {})
+        extract_path = tvbox_config.get('extract_path', '')
+        old_path = tvbox_config.get('old_path', '')
+
+        if extract_path and old_path:
+            extract_abs = os.path.abspath(extract_path)
+            old_abs = os.path.abspath(old_path)
+
+            # 检查old_path是否在extract_path内部
+            if old_abs.startswith(extract_abs + os.sep) or old_abs == extract_abs:
+                print(f"错误：TVBox配置中的备份路径 '{old_path}' 不能在解压路径 '{extract_path}' 内部")
+                print("建议修改配置文件中的 tvbox.old_path 为独立的目录，例如：")
+                print(f"  \"old_path\": \"files_backup\" 或 \"old_path\": \"backup/files\"")
+                raise ValueError(f"TVBox路径配置错误：备份路径不能是解压路径的子目录")
+
+
     def _setup_logging(self, module_name: str):
         """设置日志"""
         try:
@@ -434,6 +453,15 @@ class PanSiteMonitor:
 
                 # 备份现有文件（如果存在）
                 if os.path.exists(extract_path):
+                    # 检查是否存在路径冲突（避免将目录移动到自己的子目录中）
+                    extract_abs = os.path.abspath(extract_path)
+                    old_abs = os.path.abspath(old_path)
+
+                    # 检查old_path是否在extract_path内部
+                    if old_abs.startswith(extract_abs + os.sep) or old_abs == extract_abs:
+                        logger.error(f"路径冲突：备份路径 {old_path} 不能在解压路径 {extract_path} 内部")
+                        raise ValueError(f"备份路径配置错误：{old_path} 不能是 {extract_path} 的子目录")
+
                     if os.path.exists(old_path):
                         shutil.rmtree(old_path)
                     shutil.move(extract_path, old_path)
@@ -449,8 +477,15 @@ class PanSiteMonitor:
                     shutil.rmtree(temp_extract_path)
 
                 if os.path.exists(old_path) and not os.path.exists(extract_path):
-                    shutil.move(old_path, extract_path)
-                    logger.info("已恢复备份文件")
+                    # 检查路径冲突（恢复时也要检查）
+                    extract_abs = os.path.abspath(extract_path)
+                    old_abs = os.path.abspath(old_path)
+
+                    if not (old_abs.startswith(extract_abs + os.sep) or old_abs == extract_abs):
+                        shutil.move(old_path, extract_path)
+                        logger.info("已恢复备份文件")
+                    else:
+                        logger.warning("由于路径冲突，无法恢复备份文件")
 
                 raise e
 
