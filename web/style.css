@@ -470,200 +470,57 @@ body {
         width: calc(100% - 20px);
     }
 
-    /* 修改移动端布局，保持水平排列 */
-    .site-info {
-        /* 保持水平布局 */
-        flex-direction: row;
-        align-items: center;
-        gap: 8px;
-        /* 控制文字大小 */
-        font-size: 0.85rem;
-    }
+    /* 移除所有重复和冲突的规则 */
     
-    /* 统一站点名称的样式和位置 */
-    .site-name, .backup-url-name {
-        font-size: 0.9rem;
-        font-weight: 600;
-        margin: 0; /* 移除之前添加的边距 */
-        padding: 0; /* 确保无内边距 */
-        /* 移除宽度限制和溢出处理 */
-        white-space: nowrap;
-    }
-    
-    /* 统一URL文本的样式和位置 */
-    .best-url, .url-text {
-        font-size: 0.75rem;
-        margin: 0; /* 确保无额外边距 */
-        /* 移除宽度限制和溢出处理，允许URL完整显示 */
-    }
-
-    /* 统一右侧状态统计区域 */
-    .monitor-stats, .backup-url-stats {
-        flex-direction: row;
-        align-items: center;
-        gap: 8px;
-        margin-left: auto; /* 推到右侧 */
-        margin-right: 0; /* 确保右侧无边距 */
-    }
-    
-    /* 统一响应时间徽章样式和位置 */
-    .response-badge {
-        font-size: 0.7rem;
-        padding: 2px 6px;
-        margin: 0; /* 清除任何可能的边距 */
-    }
-
-    /* 统一状态历史点的位置 */
-    .status-history, .backup-status-history {
-        margin-left: 5px;
-        display: flex;
-        align-items: center; /* 垂直居中 */
-    }
-    
-    /* 确保状态指示器一致 */
-    .status-indicator {
-        width: 10px;
-        height: 10px;
-        margin-right: 8px;
-        flex-shrink: 0; /* 防止缩小 */
-    }
-    
-    /* 统一主域名和备用域名的布局结构 */
-    .site-info, .backup-url-info {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-        font-size: 0.85rem;
-        margin-left: 0; /* 移除可能的额外边距 */
-        width: 120px; /* 为域名区域设置固定宽度 */
-    }
-    
-    /* 对齐站点标头和URL项 */
+    /* 重置为一致的布局结构 */
     .site-header, .url-item {
-        display: flex;
-        align-items: center;
-        padding: 16px 12px; /* 减少水平内边距 */
-        height: 60px;
-        box-sizing: border-box;
-    }
-    
-    /* 为主域名卡片和备用域名卡片设置统一的内部布局 */
-    .site-header > *, .url-item > * {
-        position: relative; /* 启用相对定位 */
-    }
-    
-    /* 确保站点名称在左侧对齐 */
-    .site-header .site-name, .url-item .backup-url-name {
-        margin-left: 0; /* 确保无左边距 */
-    }
-    
-    /* 状态指示器位置 */
-    .site-header .status-indicator, .url-item .status-indicator {
-        position: relative; /* 启用相对定位 */
-        left: 0; /* 靠左对齐 */
-    }
-    
-    /* 确保主域名卡片和备用域名卡片尺寸一致 */
-    .site-header {
-        padding: 16px 20px; /* 恢复原来的内边距 */
-        height: 60px; /* 恢复原来的高度 */
-    }
-    
-    .url-item {
-        /* 保持水平布局 */
-        flex-direction: row;
-        align-items: center;
-        gap: 8px;
-        padding: 16px 20px; /* 恢复原来的内边距 */
-        height: 60px; /* 恢复原来的高度 */
-    }
-
-    .backup-url-info {
-        /* 保持水平布局 */
-        flex-direction: row;
-        align-items: center;
-        gap: 8px;
-        font-size: 0.85rem;
-    }
-    
-    /* 移除这些重复的样式定义 */
-    .backup-url-name {
-        /* 这些样式已在统一的选择器中定义 */
-    }
-    
-    .url-text {
-        /* 这些样式已在统一的选择器中定义 */
-    }
-    
-    .backup-url-stats {
-        /* 这些样式已在统一的选择器中定义 */
-    }
-    
-    .backup-url-info {
-        /* 这些样式已在统一的选择器中定义 */
-    }
-
-    /* 优化状态点在移动端的显示 */
-    .status-dot {
-        width: 4px; /* 减小点的宽度 */
-        height: 12px; /* 减小点的高度 */
-        border-radius: 1px;
-    }
-
-    /* 移动端禁用状态点悬浮效果 */
-    .status-dot:hover {
-        transform: none;
-        box-shadow: none;
-        height: 12px; /* 与上面的height保持一致 */
-    }
-
-    /* 重置之前可能影响对齐的样式 */
-    .site-header, .url-item {
-        padding: 0; /* 移除内边距，我们将使用网格布局精确控制 */
-        height: 60px;
         display: grid;
         grid-template-columns: auto 1fr auto;
         align-items: center;
         gap: 0;
+        height: 60px;
+        padding: 0 16px;
         box-sizing: border-box;
     }
     
-    /* 统一状态指示器样式和位置 */
+    /* 统一状态指示器样式 */
     .status-indicator {
         width: 10px;
         height: 10px;
-        margin: 0;
-        margin-left: 12px; /* 左边距统一 */
-        margin-right: 10px; /* 与站点名称间距统一 */
+        margin: 0 10px 0 0;
         grid-column: 1;
     }
     
-    /* 统一左侧信息区域 - 改回水平布局 */
+    /* 统一左侧信息区域 */
     .site-info, .backup-url-info {
         grid-column: 2;
         display: flex;
-        flex-direction: row; /* 水平排列站点名称和URL */
-        align-items: center; /* 垂直居中对齐 */
-        gap: 8px;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
         margin: 0;
+        width: auto; /* 移除固定宽度限制 */
     }
     
     /* 统一站点名称样式 */
     .site-name, .backup-url-name {
-        font-size: 0.9rem;
+        font-size: 0.95rem;
         font-weight: 600;
         margin: 0;
         padding: 0;
-        /* 移除宽度限制和溢出处理 */
         white-space: nowrap;
+        color: #1e293b; /* 确保颜色一致 */
+        min-width: 45px; /* 确保有最小宽度 */
+        display: inline-block; /* 确保正确显示 */
     }
     
     /* 统一URL文本样式 */
     .best-url, .url-text {
-        font-size: 0.75rem;
+        font-size: 0.8rem;
         margin: 0;
         padding: 0;
-        /* 移除宽度限制和溢出处理，允许URL完整显示 */
+        font-family: 'Courier New', monospace;
+        color: #64748b;
     }
     
     /* 统一右侧状态区域 */
@@ -674,14 +531,7 @@ body {
         align-items: center;
         gap: 8px;
         margin: 0;
-        margin-right: 12px; /* 右边距统一 */
-    }
-    
-    /* 统一响应时间徽章 */
-    .response-badge {
-        font-size: 0.7rem;
-        padding: 2px 6px;
-        margin: 0;
+        justify-self: end; /* 确保右对齐 */
     }
     
     /* 统一状态历史点区域 */
@@ -689,15 +539,8 @@ body {
         display: flex;
         align-items: center;
         gap: 2px;
-        margin: 0;
-        margin-left: 5px;
+        margin: 0 0 0 5px;
     }
     
-    /* 统一状态点样式 */
-    .status-dot {
-        width: 4px;
-        height: 12px;
-        border-radius: 1px;
-        margin: 0;
-    }
+    /* 删除所有其他冲突的规则 */
 }
