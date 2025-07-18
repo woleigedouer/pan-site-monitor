@@ -514,18 +514,19 @@ body {
         display: inline-block;
     }
     
-    /* 统一URL文本样式 */
+    /* 统一URL文本样式 - 移除截断处理 */
     .best-url, .url-text {
-        font-size: 0.75rem; /* 缩小文字 */
+        font-size: 0.75rem;
         margin: 0;
         padding: 0;
         font-family: 'Courier New', monospace;
         color: #64748b;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        min-width: 0; /* 允许收缩 */
-        max-width: 150px; /* 设置最大宽度 */
+        /* 移除截断相关样式 */
+        white-space: normal; /* 允许换行 */
+        overflow: visible; /* 允许内容溢出 */
+        text-overflow: clip; /* 不使用省略号 */
+        min-width: 0;
+        max-width: none; /* 移除最大宽度限制 */
     }
     
     /* 统一右侧状态区域 - 减小尺寸 */
