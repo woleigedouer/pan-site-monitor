@@ -368,12 +368,27 @@ function setupTooltips() {
                     // 状态文本
                     const statusText = (status === 'up' || status === 'success') ? '在线' : '离线';
                     
-                    // 组装简洁的单行提示，格式: "状态 - 时间 [延迟]"
-                    tooltipText = `<span class="${status === 'up' || status === 'success' ? 'status-online' : 'status-offline'}">${statusText}</span> - ${time}`;
+                    // 处理时间格式，去掉秒数
+                    let simplifiedTime = time;
+                    if (time && time.includes(':')) {
+                        // 假设时间格式为 YYYY/MM/DD HH:MM:SS 或类似格式
+                        const timeParts = time.split(' ');
+                        if (timeParts.length > 1) {
+                            const datePart = timeParts[0];
+                            const timePart = timeParts[1].split(':');
+                            if (timePart.length >= 2) {
+                                // 只保留小时和分钟
+                                simplifiedTime = `${datePart} ${timePart[0]}:${timePart[1]}`;
+                            }
+                        }
+                    }
                     
-                    // 如果有延迟数据则添加
+                    // 组装简洁的单行提示，格式: "状态 - 时间 - 延迟"
+                    tooltipText = `<span class="${status === 'up' || status === 'success' ? 'status-online' : 'status-offline'}">${statusText}</span> - ${simplifiedTime}`;
+                    
+                    // 如果有延迟数据则添加，使用相同的连接符号
                     if (latency && (status === 'up' || status === 'success')) {
-                        tooltipText += ` ⚡${latency}ms`;
+                        tooltipText += ` - ${latency}ms`;
                     }
                 }
                 
