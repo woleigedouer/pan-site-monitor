@@ -511,7 +511,12 @@ body {
         margin-left: 5px;
     }
     
-    /* 调整URL项布局（备用URL） */
+    /* 确保主域名卡片和备用域名卡片尺寸一致 */
+    .site-header {
+        padding: 12px 15px; /* 与url-item相同的内边距 */
+        height: 48px; /* 与url-item相同的高度 */
+    }
+    
     .url-item {
         /* 保持水平布局 */
         flex-direction: row;
