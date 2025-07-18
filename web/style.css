@@ -166,14 +166,6 @@ body {
     overflow: hidden;
 }
 
-.site-item:hover {
-    /* Remove transform effect for cleaner look */
-}
-
-.site-item.failed {
-    /* Keep same background for consistency */
-}
-
 /* Uptime Kuma Style Monitor Item */
 .site-header {
     display: flex;
@@ -511,5 +503,19 @@ body {
         flex-direction: column;
         align-items: flex-end;
         gap: 8px;
+    }
+
+    /* 优化状态点在移动端的显示 */
+    .status-dot {
+        width: 8px;
+        height: 16px;
+        border-radius: 2px;
+    }
+
+    /* 移动端禁用状态点悬浮效果 */
+    .status-dot:hover {
+        transform: none;
+        box-shadow: none;
+        height: 16px;
     }
 }

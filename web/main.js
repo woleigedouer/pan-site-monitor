@@ -347,6 +347,14 @@ function setupTooltips() {
     tooltip.className = 'tooltip';
     document.body.appendChild(tooltip);
     
+    // 检测是否为移动设备
+    const isMobile = window.innerWidth <= 768;
+    
+    // 如果是移动设备，不添加悬浮提示功能
+    if (isMobile) {
+        return;
+    }
+    
     // 监听所有状态点的鼠标事件
     document.addEventListener('mouseover', function(e) {
         const target = e.target;
