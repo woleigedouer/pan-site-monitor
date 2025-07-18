@@ -513,8 +513,8 @@ body {
     
     /* 确保主域名卡片和备用域名卡片尺寸一致 */
     .site-header {
-        padding: 12px 15px; /* 与url-item相同的内边距 */
-        height: 48px; /* 与url-item相同的高度 */
+        padding: 16px 20px; /* 恢复原来的内边距 */
+        height: 60px; /* 恢复原来的高度 */
     }
     
     .url-item {
@@ -522,8 +522,8 @@ body {
         flex-direction: row;
         align-items: center;
         gap: 8px;
-        padding: 12px 15px; /* 减少内边距 */
-        height: 48px; /* 减少高度 */
+        padding: 16px 20px; /* 恢复原来的内边距 */
+        height: 60px; /* 恢复原来的高度 */
     }
 
     .backup-url-info {
