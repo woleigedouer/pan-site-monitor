@@ -7,6 +7,9 @@ const CONFIG = {
     COUNTDOWN_INTERVAL: 60 * 60 * 1000  // 倒计时间隔：1小时（毫秒）
 };
 
+// 历史数据的全局变量
+let siteHistoryData = {};
+
 // 格式化延迟等级
 function formatLatency(latency) {
     if (latency < CONFIG.LATENCY_THRESHOLDS.GOOD) return 'success';
@@ -50,7 +53,48 @@ function startCountdown() {
 
 // 切换站点详情展开/收起
 function toggleSiteDetails(element) {
-    element.classList.toggle('expanded');
+    const isExpanded = element.classList.contains('expanded');
+    const siteDetails = element.querySelector('.site-details');
+
+    if (siteDetails) {
+        if (!isExpanded) {
+            // 展开：计算动态高度
+            const urlItems = siteDetails.querySelectorAll('.url-item');
+            const itemHeight = 60; // 每个备用域名项的高度
+            const padding = 32; // 上下padding总和 (16px * 2)
+            const dynamicHeight = urlItems.length * itemHeight + padding;
+
+            element.classList.add('expanded');
+            siteDetails.style.maxHeight = dynamicHeight + 'px';
+        } else {
+            // 收起
+            element.classList.remove('expanded');
+            siteDetails.style.maxHeight = '0px';
+        }
+    }
+}
+
+// 生成状态历史数据（使用真实数据或显示无数据状态）
+function generateStatusHistory(currentStatus, urlData, siteName) {
+    // 始终返回固定长度的历史数据（12个点）
+    const HISTORY_LENGTH = 12;
+    let history = Array(HISTORY_LENGTH).fill('no_data');
+    
+    // 尝试使用真实的历史数据
+    if (siteHistoryData && siteHistoryData[siteName] && siteHistoryData[siteName].length > 0) {
+        // 将真实历史数据复制到结果数组中
+        const realData = siteHistoryData[siteName].map(record => record.status);
+        
+        // 计算起始位置，以确保最新的数据显示在最右侧
+        const startPos = Math.max(0, HISTORY_LENGTH - realData.length);
+        
+        // 复制真实数据到结果数组
+        for (let i = 0; i < realData.length && i < HISTORY_LENGTH; i++) {
+            history[startPos + i] = realData[i];
+        }
+    }
+    
+    return history;
 }
 
 // SVG图标定义
@@ -75,37 +119,36 @@ function renderSites(data) {
             const bestUrlData = siteData.urls.find(u => u.is_best);
             const latencyMs = bestUrlData.latency * 1000;
             const latencyClass = formatLatency(latencyMs);
+            const statusHistory = generateStatusHistory('success', bestUrlData, siteName);
 
             headerContent = `
+                <div class="status-indicator success"></div>
                 <div class="site-info">
-                    <svg class="status-icon success" fill="currentColor" viewBox="0 0 20 20">
-                        ${ICONS.success}
-                    </svg>
                     <div class="site-name">${siteName}</div>
                     <div class="best-url">${siteData.best_url}</div>
-                    <div class="latency-badge ${latencyClass}">
-                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20">
-                            ${ICONS.clock}
-                        </svg>
-                        ${latencyMs.toFixed(0)}ms
+                </div>
+                <div class="monitor-stats">
+                    <div class="response-badge ${latencyClass}">${latencyMs.toFixed(0)}ms</div>
+                    <div class="status-history">
+                        ${statusHistory.map(status => `<div class="status-dot ${status}"></div>`).join('')}
                     </div>
                 </div>
-                <svg class="expand-icon" fill="currentColor" viewBox="0 0 20 20">
-                    ${ICONS.expand}
-                </svg>
             `;
         } else {
+            const statusHistory = generateStatusHistory('failed', null, siteName);
+
             headerContent = `
+                <div class="status-indicator failed"></div>
                 <div class="site-info">
-                    <svg class="status-icon failed" fill="currentColor" viewBox="0 0 20 20">
-                        ${ICONS.failed}
-                    </svg>
                     <div class="site-name">${siteName}</div>
                     <div class="best-url failed-url">所有URL均不可用</div>
                 </div>
-                <svg class="expand-icon" fill="currentColor" viewBox="0 0 20 20">
-                    ${ICONS.expand}
-                </svg>
+                <div class="monitor-stats">
+                    <div class="response-badge danger">失败</div>
+                    <div class="status-history">
+                        ${statusHistory.map(status => `<div class="status-dot ${status}"></div>`).join('')}
+                    </div>
+                </div>
             `;
         }
 
@@ -125,9 +168,11 @@ function renderSites(data) {
                 detailsContent = `
                     <div class="site-details">
                         <div class="url-list">
-                            ${urlsToShow.map(urlData => {
+                            ${urlsToShow.map((urlData, index) => {
                                 const latencyMs = urlData.latency ? urlData.latency * 1000 : 0;
                                 const latencyClass = urlData.latency ? formatLatency(latencyMs) : 'danger';
+                                const statusHistory = generateStatusHistory(urlData.latency ? 'success' : 'failed', urlData, siteName);
+                                const statusIndicatorClass = urlData.latency ? 'success' : 'failed';
 
                                 // 生成状态文本：优先显示详细错误信息
                                 let statusText;
@@ -138,17 +183,21 @@ function renderSites(data) {
                                     statusText = urlData.error_detail;
                                 } else {
                                     // 兜底显示
-                                    statusText = 'N/A';
+                                    statusText = '失败';
                                 }
 
                                 return `
                                 <div class="url-item">
-                                    <div class="url-text">${urlData.url}</div>
-                                    <div class="latency-badge ${latencyClass}">
-                                        <svg width="12" height="12" fill="currentColor" viewBox="0 0 20 20">
-                                            ${urlData.latency ? ICONS.clock : ICONS.failed}
-                                        </svg>
-                                        ${statusText}
+                                    <div class="status-indicator ${statusIndicatorClass}"></div>
+                                    <div class="backup-url-info">
+                                        <div class="backup-url-name">备用${index + 1}</div>
+                                        <div class="url-text">${urlData.url}</div>
+                                    </div>
+                                    <div class="backup-url-stats">
+                                        <div class="response-badge ${latencyClass}">${statusText}</div>
+                                        <div class="backup-status-history">
+                                            ${statusHistory.map(status => `<div class="status-dot ${status}"></div>`).join('')}
+                                        </div>
                                     </div>
                                 </div>
                                 `;
@@ -186,6 +235,19 @@ function renderSites(data) {
     }
 }
 
+// 加载历史数据
+async function loadHistoryData() {
+    try {
+        const response = await fetch('../data/history.json');
+        if (response.ok) {
+            return await response.json();
+        }
+    } catch (e) {
+        console.error('加载历史数据失败:', e);
+    }
+    return {}; // 如果加载失败返回空对象
+}
+
 // 数据加载
 async function loadData() {
     const loading = document.getElementById('loading');
@@ -195,6 +257,9 @@ async function loadData() {
     container.innerHTML = '';
 
     try {
+        // 首先尝试加载历史数据
+        siteHistoryData = await loadHistoryData();
+        
         let response;
         let data;
 
