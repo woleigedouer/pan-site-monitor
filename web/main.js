@@ -10,6 +10,9 @@ const CONFIG = {
 // 历史数据的全局变量
 let siteHistoryData = {};
 
+// 定时器管理变量
+let countdownTimer = null;
+
 // 格式化延迟等级
 function formatLatency(latency) {
     if (latency < CONFIG.LATENCY_THRESHOLDS.GOOD) return 'success';
@@ -47,8 +50,13 @@ function updateCountdown() {
 
 // 启动倒计时
 function startCountdown() {
+    // 清理之前的定时器，防止内存泄漏
+    if (countdownTimer) {
+        clearInterval(countdownTimer);
+    }
+
     updateCountdown();
-    setInterval(updateCountdown, 1000);
+    countdownTimer = setInterval(updateCountdown, 1000);
 }
 
 // 键盘事件处理
@@ -90,7 +98,12 @@ function toggleSiteDetails(element) {
 function generateStatusHistory(siteName, url) {
     // 始终返回固定长度的历史数据（12个点）
     const HISTORY_LENGTH = 12;
-    let history = Array(HISTORY_LENGTH).fill({status: 'no_data', timestamp: '', latency: null});
+    // 修复：使用map创建独立的对象，避免对象引用共享问题
+    let history = Array(HISTORY_LENGTH).fill().map(() => ({
+        status: 'no_data',
+        timestamp: '',
+        latency: null
+    }));
     
     // 尝试使用URL特定的历史数据（如果提供了URL）
     let historyRecords = null;
