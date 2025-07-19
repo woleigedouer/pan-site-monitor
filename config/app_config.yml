@@ -1,0 +1,115 @@
+# Pan Site Monitor 配置文件
+# 支持注释的YAML格式配置，提高可读性和维护性
+
+# 站点配置 - TVBox资源站点相关设置
+sites:
+  # 站点映射 - JSON文件名到站点显示名称的映射
+  mapping:
+    wogg.json: "玩偶"      # 玩偶站点
+    mogg.json: "木偶"      # 木偶站点
+    lb.json: "蜡笔"        # 蜡笔站点
+    zz.json: "至臻"        # 至臻站点
+    yyds.json: "多多"      # 多多站点
+    og.json: "欧哥"        # 欧哥站点
+    ex.json: "二小"        # 二小站点
+    hb.json: "虎斑"        # 虎斑站点
+    sd.json: "闪电"        # 闪电站点
+    xbky.json: "小斑"      # 小斑站点
+
+  # 搜索路径 - 各站点的搜索URL路径
+  search_paths:
+    闪电: "/index.php/vod/search.html?wd=仙台有树"
+    欧哥: "/index.php/vod/search.html?wd=仙台有树"
+    多多: "/index.php/vod/search.html?wd=仙台有树"
+    蜡笔: "/index.php/vod/search.html?wd=仙台有树"
+    至臻: "/index.php/vod/search.html?wd=仙台有树"
+    虎斑: "/index.php/vod/search.html?wd=仙台有树"
+    玩偶: "/vodsearch/-------------.html?wd=仙台有树"  # 玩偶站点使用不同的搜索路径
+    木偶: "/index.php/vod/search.html?wd=仙台有树"
+    二小: "/index.php/vod/search.html?wd=仙台有树"
+    小斑: "/index.php/vod/search.html?wd=仙台有树"
+
+  # 关键字验证 - 用于验证搜索结果页面的关键字
+  keyword_validation:
+    闪电: "class=\"search-stat\""
+    欧哥: "class=\"search-stat\""
+    多多: "class=\"search-stat\""
+    蜡笔: "class=\"search-stat\""
+    至臻: "class=\"search-stat\""
+    虎斑: "class=\"search-stat\""
+    玩偶: "class=\"search-stat\""
+    木偶: "class=\"search-stat\""
+    二小: "class=\"search-stat\""
+    小斑: "class=\"search-stat\""
+
+  # URL权重配置 - 特定站点的URL权重设置
+  url_weights:
+    木偶:
+      "https://aliii.deno.dev": 60
+      "http://149.88.87.72:5666": 60
+    至臻:
+      "http://www.xhww.net": 10
+      "http://xhww.net": 10
+
+# TVBox配置 - TVBox资源管理相关设置
+tvbox:
+  api_url: "https://9877.kstore.space/Market/single.json"  # TVBox API地址
+  local_json_dir: "files/TVBoxOSC/tvbox/json"              # 本地JSON文件目录
+  output_path: "data/test.json"                            # 输出文件路径
+  version_file: "data/xs_version.txt"                      # 版本文件路径
+  download_path: "data/xs.zip"                             # 下载文件路径
+  extract_path: "files"                                    # 解压目录
+  old_path: "files_backup"                                 # 备份目录
+  api_timeout: 10                                          # API请求超时时间(秒)
+  download_timeout: 60                                     # 下载超时时间(秒)
+  download_chunk_size: 8192                                # 下载块大小(字节)
+  
+  # API解析配置
+  api_parsing_keys:
+    category_name: "本地包"      # 分类名称
+    download_item_name: "点击下载"  # 下载项名称
+
+# URL测试器配置 - 站点可用性测试相关设置
+url_tester:
+  test_timeout: 15        # 测试超时时间(秒)
+  default_weight: 50      # 默认权重
+  history_limit: 12       # 历史记录限制
+  
+  # 代理配置
+  proxy:
+    enabled: false        # 是否启用代理
+    proxies:
+      http: "http://127.0.0.1:7890"    # HTTP代理地址
+      https: "http://127.0.0.1:7890"   # HTTPS代理地址
+
+# GitHub配置 - 自动上传到GitHub相关设置
+github:
+  owner: "请设置环境变量 GITHUB_OWNER"     # GitHub用户名(建议使用环境变量)
+  repo: "请设置环境变量 GITHUB_REPO"       # GitHub仓库名(建议使用环境变量)
+  branch: "main"                           # 目标分支
+  token: "请设置环境变量 GITHUB_TOKEN"     # GitHub Token(建议使用环境变量)
+  api_timeout: 30                          # API超时时间(秒)
+  commit_message_template: "Update test results - {timestamp}"  # 提交消息模板
+  
+  # 要上传的文件列表
+  files_to_upload:
+    - local_path: "data/test_results.json"
+      github_path: "data/test_results.json"
+    - local_path: "data/test.json"
+      github_path: "data/test.json"
+    - local_path: "data/history.json"
+      github_path: "data/history.json"
+
+# 日志配置 - 日志记录相关设置
+logging:
+  level: "INFO"           # 日志级别: DEBUG, INFO, WARNING, ERROR
+  files:
+    tvbox_manager: "logs/tvbox_manager.log"         # TVBox管理器日志文件
+    url_tester: "logs/url_tester.log"               # URL测试器日志文件
+    github_uploader: "logs/github_uploader.log"     # GitHub上传器日志文件
+
+# 安全配置 - 安全相关设置
+security:
+  verify_ssl: true              # 是否验证SSL证书
+  ignore_ssl_warnings: false   # 是否忽略SSL警告
+  log_sensitive_info: false    # 是否记录敏感信息到日志

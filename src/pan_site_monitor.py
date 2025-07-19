@@ -16,6 +16,12 @@ from typing import Dict, List, Tuple, Optional, Any
 import argparse
 import sys
 
+try:
+    import yaml
+    YAML_AVAILABLE = True
+except ImportError:
+    YAML_AVAILABLE = False
+
 # SSL警告处理将在配置加载后动态设置
 
 
@@ -29,9 +35,21 @@ class PanSiteMonitor:
         self.last_site = None
         
     def _load_unified_config(self, config_file: str = None):
-        """加载统一配置文件"""
+        """加载统一配置文件，支持JSON和YAML格式"""
         if config_file is None:
-            config_file = self.base_dir / "config" / "app_config.json"
+            # 优先尝试YAML格式，如果不存在则使用JSON格式
+            yaml_config = self.base_dir / "config" / "app_config.yml"
+            json_config = self.base_dir / "config" / "app_config.json"
+
+            if yaml_config.exists() and YAML_AVAILABLE:
+                config_file = yaml_config
+                print(f"使用YAML配置文件: {config_file}")
+            else:
+                config_file = json_config
+                if not yaml_config.exists():
+                    print(f"YAML配置文件不存在，使用JSON配置文件: {config_file}")
+                elif not YAML_AVAILABLE:
+                    print(f"PyYAML未安装，使用JSON配置文件: {config_file}")
         else:
             config_file = Path(config_file)
             if not config_file.is_absolute():
@@ -83,7 +101,7 @@ class PanSiteMonitor:
                 print(f"加载.env文件失败: {e}")
     
     def _load_config_file(self, config_file: str):
-        """加载配置文件"""
+        """加载配置文件，支持JSON和YAML格式"""
         # 最小默认配置结构
         default_config = {
             "sites": {"mapping": {}, "search_paths": {}, "keyword_validation": {}, "url_weights": {}},
@@ -98,25 +116,55 @@ class PanSiteMonitor:
             "security": {"verify_ssl": True, "ignore_ssl_warnings": False, "log_sensitive_info": False},
             "logging": {"level": "INFO", "files": {}}
         }
-        
+
         try:
             if os.path.exists(config_file):
+                config_path = Path(config_file)
+                is_yaml = config_path.suffix.lower() in ['.yml', '.yaml']
+
                 with open(config_file, 'r', encoding='utf-8') as f:
-                    user_config = json.load(f)
+                    if is_yaml and YAML_AVAILABLE:
+                        user_config = yaml.safe_load(f)
+                        print(f"已加载YAML配置文件: {config_file}")
+                    else:
+                        user_config = json.load(f)
+                        print(f"已加载JSON配置文件: {config_file}")
+
                     self._deep_merge(default_config, user_config)
             else:
+                # 创建默认配置文件
                 os.makedirs(os.path.dirname(config_file), exist_ok=True)
+                config_path = Path(config_file)
+                is_yaml = config_path.suffix.lower() in ['.yml', '.yaml']
+
                 with open(config_file, 'w', encoding='utf-8') as f:
-                    json.dump(default_config, f, ensure_ascii=False, indent=2)
-                print(f"已创建默认配置文件: {config_file}")
+                    if is_yaml and YAML_AVAILABLE:
+                        yaml.dump(default_config, f, default_flow_style=False,
+                                allow_unicode=True, indent=2)
+                        print(f"已创建默认YAML配置文件: {config_file}")
+                    else:
+                        json.dump(default_config, f, ensure_ascii=False, indent=2)
+                        print(f"已创建默认JSON配置文件: {config_file}")
+
                 print("警告：配置文件中缺少站点配置数据，程序可能无法正常工作")
-                print("请在config/app_config.json中配置sites节的相关信息")
+                if is_yaml:
+                    print("请在config/app_config.yml中配置sites节的相关信息")
+                else:
+                    print("请在config/app_config.json中配置sites节的相关信息")
                 print("注意：请编辑配置文件中的敏感信息（如GitHub token）")
         except Exception as e:
             print(f"配置文件加载失败，使用默认配置: {e}")
         
         return default_config
-    
+
+    def _get_config_file_hint(self):
+        """获取配置文件提示信息"""
+        yaml_config = self.base_dir / "config" / "app_config.yml"
+        if yaml_config.exists() and YAML_AVAILABLE:
+            return "config/app_config.yml"
+        else:
+            return "config/app_config.json"
+
     def _deep_merge(self, target, source):
         """深度合并字典"""
         for key, value in source.items():
@@ -218,15 +266,15 @@ class PanSiteMonitor:
 
         if not mapping:
             print("警告：站点映射配置为空，TVBox功能可能无法正常工作")
-            print("提示：请在config/app_config.json中配置sites.mapping")
+            print(f"提示：请在{self._get_config_file_hint()}中配置sites.mapping")
 
         if not search_paths:
             print("警告：搜索路径配置为空，URL测试功能可能无法正常工作")
-            print("提示：请在config/app_config.json中配置sites.search_paths")
+            print(f"提示：请在{self._get_config_file_hint()}中配置sites.search_paths")
 
         if not keyword_validation:
             print("警告：关键字验证配置为空，URL测试的准确性可能受影响")
-            print("提示：请在config/app_config.json中配置sites.keyword_validation")
+            print(f"提示：请在{self._get_config_file_hint()}中配置sites.keyword_validation")
 
         # 检查配置一致性
         mapping_sites = set(mapping.values())
@@ -503,7 +551,7 @@ class PanSiteMonitor:
             site_mapping = self.config['sites']['mapping']
             if not site_mapping:
                 logger.warning("站点映射配置为空，无法进行数据聚合")
-                logger.info("请在config/app_config.json中配置sites.mapping")
+                logger.info(f"请在{self._get_config_file_hint()}中配置sites.mapping")
                 return False
 
             total_count = len(site_mapping)
@@ -668,7 +716,7 @@ class PanSiteMonitor:
         site_mapping = self.config['sites']['mapping']
         if not site_mapping:
             self.log_message("[错误] 站点映射配置为空，无法处理TVBox文件", step="提取URL")
-            self.log_message("[信息] 请在config/app_config.json中配置sites.mapping", step="提取URL")
+            self.log_message(f"[信息] 请在{self._get_config_file_hint()}中配置sites.mapping", step="提取URL")
             return {}
 
         for filename, site_name in site_mapping.items():
