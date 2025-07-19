@@ -21,6 +21,8 @@ function isMobileDevice() {
     return window.innerWidth <= 768;
 }
 
+
+
 // 格式化延迟等级
 function formatLatency(latency) {
     if (latency < CONFIG.LATENCY_THRESHOLDS.GOOD) return 'success';
@@ -350,36 +352,97 @@ async function loadData() {
     loading.style.display = 'flex';
     container.innerHTML = '';
 
+    let data = null;
+    let errorDetails = null;
+
     try {
         // 首先尝试加载历史数据
         siteHistoryData = await loadHistoryData();
-        
-        let response;
-        let data;
 
         // 尝试API端点
         try {
-            response = await fetch('/api/data');
+            console.log('🔄 尝试从API加载数据...');
+            const response = await fetch('/api/data');
+
             if (response.ok) {
-                data = await response.json();
+                try {
+                    data = await response.json();
+                    console.log('✅ 成功从API加载数据');
+                } catch (jsonError) {
+                    errorDetails = {
+                        type: 'api_json_parse_error',
+                        message: 'API响应JSON解析失败',
+                        error: jsonError
+                    };
+                    throw jsonError;
+                }
             } else {
-                throw new Error('API not available');
+                errorDetails = {
+                    type: 'api_http_error',
+                    message: `API请求失败: HTTP ${response.status}`,
+                    status: response.status
+                };
+                throw new Error(`API HTTP ${response.status}`);
             }
         } catch (apiError) {
+            console.warn('⚠️ API加载失败，尝试本地文件:', errorDetails?.message || apiError.message);
+
             // 尝试本地文件
-            response = await fetch('../data/test_results.json');
-            if (response.ok) {
-                data = await response.json();
-            } else {
-                throw new Error('Data file not found');
+            try {
+                console.log('🔄 尝试从本地文件加载数据...');
+                const response = await fetch('../data/test_results.json');
+
+                if (response.ok) {
+                    try {
+                        data = await response.json();
+                        console.log('✅ 成功从本地文件加载数据');
+                    } catch (jsonError) {
+                        errorDetails = {
+                            type: 'local_json_parse_error',
+                            message: '本地文件JSON解析失败',
+                            error: jsonError
+                        };
+                        throw jsonError;
+                    }
+                } else {
+                    errorDetails = {
+                        type: 'local_file_not_found',
+                        message: '本地数据文件不存在',
+                        status: response.status
+                    };
+                    throw new Error(`Local file ${response.status}`);
+                }
+            } catch (localError) {
+                errorDetails = errorDetails || {
+                    type: 'local_fetch_error',
+                    message: '本地文件加载失败',
+                    error: localError
+                };
+                throw localError;
             }
         }
 
-        renderSites(data);
-        loading.style.display = 'none';
+        if (data) {
+            renderSites(data);
+            loading.style.display = 'none';
+        }
 
     } catch (err) {
-        console.error('Error loading data:', err);
+        // 详细的错误处理和日志
+        const errorInfo = errorDetails || {
+            type: 'unknown_error',
+            message: '未知错误',
+            error: err
+        };
+
+        console.error('❌ 数据加载失败:', {
+            type: errorInfo.type,
+            message: errorInfo.message,
+            error: err,
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent
+        });
+
         // 保持加载状态更长时间，然后静默隐藏
         setTimeout(() => {
             loading.style.display = 'none';
