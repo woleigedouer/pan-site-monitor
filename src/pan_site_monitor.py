@@ -732,13 +732,27 @@ class PanSiteMonitor:
         # 设置SSL验证
         verify_ssl = self.config.get('security', {}).get('verify_ssl', True)
 
+        # 设置请求头，模拟真实浏览器
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+            'Accept-Encoding': 'gzip, deflate',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1'
+        }
+
+
+
         try:
             timeout = self.config.get('url_tester', {}).get('test_timeout', 15)
             response = requests.get(
                 test_url_str,
                 timeout=timeout,
                 verify=verify_ssl,
-                proxies=proxies
+                proxies=proxies,
+                headers=headers,
+                allow_redirects=True
             )
             latency = response.elapsed.total_seconds()
 
@@ -765,12 +779,16 @@ class PanSiteMonitor:
             self.log_message(f"[超时] URL {test_url_str} {error_detail}",
                             site_name, "测试URL")
             return None, None, {"type": "timeout", "detail": "超时"}
-        except requests.exceptions.ConnectionError:
-            error_detail = "连接失败"
+        except requests.exceptions.SSLError as e:
+            error_detail = f"SSL错误: {str(e)[:100]}"
+            self.log_message(f"[SSL错误] URL {test_url_str} {error_detail}", site_name, "测试URL")
+            return None, None, {"type": "ssl_error", "detail": "SSL错误"}
+        except requests.exceptions.ConnectionError as e:
+            error_detail = f"连接失败: {str(e)[:100]}"
             self.log_message(f"[连接失败] URL {test_url_str} {error_detail}", site_name, "测试URL")
             return None, None, {"type": "connection_error", "detail": "连接失败"}
         except Exception as e:
-            error_detail = f"测试异常: {e}"
+            error_detail = f"测试异常: {str(e)[:100]}"
             self.log_message(f"[错误] URL {test_url_str} {error_detail}", site_name, "测试URL")
             return None, None, {"type": "unknown_error", "detail": "未知错误"}
 
