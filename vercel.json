@@ -14,11 +14,11 @@
     },
     {
       "source": "/style.css",
-      "destination": "/web/style.css"
+      "destination": "/web/assets/css/main.css"
     },
     {
       "source": "/main.js",
-      "destination": "/web/main.js"
+      "destination": "/web/assets/js/main.js"
     },
     {
       "source": "/api/data",
@@ -27,6 +27,18 @@
     {
       "source": "/test_results.json",
       "destination": "/web/assets/data/test_results.json"
+    },
+    {
+      "source": "/history.json",
+      "destination": "/web/assets/data/history.json"
+    },
+    {
+      "source": "/data/test_results.json",
+      "destination": "/web/assets/data/test_results.json"
+    },
+    {
+      "source": "/data/history.json",
+      "destination": "/web/assets/data/history.json"
     }
   ],
   "headers": [
