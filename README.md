@@ -21,11 +21,14 @@
 
 ```
 pan-site-monitor/
-├── src/                    # 核心脚本
-│   └── pan_site_monitor.py # 统一监控工具（3合1）
 ├── config/                 # 配置文件
 │   ├── app_config.yml      # 统一配置文件（YAML格式，推荐）
 │   └── app_config.json     # 统一配置文件（JSON格式，兼容）
+├── data/                   # 数据文件目录
+│   └── test.json           # 测试配置数据
+├── logs/                   # 日志文件目录
+├── src/                    # 核心脚本
+│   └── pan_site_monitor.py # 统一监控工具（3合1）
 ├── web/                    # Web界面
 │   ├── index.html          # 监控仪表板主页面
 │   └── assets/             # 静态资源
@@ -51,13 +54,11 @@ pan-site-monitor/
 │           └── data/       # 数据处理模块
 │               ├── loader.js     # 数据加载
 │               └── renderer.js   # 数据渲染
-├── data/                   # 数据文件目录
-│   └── test.json           # 测试配置数据
-├── logs/                   # 日志文件目录
+├── .env.example           # 环境变量配置示例
+├── .gitignore             # Git忽略文件配置
+├── README.md              # 项目说明文档
 ├── requirements.txt        # Python依赖包
-├── vercel.json            # Vercel部署配置
-├── .env                   # 环境变量配置（需要创建）
-└── README.md              # 项目说明文档
+└── vercel.json            # Vercel部署配置
 ```
 
 ## 🛠️ 安装和配置
