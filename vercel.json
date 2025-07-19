@@ -24,14 +24,7 @@
       "source": "/history.json",
       "destination": "/web/assets/data/history.json"
     },
-    {
-      "source": "/data/test_results.json",
-      "destination": "/web/assets/data/test_results.json"
-    },
-    {
-      "source": "/data/history.json",
-      "destination": "/web/assets/data/history.json"
-    },
+
     {
       "source": "/assets/(.*)",
       "destination": "/web/assets/$1"

@@ -83,7 +83,7 @@
     "files_to_upload": [
       {
         "local_path": "web/assets/data/test_results.json",
-        "github_path": "data/test_results.json"
+        "github_path": "web/assets/data/test_results.json"
       },
       {
         "local_path": "data/test.json",
@@ -91,7 +91,7 @@
       },
       {
         "local_path": "web/assets/data/history.json",
-        "github_path": "data/history.json"
+        "github_path": "web/assets/data/history.json"
       }
     ],
     "commit_message_template": "Update test results - {timestamp}",
