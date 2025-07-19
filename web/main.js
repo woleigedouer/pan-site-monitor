@@ -83,9 +83,12 @@ function toggleSiteDetails(element) {
 
     if (siteDetails && header) {
         if (!isExpanded) {
-            // 展开：计算动态高度
+            // 展开：从CSS变量获取高度，确保与样式同步
             const urlItems = siteDetails.querySelectorAll('.url-item');
-            const itemHeight = 60; // 每个备用域名项的高度
+            const itemHeight = parseInt(
+                getComputedStyle(document.documentElement)
+                .getPropertyValue('--url-item-height')
+            );
             const dynamicHeight = urlItems.length * itemHeight;
 
             element.classList.add('expanded');
