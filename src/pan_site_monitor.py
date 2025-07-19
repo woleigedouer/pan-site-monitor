@@ -922,7 +922,7 @@ class PanSiteMonitor:
     def save_test_results(self, results):
         """保存测试结果到JSON文件"""
         try:
-            output_file = self.base_dir / "data" / "test_results.json"
+            output_file = self.base_dir / "web" / "assets" / "data" / "test_results.json"
             os.makedirs(output_file.parent, exist_ok=True)
 
             # 构建JSON数据
@@ -984,14 +984,14 @@ class PanSiteMonitor:
     def update_history(self, results):
         """更新URL历史状态记录（按网站分类）
         
-        将URL测试结果保存到历史记录文件(data/history.json)中，用于前端展示URL状态的历史变化。
+        将URL测试结果保存到历史记录文件(web/assets/data/history.json)中，用于前端展示URL状态的历史变化。
         采用按站点分类的嵌套格式存储: {"站点名": {"URL": [历史记录列表]}}
         每个URL最多保留配置文件中指定数量的最新历史记录。
         """
         try:
-            history_file = self.base_dir / "data" / "history.json"
-            
-            # 确保data目录存在
+            history_file = self.base_dir / "web" / "assets" / "data" / "history.json"
+
+            # 确保目录存在
             os.makedirs(history_file.parent, exist_ok=True)
             
             # 读取现有历史记录

@@ -82,7 +82,7 @@
     "token": "请设置环境变量 GITHUB_TOKEN",
     "files_to_upload": [
       {
-        "local_path": "data/test_results.json",
+        "local_path": "web/assets/data/test_results.json",
         "github_path": "data/test_results.json"
       },
       {
@@ -90,7 +90,7 @@
         "github_path": "data/test.json"
       },
       {
-        "local_path": "data/history.json",
+        "local_path": "web/assets/data/history.json",
         "github_path": "data/history.json"
       }
     ],

@@ -10,7 +10,7 @@ export const loader = {
     // 加载历史数据
     async loadHistoryData() {
         try {
-            const response = await fetch('../data/history.json');
+            const response = await fetch('./assets/data/history.json');
             if (response.ok) {
                 const historyData = await response.json();
                 state.siteHistoryData = historyData;
@@ -46,7 +46,7 @@ export const loader = {
             // 尝试本地文件
             try {
                 console.log('🔄 尝试从本地文件加载数据...');
-                const response = await fetch('../data/test_results.json');
+                const response = await fetch('./assets/data/test_results.json');
 
                 if (response.ok) {
                     const data = await response.json();

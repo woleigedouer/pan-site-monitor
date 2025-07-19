@@ -22,11 +22,11 @@
     },
     {
       "source": "/api/data",
-      "destination": "/data/test_results.json"
+      "destination": "/web/assets/data/test_results.json"
     },
     {
       "source": "/test_results.json",
-      "destination": "/data/test_results.json"
+      "destination": "/web/assets/data/test_results.json"
     }
   ],
   "headers": [

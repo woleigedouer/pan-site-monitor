@@ -28,7 +28,6 @@ pan-site-monitor/
 │   └── app_config.json     # 统一配置文件（JSON格式，兼容）
 ├── web/                    # Web界面
 │   ├── index.html          # 监控仪表板主页面
-│   ├── main.js             # 主要JavaScript逻辑
 │   └── assets/             # 静态资源
 │       ├── css/            # 样式文件
 │       │   ├── main.css    # 主样式文件（统一入口）
@@ -37,11 +36,23 @@ pan-site-monitor/
 │       │   ├── site-components.css  # 头部、站点卡片、状态指示器等组件
 │       │   └── responsive.css   # 移动端适配样式
 │       ├── data/           # 前端数据文件
+│       │   ├── test_results.json   # 测试结果数据
+│       │   └── history.json       # 历史监控数据
 │       └── js/             # JavaScript模块
+│           ├── main.js     # 模块加载器（支持ES6模块和回退）
+│           ├── app.js      # 主应用入口和初始化
+│           ├── config.js   # 应用配置常量
+│           ├── state.js    # 应用状态管理
+│           ├── utils.js    # 工具函数模块
+│           ├── ui/         # UI组件模块
+│           │   ├── countdown.js  # 倒计时功能
+│           │   ├── events.js     # 事件处理
+│           │   └── tooltip.js    # 工具提示系统
+│           └── data/       # 数据处理模块
+│               ├── loader.js     # 数据加载
+│               └── renderer.js   # 数据渲染
 ├── data/                   # 数据文件目录
-│   ├── history.json        # 历史监控数据
-│   ├── test.json           # 测试配置数据
-│   └── test_results.json   # 测试结果数据
+│   └── test.json           # 测试配置数据
 ├── logs/                   # 日志文件目录
 ├── requirements.txt        # Python依赖包
 ├── vercel.json            # Vercel部署配置
@@ -200,10 +211,39 @@ sites:
 - 最优URL推荐
 
 ### 前端架构
+
+#### 🎯 模块化JavaScript架构
+- **ES6模块化**: 支持现代浏览器的原生模块系统
+- **智能加载器**: 自动检测浏览器支持，提供回退机制
+- **模块分离**: 按功能拆分为10个独立模块
+  - `main.js` - 模块加载器和兼容性处理
+  - `app.js` - 主应用入口和初始化逻辑
+  - `config.js` - 应用配置常量管理
+  - `state.js` - 全局状态管理
+  - `utils.js` - 通用工具函数
+  - `ui/countdown.js` - 倒计时功能模块
+  - `ui/events.js` - 用户交互事件处理
+  - `ui/tooltip.js` - 工具提示系统
+  - `data/loader.js` - 数据获取和加载逻辑
+  - `data/renderer.js` - 数据渲染和HTML生成
+
+#### 🎨 样式架构
 - **模块化CSS**: 样式文件按功能拆分，便于维护
+- **CSS Grid + Flexbox**: 现代布局技术，精确控制和灵活适配
 - **响应式设计**: 支持桌面端和移动端访问
-- **实时更新**: 自动刷新监控数据
+- **CSS变量**: 统一的设计系统和主题管理
+
+#### ⚡ 性能特性
+- **自动加载**: 页面打开即自动加载数据
+- **实时更新**: 自动刷新监控数据和倒计时
+- **向后兼容**: 支持不同版本的浏览器
 - **现代化UI**: 采用现代Web设计规范
+
+#### 🔧 技术特性
+- **零依赖**: 前端无需构建工具，直接运行
+- **模块热加载**: 支持开发时的模块更新
+- **错误处理**: 完善的错误处理和回退机制
+- **代码分离**: 关注点分离，便于维护和扩展
 
 ## 🔒 环境变量配置
 

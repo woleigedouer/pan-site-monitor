@@ -93,11 +93,11 @@ github:
   
   # 要上传的文件列表
   files_to_upload:
-    - local_path: "data/test_results.json"
+    - local_path: "web/assets/data/test_results.json"
       github_path: "data/test_results.json"
     - local_path: "data/test.json"
       github_path: "data/test.json"
-    - local_path: "data/history.json"
+    - local_path: "web/assets/data/history.json"
       github_path: "data/history.json"
 
 # 日志配置 - 日志记录相关设置
