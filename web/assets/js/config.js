@@ -9,7 +9,7 @@ export const CONFIG = {
     },
     LOADING_ERROR_DELAY: 3000,  // 加载失败时保持加载状态的时间(毫秒)
     COUNTDOWN_INTERVAL: 60 * 60 * 1000,  // 倒计时间隔：1小时（毫秒）
-    HISTORY_LENGTH: 12,  // 状态历史点数量
+    HISTORY_LENGTH: 24,  // 状态历史点数量
     TOOLTIP_OFFSET: { x: 15, y: 10 }  // 工具提示偏移量
 };
 

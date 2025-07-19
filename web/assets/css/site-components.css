@@ -135,9 +135,8 @@
 /* Monitor Stats */
 .monitor-stats {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto;
     align-items: center;
-    gap: 1rem;
     justify-self: end;
 }
 
@@ -169,10 +168,18 @@
 }
 
 /* Status History */
-.status-history, .backup-status-history {
+.status-history {
     display: flex;
     gap: 2px;
-    margin-left: 16px;
+    margin-left: 0;
+    height: 20px;
+    align-items: center;
+}
+
+.backup-status-history {
+    display: flex;
+    gap: 2px;
+    margin-left: 0;
     height: 20px;
     align-items: center;
 }
@@ -220,6 +227,18 @@
 }
 
 .tooltip .status-offline {
+    color: var(--color-danger);
+    font-weight: 600;
+}
+
+/* 工具提示中的延迟文本颜色（绿色） */
+.tooltip .latency-text {
+    color: var(--color-success);
+    font-weight: 600;
+}
+
+/* 工具提示中的错误文本颜色（红色） */
+.tooltip .error-text {
     color: var(--color-danger);
     font-weight: 600;
 }
@@ -315,15 +334,10 @@
 
 .backup-url-stats {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: auto;
     align-items: center;
-    gap: 1rem;
     justify-self: end;
 }
 
-.backup-status-history {
-    display: flex;
-    gap: 2px;
-    margin-left: 16px;
-}
+
 }

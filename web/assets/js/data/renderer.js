@@ -9,14 +9,15 @@ import { state } from '../state.js';
 
 export const renderer = {
     // 生成状态历史数据（使用真实数据或显示无数据状态）
-    generateStatusHistory(siteName, url) {
+    generateStatusHistory(siteName, url, currentUrlData = null) {
         // 始终返回固定长度的历史数据
         const HISTORY_LENGTH = CONFIG.HISTORY_LENGTH;
         // 修复：使用map创建独立的对象，避免对象引用共享问题
         let history = Array(HISTORY_LENGTH).fill().map(() => ({
             status: 'no_data',
             timestamp: '',
-            latency: null
+            latency: null,
+            errorDetail: null
         }));
 
         // 尝试使用URL特定的历史数据（如果提供了URL）
@@ -48,7 +49,8 @@ export const renderer = {
                 return {
                     status: record.status,
                     timestamp: formattedTime,
-                    latency: record.latency
+                    latency: record.latency,
+                    errorDetail: record.error_detail || null
                 };
             });
 
@@ -61,7 +63,61 @@ export const renderer = {
             }
         }
 
+        // 如果提供了当前URL数据，并且最后一个历史状态点是no_data，则用当前数据填充
+        if (currentUrlData && history[HISTORY_LENGTH - 1].status === 'no_data') {
+            const currentTime = new Date().toLocaleString('zh-CN', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+
+            const currentStatus = {
+                status: currentUrlData.latency ? 'success' : 'down',
+                timestamp: currentTime,
+                latency: currentUrlData.latency,
+                errorDetail: currentUrlData.error_detail || null
+            };
+
+            // 只在最后一个位置是no_data时才替换
+            history[HISTORY_LENGTH - 1] = currentStatus;
+        }
+
         return history;
+    },
+
+    // 查找站点中上次最佳URL
+    findLastSuccessfulUrl(siteName, siteData) {
+        if (!siteName || !state.siteHistoryData[siteName]) {
+            return null;
+        }
+
+        const siteHistory = state.siteHistoryData[siteName];
+        let lastBestUrl = null;
+        let latestBestTime = null;
+
+        // 遍历所有URL的历史记录，找到最近一次标记为最佳的URL
+        for (const [url, urlHistory] of Object.entries(siteHistory)) {
+            if (!urlHistory || urlHistory.length === 0) continue;
+
+            // 从最新记录开始查找最佳URL标记
+            for (let i = urlHistory.length - 1; i >= 0; i--) {
+                const record = urlHistory[i];
+                if (record.is_best === true) {
+                    const recordTime = new Date(record.timestamp);
+                    if (!latestBestTime || recordTime > latestBestTime) {
+                        latestBestTime = recordTime;
+                        lastBestUrl = url;
+                    }
+                    break; // 找到该URL最近的最佳记录，跳出内层循环
+                }
+            }
+        }
+
+        return lastBestUrl;
     },
 
     // 创建状态历史HTML
@@ -73,6 +129,7 @@ export const renderer = {
                         data-time="${utils.sanitizeHTML(item.timestamp)}"
                         data-status="${utils.sanitizeHTML(item.status)}"
                         data-latency="${item.latency ? (item.latency * 1000).toFixed(0) : ''}"
+                        data-error-detail="${item.errorDetail ? utils.sanitizeHTML(item.errorDetail) : ''}"
                         role="img"
                         aria-label="历史状态点 ${historyIndex + 1}: ${statusLabel}${item.timestamp ? ', 时间: ' + item.timestamp : ''}">
                     <span></span>
@@ -83,9 +140,7 @@ export const renderer = {
     // 创建成功站点的头部内容
     createSuccessHeaderContent(siteName, siteData, index) {
         const bestUrlData = siteData.urls.find(u => u.is_best);
-        const latencyMs = bestUrlData.latency * 1000;
-        const latencyClass = utils.formatLatency(latencyMs);
-        const statusHistory = this.generateStatusHistory(siteName, siteData.best_url);
+        const statusHistory = this.generateStatusHistory(siteName, siteData.best_url, bestUrlData);
 
         return `
             <div class="status-indicator success" role="img" aria-label="站点在线"></div>
@@ -94,7 +149,6 @@ export const renderer = {
                 <div class="best-url">${utils.sanitizeHTML(siteData.best_url)}</div>
             </div>
             <div class="monitor-stats">
-                <div class="response-badge ${latencyClass}" role="status" aria-label="响应时间 ${latencyMs.toFixed(0)} 毫秒">${latencyMs.toFixed(0)}ms</div>
                 <div class="status-history" role="group" aria-label="状态历史记录">
                     ${this.createStatusHistoryHTML(statusHistory)}
                 </div>
@@ -103,17 +157,23 @@ export const renderer = {
     },
 
     // 创建失败站点的头部内容
-    createFailedHeaderContent(siteName, index) {
-        const statusHistory = this.generateStatusHistory(siteName, null);
+    createFailedHeaderContent(siteName, siteData, index) {
+        // 对于失败站点，尝试找到上次成功的URL来显示历史信息
+        const lastSuccessfulUrl = this.findLastSuccessfulUrl(siteName, siteData);
+        const statusHistory = this.generateStatusHistory(siteName, lastSuccessfulUrl, null);
+
+        // 根据是否找到上次最佳URL来决定显示文本
+        const displayText = lastSuccessfulUrl
+            ? utils.sanitizeHTML(lastSuccessfulUrl)
+            : '所有URL均不可用';
 
         return `
             <div class="status-indicator failed" role="img" aria-label="站点离线"></div>
             <div class="site-info">
                 <div class="site-name" id="site-name-${index}">${utils.sanitizeHTML(siteName)}</div>
-                <div class="best-url failed-url">所有URL均不可用</div>
+                <div class="best-url failed-url">${displayText}</div>
             </div>
             <div class="monitor-stats">
-                <div class="response-badge danger" role="status" aria-label="站点状态：失败">失败</div>
                 <div class="status-history" role="group" aria-label="状态历史记录">
                     ${this.createStatusHistoryHTML(statusHistory)}
                 </div>
@@ -151,20 +211,8 @@ export const renderer = {
 
     // 创建URL项目HTML
     createUrlItemHTML(siteName, urlData, index) {
-        const latencyMs = urlData.latency ? urlData.latency * 1000 : 0;
-        const latencyClass = urlData.latency ? utils.formatLatency(latencyMs) : 'danger';
-        const statusHistory = this.generateStatusHistory(siteName, urlData.url);
+        const statusHistory = this.generateStatusHistory(siteName, urlData.url, urlData);
         const statusIndicatorClass = urlData.latency ? 'success' : 'failed';
-
-        // 生成状态文本：优先显示详细错误信息
-        let statusText;
-        if (urlData.latency) {
-            statusText = `${latencyMs.toFixed(0)}ms`;
-        } else if (urlData.error_detail) {
-            statusText = utils.sanitizeHTML(urlData.error_detail);
-        } else {
-            statusText = '失败';
-        }
 
         return `
         <div class="url-item">
@@ -174,7 +222,6 @@ export const renderer = {
                 <div class="url-text">${utils.sanitizeHTML(urlData.url)}</div>
             </div>
             <div class="backup-url-stats">
-                <div class="response-badge ${latencyClass}">${statusText}</div>
                 <div class="backup-status-history">
                     ${this.createStatusHistoryHTML(statusHistory)}
                 </div>
@@ -231,7 +278,7 @@ export function renderSites(data) {
         if (siteData.status === 'success' && siteData.best_url) {
             headerContent = renderer.createSuccessHeaderContent(siteName, siteData, index);
         } else {
-            headerContent = renderer.createFailedHeaderContent(siteName, index);
+            headerContent = renderer.createFailedHeaderContent(siteName, siteData, index);
         }
 
         // 创建详情内容

@@ -73,7 +73,7 @@ tvbox:
 url_tester:
   test_timeout: 15        # 测试超时时间(秒)
   default_weight: 50      # 默认权重
-  history_limit: 12       # 历史记录限制
+  history_limit: 24       # 历史记录限制
   
   # 代理配置
   proxy:

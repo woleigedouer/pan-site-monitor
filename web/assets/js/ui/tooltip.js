@@ -62,10 +62,11 @@ export const tooltip = {
         const time = dot.dataset.time;
         const status = dot.dataset.status;
         const latency = dot.dataset.latency;
+        const errorDetail = dot.dataset.errorDetail;
 
         // 如果有时间数据，则显示工具提示
         if (time || status === 'no_data') {
-            const tooltipText = this.generateTooltipText(status, time, latency);
+            const tooltipText = this.generateTooltipText(status, time, latency, errorDetail);
 
             this.element.innerHTML = tooltipText;
             this.element.style.display = 'block';
@@ -101,7 +102,7 @@ export const tooltip = {
     },
 
     // 生成工具提示文本
-    generateTooltipText(status, time, latency) {
+    generateTooltipText(status, time, latency, errorDetail) {
         if (status === 'no_data') {
             return '无历史数据';
         }
@@ -125,9 +126,14 @@ export const tooltip = {
         // 组装简洁的单行提示
         let tooltipText = `<span class="${status === 'up' || status === 'success' ? 'status-online' : 'status-offline'}">${statusText}</span> - ${simplifiedTime}`;
 
-        // 如果有延迟数据则添加
+        // 如果有延迟数据则添加（绿色显示）
         if (latency && (status === 'up' || status === 'success')) {
-            tooltipText += ` - ${latency}ms`;
+            tooltipText += ` - <span class="latency-text">${latency}ms</span>`;
+        }
+
+        // 如果有错误详情且状态为离线，则添加错误详情（红色显示）
+        if (errorDetail && (status === 'down' || status === 'failed')) {
+            tooltipText += ` - <span class="error-text">${errorDetail}</span>`;
         }
 
         return tooltipText;

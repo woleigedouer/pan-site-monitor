@@ -109,7 +109,7 @@ class PanSiteMonitor:
                      "download_path": "", "extract_path": "", "old_path": "", "api_timeout": 10,
                      "download_timeout": 60, "download_chunk_size": 8192},
             "url_tester": {"test_timeout": 15, "default_weight": 50,
-                          "proxy": {"enabled": False, "proxies": {}}, "history_limit": 12},
+                          "proxy": {"enabled": False, "proxies": {}}, "history_limit": 24},
             "github": {"owner": "", "repo": "", "branch": "main", "token": "",
                       "files_to_upload": [], "commit_message_template": "Update - {timestamp}",
                       "api_timeout": 30},
@@ -1027,19 +1027,31 @@ class PanSiteMonitor:
                         if len(history_data[site_name][url]) >= history_limit:
                             history_data[site_name][url].pop(0)
                         
-                        # 获取URL状态
+                        # 获取URL状态和错误信息
                         if len(url_result) >= 1:
                             latency = url_result[0]  # 获取延迟时间
                         else:
                             latency = None
-                        
+
+                        # 获取错误信息（如果存在）
+                        error_detail = None
+                        if len(url_result) >= 4 and url_result[3]:  # error_info存在
+                            error_info = url_result[3]
+                            error_detail = error_info.get("detail")
+
                         # 记录URL状态
-                        history_data[site_name][url].append({
+                        history_record = {
                             "timestamp": timestamp,
                             "status": "up" if latency is not None else "down",
                             "latency": latency,
                             "is_best": url == result['best_url']
-                        })
+                        }
+
+                        # 添加错误详情（如果存在）
+                        if error_detail:
+                            history_record["error_detail"] = error_detail
+
+                        history_data[site_name][url].append(history_record)
             
             # 保存历史数据
             with open(history_file, 'w', encoding='utf-8') as f:
