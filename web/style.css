@@ -513,9 +513,18 @@ body {
         margin: 0;
         padding: 0;
         white-space: nowrap;
-        color: #1e293b;
         min-width: 40px; /* 略微减小最小宽度 */
         display: inline-block;
+    }
+
+    /* 主站点名称颜色 */
+    .site-name {
+        color: #1e293b;
+    }
+
+    /* 备用域名站点名称颜色 - 保持与桌面端一致 */
+    .backup-url-name {
+        color: #64748b;
     }
     
     /* 统一URL文本样式 - 移除截断处理 */
