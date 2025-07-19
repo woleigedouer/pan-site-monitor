@@ -13,14 +13,6 @@
       "destination": "/web/index.html"
     },
     {
-      "source": "/style.css",
-      "destination": "/web/assets/css/main.css"
-    },
-    {
-      "source": "/main.js",
-      "destination": "/web/assets/js/main.js"
-    },
-    {
       "source": "/api/data",
       "destination": "/web/assets/data/test_results.json"
     },
@@ -39,6 +31,10 @@
     {
       "source": "/data/history.json",
       "destination": "/web/assets/data/history.json"
+    },
+    {
+      "source": "/assets/(.*)",
+      "destination": "/web/assets/$1"
     }
   ],
   "headers": [
