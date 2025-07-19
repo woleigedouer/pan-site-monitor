@@ -3,17 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="实时监控网盘站点URL状态，提供可用性检测和响应时间统计">
+    <meta name="keywords" content="网盘监控,URL状态,站点检测,响应时间,可用性监控">
+    <meta name="author" content="Pan Site Monitor">
+    <meta property="og:title" content="站点URL状态监控">
+    <meta property="og:description" content="实时监控网盘站点URL状态，提供可用性检测和响应时间统计">
+    <meta property="og:type" content="website">
     <title>站点URL状态监控</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Skip link for accessibility -->
+    <a class="skip-link screen-reader-text" href="#main">
+        跳转到主要内容
+    </a>
+
     <!-- Modern Header with Countdown Design -->
-    <div class="header">
+    <header class="header" role="banner">
         <div class="header-content">
             <div class="countdown-header">
-                <h1>站点URL状态监控</h1>
+                <h1 id="monitor-title">站点URL状态监控</h1>
                 <div class="countdown-progress-container">
-                    <div class="countdown-progress-bar" id="countdown-progress"></div>
+                    <div class="countdown-progress-bar" id="countdown-progress" role="progressbar" aria-label="下次更新倒计时进度"></div>
                 </div>
                 <div class="countdown-info">
                     <div class="last-update-info" id="header-last-update">
@@ -21,7 +32,7 @@
                     </div>
                     <div class="countdown-time-info">
                         <span>下次更新</span>
-                        <span id="countdown-time">00:00</span>
+                        <span id="countdown-time" aria-live="polite">00:00</span>
                     </div>
                 </div>
             </div>
@@ -29,15 +40,15 @@
     </div>
 
     <!-- Modern Main Container -->
-    <div class="container">
+    <main class="container" id="main" role="main">
         <!-- Loading State -->
-        <div id="loading" class="loading">
-            <div class="loading-spinner"></div>
+        <section id="loading" class="loading" role="status" aria-live="polite" aria-label="数据加载状态">
+            <div class="loading-spinner" aria-hidden="true"></div>
             <p>正在加载数据...</p>
-        </div>
+        </section>
 
         <!-- Sites Container -->
-        <div id="sites-container"></div>
+        <section id="sites-container" aria-labelledby="monitor-title" role="region" aria-label="站点监控列表"></section>
     </div>
 
     <script src="main.js"></script>

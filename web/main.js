@@ -51,12 +51,21 @@ function startCountdown() {
     setInterval(updateCountdown, 1000);
 }
 
+// 键盘事件处理
+function handleKeyDown(event, element) {
+    if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleSiteDetails(element);
+    }
+}
+
 // 切换站点详情展开/收起
 function toggleSiteDetails(element) {
     const isExpanded = element.classList.contains('expanded');
     const siteDetails = element.querySelector('.site-details');
+    const header = element.querySelector('.site-header');
 
-    if (siteDetails) {
+    if (siteDetails && header) {
         if (!isExpanded) {
             // 展开：计算动态高度
             const urlItems = siteDetails.querySelectorAll('.url-item');
@@ -65,10 +74,14 @@ function toggleSiteDetails(element) {
 
             element.classList.add('expanded');
             siteDetails.style.maxHeight = dynamicHeight + 'px';
+            siteDetails.setAttribute('aria-hidden', 'false');
+            header.setAttribute('aria-expanded', 'true');
         } else {
             // 收起
             element.classList.remove('expanded');
             siteDetails.style.maxHeight = '0px';
+            siteDetails.setAttribute('aria-hidden', 'true');
+            header.setAttribute('aria-expanded', 'false');
         }
     }
 }
@@ -129,9 +142,11 @@ function renderSites(data) {
     const container = document.getElementById('sites-container');
     container.innerHTML = '';
 
-    Object.entries(data.sites).forEach(([siteName, siteData]) => {
-        const siteItem = document.createElement('div');
+    Object.entries(data.sites).forEach(([siteName, siteData], index) => {
+        const siteItem = document.createElement('article');
         siteItem.className = `site-item ${siteData.status === 'failed' ? 'failed' : ''}`;
+        siteItem.setAttribute('role', 'article');
+        siteItem.setAttribute('aria-labelledby', `site-name-${index}`);
 
         let headerContent = '';
         if (siteData.status === 'success' && siteData.best_url) {
@@ -141,19 +156,23 @@ function renderSites(data) {
             const statusHistory = generateStatusHistory(siteName, siteData.best_url);
 
             headerContent = `
-                <div class="status-indicator success"></div>
+                <div class="status-indicator success" role="img" aria-label="站点在线"></div>
                 <div class="site-info">
-                    <div class="site-name">${siteName}</div>
+                    <div class="site-name" id="site-name-${index}">${siteName}</div>
                     <div class="best-url">${siteData.best_url}</div>
                 </div>
                 <div class="monitor-stats">
-                    <div class="response-badge ${latencyClass}">${latencyMs.toFixed(0)}ms</div>
-                    <div class="status-history">
-                        ${statusHistory.map(item => {
-                            return `<div class="status-dot ${item.status}" 
-                                        data-time="${item.timestamp}" 
-                                        data-status="${item.status}" 
-                                        data-latency="${item.latency ? (item.latency * 1000).toFixed(0) : ''}">
+                    <div class="response-badge ${latencyClass}" role="status" aria-label="响应时间 ${latencyMs.toFixed(0)} 毫秒">${latencyMs.toFixed(0)}ms</div>
+                    <div class="status-history" role="group" aria-label="状态历史记录">
+                        ${statusHistory.map((item, historyIndex) => {
+                            const statusLabel = item.status === 'success' || item.status === 'up' ? '在线' :
+                                              item.status === 'no_data' ? '无数据' : '离线';
+                            return `<div class="status-dot ${item.status}"
+                                        data-time="${item.timestamp}"
+                                        data-status="${item.status}"
+                                        data-latency="${item.latency ? (item.latency * 1000).toFixed(0) : ''}"
+                                        role="img"
+                                        aria-label="历史状态点 ${historyIndex + 1}: ${statusLabel}${item.timestamp ? ', 时间: ' + item.timestamp : ''}">
                                     <span></span>
                                   </div>`;
                         }).join('')}
@@ -164,19 +183,23 @@ function renderSites(data) {
             const statusHistory = generateStatusHistory(siteName, null);
 
             headerContent = `
-                <div class="status-indicator failed"></div>
+                <div class="status-indicator failed" role="img" aria-label="站点离线"></div>
                 <div class="site-info">
-                    <div class="site-name">${siteName}</div>
+                    <div class="site-name" id="site-name-${index}">${siteName}</div>
                     <div class="best-url failed-url">所有URL均不可用</div>
                 </div>
                 <div class="monitor-stats">
-                    <div class="response-badge danger">失败</div>
-                    <div class="status-history">
-                        ${statusHistory.map(item => {
-                            return `<div class="status-dot ${item.status}" 
-                                        data-time="${item.timestamp}" 
-                                        data-status="${item.status}" 
-                                        data-latency="${item.latency ? (item.latency * 1000).toFixed(0) : ''}">
+                    <div class="response-badge danger" role="status" aria-label="站点状态：失败">失败</div>
+                    <div class="status-history" role="group" aria-label="状态历史记录">
+                        ${statusHistory.map((item, historyIndex) => {
+                            const statusLabel = item.status === 'success' || item.status === 'up' ? '在线' :
+                                              item.status === 'no_data' ? '无数据' : '离线';
+                            return `<div class="status-dot ${item.status}"
+                                        data-time="${item.timestamp}"
+                                        data-status="${item.status}"
+                                        data-latency="${item.latency ? (item.latency * 1000).toFixed(0) : ''}"
+                                        role="img"
+                                        aria-label="历史状态点 ${historyIndex + 1}: ${statusLabel}${item.timestamp ? ', 时间: ' + item.timestamp : ''}">
                                     <span></span>
                                   </div>`;
                         }).join('')}
@@ -249,10 +272,17 @@ function renderSites(data) {
         }
 
         siteItem.innerHTML = `
-            <div class="site-header" onclick="toggleSiteDetails(this.parentElement)">
+            <div class="site-header"
+                 onclick="toggleSiteDetails(this.parentElement)"
+                 role="button"
+                 tabindex="0"
+                 aria-expanded="false"
+                 aria-controls="details-${index}"
+                 aria-label="展开或收起 ${siteName} 的详细信息"
+                 onkeydown="handleKeyDown(event, this.parentElement)">
                 ${headerContent}
             </div>
-            ${detailsContent}
+            ${detailsContent.replace('<div class="site-details">', `<div class="site-details" id="details-${index}" aria-hidden="true">`)}
         `;
 
         container.appendChild(siteItem);
