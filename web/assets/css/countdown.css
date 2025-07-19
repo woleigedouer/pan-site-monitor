@@ -1,0 +1,61 @@
+@layer components {
+/* Countdown Header Styles */
+.countdown-header {
+    text-align: center;
+}
+
+.countdown-header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 16px;
+    letter-spacing: -0.025em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.countdown-progress-container {
+    background: #e2e8f0;
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+.countdown-progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+    border-radius: 3px;
+    transition: width 1s ease;
+    width: 0%;
+}
+
+.countdown-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 0.875rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.countdown-time-info {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-weight: 500;
+}
+
+.last-update-info {
+    font-weight: 500;
+}
+}
+
+

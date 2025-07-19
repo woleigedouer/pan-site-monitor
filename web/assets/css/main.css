@@ -1,0 +1,21 @@
+/**
+ * 主样式文件 - 整合所有CSS模块
+ * 站点URL状态监控系统 - 保持原有样式不变
+ */
+
+/* 导入所有CSS模块 */
+@import url('./variables.css');
+@import url('./countdown.css');
+@import url('./site-components.css');
+@import url('./responsive.css');
+
+/* 
+ * 注意：CSS @import 规则必须在所有其他CSS规则之前
+ * 这个文件作为统一的入口点，方便HTML引用
+ * 
+ * 模块说明：
+ * - variables.css: CSS变量、重置样式、基础样式
+ * - countdown.css: 倒计时头部样式
+ * - site-components.css: 头部样式、站点卡片、状态指示器、工具提示等组件
+ * - responsive.css: 移动端适配样式
+ */

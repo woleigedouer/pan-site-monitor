@@ -1,0 +1,329 @@
+@layer components {
+/* Uptime Kuma Style Header */
+.header {
+    background: white;
+    border-radius: 12px;
+    margin: 20px auto 24px auto;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    max-width: 1160px;
+    width: calc(100% - 40px);
+}
+
+.header-content {
+    text-align: center;
+}
+
+/* Container */
+.container {
+    max-width: 1160px;
+    margin: 0 auto 20px auto;
+    padding: 0;
+    width: calc(100% - 40px);
+}
+
+/* Modern Loading State */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-12) 0;
+    color: var(--color-gray-600);
+}
+
+.loading-spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 3px solid var(--color-gray-200);
+    border-top: 3px solid var(--color-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: var(--spacing-4);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Uptime Kuma Style Monitor Group */
+.site-item {
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+/* Uptime Kuma Style Monitor Item */
+.site-header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 16px 20px;
+    border-bottom: 1px solid #f1f5f9;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+    height: var(--url-item-height);
+    box-sizing: border-box;
+}
+
+.site-header:hover {
+    background: #f8fafc;
+}
+
+.site-item.failed .site-header:hover {
+    background: #f8fafc;
+}
+
+.site-info {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 1rem;
+    min-width: 0;
+}
+
+.site-name {
+    font-weight: 600;
+    color: #1e293b;
+    flex-shrink: 0;
+    font-size: 1rem;
+}
+
+.site-item.failed .site-name {
+    color: #1e293b;
+}
+
+.best-url {
+    font-size: 0.875rem;
+    color: #64748b;
+    font-family: 'Courier New', monospace;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.failed-url {
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* Status Indicator (Uptime Kuma style) */
+.status-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.status-indicator.success {
+    background: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+
+.status-indicator.failed {
+    background: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+/* Monitor Stats */
+.monitor-stats {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    gap: 1rem;
+    justify-self: end;
+}
+
+.response-badge {
+    background: #dcfce7;
+    color: #166534;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    min-width: 80px;
+    max-width: 120px;
+    text-align: center;
+    display: inline-block;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.response-badge.warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.response-badge.danger {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* Status History */
+.status-history, .backup-status-history {
+    display: flex;
+    gap: 2px;
+    margin-left: 16px;
+    height: 20px;
+    align-items: center;
+}
+
+/* 统一所有状态点样式 */
+.status-dot {
+    width: 6px;
+    height: 18px;
+    border-radius: 2px;
+    background: #e2e8f0;
+    flex-shrink: 0;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.status-dot:hover {
+    height: 20px;
+    transform: translateY(-2px);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* 自定义工具提示 */
+.tooltip {
+    position: fixed;
+    background: white;
+    color: #333;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    z-index: 1000;
+    pointer-events: none;
+    max-width: 300px;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    display: none;
+    text-align: center;
+    border: 1px solid #eee;
+}
+
+/* 工具提示中的状态文本颜色 */
+.tooltip .status-online {
+    color: var(--color-success);
+    font-weight: 600;
+}
+
+.tooltip .status-offline {
+    color: var(--color-danger);
+    font-weight: 600;
+}
+
+/* 移除之前复杂的工具提示内部结构 */
+.tooltip .tooltip-time,
+.tooltip .tooltip-status,
+.tooltip .tooltip-latency {
+    display: inline;
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+    background: transparent;
+    color: inherit;
+}
+
+.status-dot span {
+    display: none;
+}
+
+.status-dot.success, .status-dot.up {
+    background: #10b981;
+    box-shadow: 0 0 2px rgba(16, 185, 129, 0.4);
+}
+
+.status-dot.failed, .status-dot.down {
+    background: #ef4444;
+    box-shadow: 0 0 2px rgba(239, 68, 68, 0.4);
+}
+
+.status-dot.no_data {
+    background: #cbd5e1;
+    opacity: 0.5;
+}
+
+/* Backup URLs Expansion Area */
+.site-details {
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.site-item.expanded .site-details {
+    /* max-height will be set dynamically by JavaScript */
+    padding: 0;
+}
+
+.url-list {
+    padding: 0;
+}
+
+.url-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 16px 20px;
+    border-bottom: 1px solid #e2e8f0;
+    height: var(--url-item-height);
+    box-sizing: border-box;
+}
+
+.url-item:last-child {
+    border-bottom: none;
+}
+
+.backup-url-info {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 1rem;
+    min-width: 0;
+}
+
+.backup-url-name {
+    font-weight: 600;
+    color: #64748b;
+    flex-shrink: 0;
+    font-size: 0.9rem;
+}
+
+.url-text {
+    font-family: 'Courier New', monospace;
+    font-size: 0.875rem;
+    color: #475569;
+    flex: 1;
+    min-width: 0;
+}
+
+.backup-url-stats {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    gap: 1rem;
+    justify-self: end;
+}
+
+.backup-status-history {
+    display: flex;
+    gap: 2px;
+    margin-left: 16px;
+}
+}

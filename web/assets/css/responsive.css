@@ -1,0 +1,171 @@
+/* Responsive Design */
+@media (max-width: 768px) {
+    /* 禁用所有hover效果以避免移动端点击时的意外触发 */
+    * {
+        -webkit-tap-highlight-color: transparent; /* 禁用iOS点击高亮 */
+    }
+    .header {
+        margin: 10px auto;
+        padding: 20px;
+        width: calc(100% - 20px);
+    }
+
+    .countdown-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .countdown-info {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 8px;
+        text-align: left;
+        font-size: 0.8rem;
+    }
+
+    .countdown-time-info, .last-update-info {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .countdown-progress-container {
+        margin: 0 auto;
+        order: unset;
+    }
+
+    .container {
+        margin: 0 auto 10px auto;
+        padding: 0;
+        width: calc(100% - 20px);
+    }
+
+    /* 重置为一致的布局结构 - 调整网格比例 */
+    .site-header, .url-item {
+        display: grid;
+        grid-template-columns: auto minmax(0, 2fr) auto; /* 增加中间列的比例 */
+        align-items: center;
+        gap: 0;
+        height: var(--url-item-height);
+        padding: 0 10px 0 12px; /* 减少整体内边距，但保持左侧对齐 */
+        box-sizing: border-box;
+    }
+
+    /* 统一状态指示器样式 */
+    .status-indicator {
+        width: 8px; /* 减小尺寸 */
+        height: 8px;
+        margin: 0 8px 0 0;
+        grid-column: 1;
+    }
+
+    /* 统一左侧信息区域 */
+    .site-info, .backup-url-info {
+        grid-column: 2;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 6px; /* 减小间隔 */
+        margin: 0;
+        width: auto;
+        overflow: hidden; /* 防止溢出 */
+        min-width: 0; /* 允许Grid容器收缩 */
+    }
+
+    /* 统一站点名称样式 */
+    .site-name, .backup-url-name {
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin: 0;
+        padding: 0;
+        white-space: nowrap;
+        min-width: 40px; /* 略微减小最小宽度 */
+        display: inline-block;
+    }
+
+    /* 主站点名称颜色 */
+    .site-name {
+        color: #1e293b;
+    }
+
+    /* 备用域名站点名称颜色 - 保持与桌面端一致 */
+    .backup-url-name {
+        color: #64748b;
+    }
+
+    /* 统一URL文本样式 - 移除截断处理 */
+    .best-url, .url-text {
+        font-size: 0.75rem;
+        margin: 0;
+        padding: 0;
+        font-family: 'Courier New', monospace;
+        color: #64748b;
+        /* 移除截断相关样式 */
+        white-space: normal; /* 允许换行 */
+        overflow: visible; /* 允许内容溢出 */
+        text-overflow: clip; /* 不使用省略号 */
+        min-width: 0;
+        max-width: none; /* 移除最大宽度限制 */
+    }
+
+    /* 统一右侧状态区域 - 减小尺寸 */
+    .monitor-stats, .backup-url-stats {
+        grid-column: 3;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 4px; /* 减小间距 */
+        margin: 0;
+        justify-self: end;
+    }
+
+    /* 响应时间徽章样式 - 移动端统一尺寸 */
+    .response-badge {
+        font-size: 0.6rem; /* 更小的字体 */
+        padding: 1px 4px; /* 减小内边距 */
+        margin: 0;
+        white-space: nowrap; /* 确保不换行 */
+        border-radius: 3px; /* 减小圆角 */
+        line-height: 1.4; /* 减小行高 */
+        width: 70px; /* 固定宽度，统一所有标签 */
+        min-width: unset; /* 移除最小宽度限制 */
+        max-width: unset; /* 移除最大宽度限制，使用固定宽度 */
+        text-align: center;
+        overflow: hidden; /* 隐藏溢出部分 */
+        text-overflow: ellipsis; /* 使用省略号表示溢出 */
+        box-sizing: border-box; /* 确保边框和内边距包含在宽度内 */
+    }
+
+    /* 统一状态历史点区域 - 减小尺寸 */
+    .status-history, .backup-status-history {
+        display: flex;
+        align-items: center;
+        gap: 1px; /* 减小点之间的间距 */
+        margin: 0 0 0 4px; /* 减小左边距 */
+    }
+
+    /* 统一状态点样式 - 减小尺寸 */
+    .status-dot {
+        width: 3px; /* 更窄的点 */
+        height: 10px; /* 更短的点 */
+        border-radius: 1px;
+        margin: 0;
+    }
+
+    /* 禁用移动端的hover效果 */
+    .status-dot:hover {
+        height: 10px; /* 保持原始高度 */
+        transform: none; /* 禁用变换效果 */
+        box-shadow: none; /* 禁用阴影效果 */
+    }
+
+    /* 禁用移动端的其他hover效果 */
+    .site-header:hover {
+        background: transparent; /* 禁用背景变化 */
+    }
+
+    .site-item.failed .site-header:hover {
+        background: transparent; /* 禁用背景变化 */
+    }
+
+    /* 删除所有其他冲突的规则 */
+}
