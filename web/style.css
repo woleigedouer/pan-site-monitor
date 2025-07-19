@@ -435,6 +435,10 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    /* 禁用所有hover效果以避免移动端点击时的意外触发 */
+    * {
+        -webkit-tap-highlight-color: transparent; /* 禁用iOS点击高亮 */
+    }
     .header {
         margin: 10px auto;
         padding: 20px;
@@ -572,6 +576,22 @@ body {
         border-radius: 1px;
         margin: 0;
     }
-    
+
+    /* 禁用移动端的hover效果 */
+    .status-dot:hover {
+        height: 10px; /* 保持原始高度 */
+        transform: none; /* 禁用变换效果 */
+        box-shadow: none; /* 禁用阴影效果 */
+    }
+
+    /* 禁用移动端的其他hover效果 */
+    .site-header:hover {
+        background: transparent; /* 禁用背景变化 */
+    }
+
+    .site-item.failed .site-header:hover {
+        background: transparent; /* 禁用背景变化 */
+    }
+
     /* 删除所有其他冲突的规则 */
 }
