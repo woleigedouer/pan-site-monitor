@@ -13,6 +13,14 @@ let siteHistoryData = {};
 // 定时器管理变量
 let countdownTimer = null;
 
+// 工具提示事件监听器管理变量
+let tooltipMouseMoveActive = false;
+
+// 动态检测移动设备
+function isMobileDevice() {
+    return window.innerWidth <= 768;
+}
+
 // 格式化延迟等级
 function formatLatency(latency) {
     if (latency < CONFIG.LATENCY_THRESHOLDS.GOOD) return 'success';
@@ -385,11 +393,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // 设置自定义工具提示
 function setupTooltips() {
-    // 检测是否为移动设备
-    const isMobile = window.innerWidth <= 768;
-    
-    // 如果是移动设备，不添加任何工具提示相关代码
-    if (isMobile) {
+    // 动态检测是否为移动设备
+    if (isMobileDevice()) {
         return;
     }
     
@@ -400,6 +405,11 @@ function setupTooltips() {
     
     // 监听所有状态点的鼠标事件
     document.addEventListener('mouseover', function(e) {
+        // 动态检测移动设备，如果是移动设备则不显示工具提示
+        if (isMobileDevice()) {
+            return;
+        }
+
         const target = e.target;
         if (target.classList.contains('status-dot') || target.parentElement.classList.contains('status-dot')) {
             const dot = target.classList.contains('status-dot') ? target : target.parentElement;
@@ -446,8 +456,11 @@ function setupTooltips() {
                 tooltip.innerHTML = tooltipText;
                 tooltip.style.display = 'block';
                 
-                // 跟随鼠标位置
-                document.addEventListener('mousemove', updateTooltipPosition);
+                // 跟随鼠标位置 - 防止重复添加监听器
+                if (!tooltipMouseMoveActive) {
+                    document.addEventListener('mousemove', updateTooltipPosition);
+                    tooltipMouseMoveActive = true;
+                }
                 updateTooltipPosition(e);
             }
         }
@@ -457,7 +470,11 @@ function setupTooltips() {
         const target = e.target;
         if (target.classList.contains('status-dot') || target.parentElement.classList.contains('status-dot')) {
             tooltip.style.display = 'none';
-            document.removeEventListener('mousemove', updateTooltipPosition);
+            // 安全移除监听器，防止重复移除
+            if (tooltipMouseMoveActive) {
+                document.removeEventListener('mousemove', updateTooltipPosition);
+                tooltipMouseMoveActive = false;
+            }
         }
     });
     
