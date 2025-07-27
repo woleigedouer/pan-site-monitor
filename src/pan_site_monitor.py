@@ -207,10 +207,13 @@ class PanSiteMonitor:
                 if isinstance(value, dict):
                     resolve_path_in_dict(value, base_dir)
                 elif isinstance(value, str) and (key.endswith('_path') or key.endswith('_dir') or key.endswith('_file')):
+                    # 排除远程文件名，只处理本地路径
+                    if key == 'gitee_zip_file':
+                        continue
                     # 检查路径值是否有效
                     if value and value.strip() and not os.path.isabs(value):
                         d[key] = str(base_dir / value)
-        
+
         resolve_path_in_dict(config, self.base_dir)
 
     def _configure_ssl_warnings(self, config):
@@ -432,8 +435,15 @@ class PanSiteMonitor:
             branch = self.config['tvbox']['gitee_branch']
             zip_file = self.config['tvbox']['gitee_zip_file']
 
-            gitee_zip_url = f"https://gitee.com/{repo_owner}/{repo_name}/raw/{branch}/{zip_file}"
+            # 对文件名进行URL编码，避免中文字符问题
+            from urllib.parse import quote
+            encoded_zip_file = quote(zip_file, safe='')
+
+            gitee_zip_url = f"https://gitee.com/{repo_owner}/{repo_name}/raw/{branch}/{encoded_zip_file}"
             gitee_api_url = f"https://gitee.com/api/v5/repos/{repo_owner}/{repo_name}/commits/{branch}"
+
+            logger.debug(f"构建的下载URL: {gitee_zip_url}")
+            logger.debug(f"构建的API URL: {gitee_api_url}")
 
             verify_ssl = self.config.get('security', {}).get('verify_ssl', True)
 
@@ -499,6 +509,7 @@ class PanSiteMonitor:
 
         try:
             # 下载文件
+            logger.debug(f"准备下载URL: {url}")
             verify_ssl = self.config.get('security', {}).get('verify_ssl', True)
             response = requests.get(url, timeout=self.config['tvbox']['download_timeout'], stream=True, verify=verify_ssl)
             response.raise_for_status()
