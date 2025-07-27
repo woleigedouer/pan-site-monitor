@@ -53,21 +53,21 @@ sites:
 
 # TVBox配置 - TVBox资源管理相关设置
 tvbox:
-  api_url: "https://9877.kstore.space/Market/single.json"  # TVBox API地址
+  # Gitee仓库配置
+  gitee_repo_owner: "PizazzXS"                             # Gitee仓库所有者
+  gitee_repo_name: "another-d"                             # Gitee仓库名称
+  gitee_branch: "master"                                   # Gitee分支名称
+  gitee_zip_file: "单线路.zip"                             # ZIP文件名称
+
   local_json_dir: "files/TVBoxOSC/tvbox/json"              # 本地JSON文件目录
   output_path: "data/test.json"                            # 输出文件路径
-  version_file: "data/xs_version.txt"                      # 版本文件路径
+  version_file: "data/xs_version.txt"                      # 版本文件路径 (存储Gitee提交SHA)
   download_path: "data/xs.zip"                             # 下载文件路径
   extract_path: "files"                                    # 解压目录
   old_path: "files_backup"                                 # 备份目录
-  api_timeout: 10                                          # API请求超时时间(秒)
+  api_timeout: 10                                          # Gitee API请求超时时间(秒)
   download_timeout: 60                                     # 下载超时时间(秒)
   download_chunk_size: 8192                                # 下载块大小(字节)
-  
-  # API解析配置
-  api_parsing_keys:
-    category_name: "本地包"      # 分类名称
-    download_item_name: "点击下载"  # 下载项名称
 
 # URL测试器配置 - 站点可用性测试相关设置
 url_tester:

@@ -105,7 +105,7 @@ class PanSiteMonitor:
         # 最小默认配置结构
         default_config = {
             "sites": {"mapping": {}, "search_paths": {}, "keyword_validation": {}, "url_weights": {}},
-            "tvbox": {"api_url": "", "local_json_dir": "", "output_path": "", "version_file": "",
+            "tvbox": {"local_json_dir": "", "output_path": "", "version_file": "",
                      "download_path": "", "extract_path": "", "old_path": "", "api_timeout": 10,
                      "download_timeout": 60, "download_chunk_size": 8192},
             "url_tester": {"test_timeout": 15, "default_weight": 50,
@@ -291,14 +291,14 @@ class PanSiteMonitor:
             print(f"警告：以下站点缺少关键字验证配置: {', '.join(missing_keyword)}")
 
         # 检查其他必要配置
-        if not config.get('tvbox', {}).get('api_url'):
-            print("警告：TVBox API URL未配置")
-
         if not config.get('github', {}).get('token') or config.get('github', {}).get('token', '').startswith('请设置'):
             print("提示：GitHub token未配置，GitHub上传功能将不可用")
 
         # 检查TVBox路径配置
         self._validate_tvbox_paths(config)
+
+        # 检查TVBox Gitee配置
+        self._validate_tvbox_gitee_config(config)
 
     def _validate_tvbox_paths(self, config):
         """验证TVBox路径配置的合理性"""
@@ -317,6 +317,28 @@ class PanSiteMonitor:
                 print(f"  \"old_path\": \"files_backup\" 或 \"old_path\": \"backup/files\"")
                 raise ValueError(f"TVBox路径配置错误：备份路径不能是解压路径的子目录")
 
+    def _validate_tvbox_gitee_config(self, config):
+        """验证TVBox Gitee配置的完整性"""
+        tvbox_config = config.get('tvbox', {})
+
+        required_gitee_fields = [
+            'gitee_repo_owner',
+            'gitee_repo_name',
+            'gitee_branch',
+            'gitee_zip_file'
+        ]
+
+        missing_fields = []
+        for field in required_gitee_fields:
+            if not tvbox_config.get(field):
+                missing_fields.append(field)
+
+        if missing_fields:
+            print(f"错误：TVBox Gitee配置缺少必要字段: {', '.join(missing_fields)}")
+            print(f"提示：请在{self._get_config_file_hint()}中配置以下字段：")
+            for field in missing_fields:
+                print(f"  tvbox.{field}")
+            raise ValueError(f"TVBox Gitee配置不完整")
 
     def _setup_logging(self, module_name: str):
         """设置日志"""
@@ -399,76 +421,81 @@ class PanSiteMonitor:
     # ==================== TVBox管理功能 ====================
 
     def tvbox_check_version_update(self):
-        """检查TVBox版本更新"""
+        """检查TVBox版本更新 - 基于Gitee仓库提交哈希"""
         logger = self._setup_logging('tvbox_manager')
         logger.info("检查TVBox版本更新")
 
         try:
+            # 从配置构建Gitee URL
+            repo_owner = self.config['tvbox']['gitee_repo_owner']
+            repo_name = self.config['tvbox']['gitee_repo_name']
+            branch = self.config['tvbox']['gitee_branch']
+            zip_file = self.config['tvbox']['gitee_zip_file']
+
+            gitee_zip_url = f"https://gitee.com/{repo_owner}/{repo_name}/raw/{branch}/{zip_file}"
+            gitee_api_url = f"https://gitee.com/api/v5/repos/{repo_owner}/{repo_name}/commits/{branch}"
+
             verify_ssl = self.config.get('security', {}).get('verify_ssl', True)
+
+            # 调用Gitee API获取最新提交信息
             response = requests.get(
-                self.config['tvbox']['api_url'],
+                gitee_api_url,
                 timeout=self.config['tvbox']['api_timeout'],
                 verify=verify_ssl
             )
             response.raise_for_status()
 
-            api_data = response.json()
+            # 解析API响应
+            commit_data = response.json()
+            remote_commit_sha = commit_data.get('sha')
+            remote_commit_date = commit_data.get('commit', {}).get('committer', {}).get('date')
 
-            # 处理API返回的列表格式数据
-            remote_version = None
-            download_url = None
-
-            # 从配置中获取API解析的关键字段名
-            api_parsing_keys = self.config.get('tvbox', {}).get('api_parsing_keys', {})
-            category_name = api_parsing_keys.get('category_name', '本地包')
-            download_item_name = api_parsing_keys.get('download_item_name', '点击下载')
-
-            if isinstance(api_data, list):
-                # 查找指定分类
-                for category in api_data:
-                    if isinstance(category, dict) and category.get('name') == category_name:
-                        # 在分类的list中查找下载项目
-                        for item in category.get('list', []):
-                            if isinstance(item, dict) and item.get('name') == download_item_name:
-                                remote_version = item.get('version')
-                                download_url = item.get('url')
-                                break
-                        break
-            else:
-                # 兼容原来的字典格式（如果API格式改回来）
-                remote_version = api_data.get('version')
-                download_url = api_data.get('url')
-
-            if not remote_version or not download_url:
-                logger.error("API响应缺少必要字段")
+            if not remote_commit_sha:
+                logger.error("API响应中缺少提交SHA信息")
                 return 'error', None, None
 
-            # 检查本地版本
+            # 格式化提交时间显示
+            commit_time_str = ""
+            if remote_commit_date:
+                try:
+                    # Gitee API返回的时间格式: "2024-01-01T12:00:00+08:00"
+                    from datetime import datetime
+                    commit_datetime = datetime.fromisoformat(remote_commit_date.replace('Z', '+00:00'))
+                    commit_time_str = f" ({commit_datetime.strftime('%Y-%m-%d %H:%M:%S')})"
+                except Exception as e:
+                    logger.debug(f"解析提交时间失败: {e}")
+
+            logger.info(f"远程最新提交SHA: {remote_commit_sha[:8]}...{commit_time_str}")
+
+            # 检查本地版本文件中存储的提交SHA
             version_file = self.config['tvbox']['version_file']
-            local_version = None
+            local_commit_sha = None
 
             if os.path.exists(version_file):
                 try:
                     with open(version_file, 'r', encoding='utf-8') as f:
-                        local_version = f.read().strip()
+                        local_commit_sha = f.read().strip()
                 except Exception as e:
                     logger.warning(f"读取本地版本文件失败: {e}")
 
-            if local_version == remote_version:
-                logger.info(f"当前版本 {local_version} 已是最新")
-                return 'up_to_date', remote_version, download_url
+            # 比较提交SHA
+            if local_commit_sha == remote_commit_sha:
+                logger.info(f"当前版本已是最新 (SHA: {local_commit_sha[:8] if local_commit_sha else '未知'}...{commit_time_str})")
+                return 'up_to_date', remote_commit_sha, gitee_zip_url
             else:
-                logger.info(f"发现新版本: {remote_version} (当前: {local_version or '未知'})")
-                return 'need_update', remote_version, download_url
+                local_short = local_commit_sha[:8] + '...' if local_commit_sha else '未知'
+                remote_short = remote_commit_sha[:8] + '...'
+                logger.info(f"发现新版本: {remote_short}{commit_time_str} (当前: {local_short})")
+                return 'need_update', remote_commit_sha, gitee_zip_url
 
         except Exception as e:
             logger.error(f"检查版本更新失败: {e}")
             return 'error', None, None
 
-    def tvbox_download_and_update(self, version: str, url: str):
-        """下载并更新TVBox资源"""
+    def tvbox_download_and_update(self, commit_sha: str, url: str):
+        """下载并更新TVBox资源 - 从Gitee下载固定ZIP文件"""
         logger = self._setup_logging('tvbox_manager')
-        logger.info(f"开始下载版本 {version}")
+        logger.info(f"开始下载更新 (提交SHA: {commit_sha[:8]}...)")
 
         try:
             # 下载文件
@@ -526,12 +553,13 @@ class PanSiteMonitor:
 
                 raise e
 
-            # 更新版本文件
+            # 更新版本文件，保存提交SHA
             version_file = self.config['tvbox']['version_file']
+            os.makedirs(os.path.dirname(version_file), exist_ok=True)
             with open(version_file, 'w', encoding='utf-8') as f:
-                f.write(version)
+                f.write(commit_sha)
 
-            logger.info(f"版本更新完成: {version}")
+            logger.info(f"版本更新完成，提交SHA已保存: {commit_sha[:8]}...")
             return True
 
         except Exception as e:
@@ -612,16 +640,17 @@ class PanSiteMonitor:
         results = {"update": False, "aggregate": False}
 
         # 检查并更新版本
+        status = None
         if check_update:
-            status, version, url = self.tvbox_check_version_update()
+            status, commit_sha, url = self.tvbox_check_version_update()
 
             if status == 'error':
                 logger.error("版本检查失败，跳过后续操作")
                 return results
             elif status == 'need_update':
-                if version and url:
+                if commit_sha and url:
                     logger.info("发现新版本，开始更新...")
-                    results["update"] = self.tvbox_download_and_update(version, url)
+                    results["update"] = self.tvbox_download_and_update(commit_sha, url)
                     if not results["update"]:
                         logger.error("版本更新失败，跳过数据聚合")
                         return results
@@ -637,10 +666,15 @@ class PanSiteMonitor:
             if not os.path.exists(json_dir):
                 logger.warning("跳过版本检查但本地文件不存在，建议先运行版本更新")
             results["update"] = True
+            status = 'skip_check'  # 标记为跳过检查
 
-        # 聚合数据
+        # 聚合数据 - 只有当版本实际更新或跳过检查时才聚合
         if aggregate_data and results["update"]:
-            results["aggregate"] = self.tvbox_aggregate_data()
+            if status == 'need_update' or status == 'skip_check':
+                results["aggregate"] = self.tvbox_aggregate_data()
+            elif status == 'up_to_date':
+                logger.info("版本无更新，跳过数据聚合")
+                results["aggregate"] = True  # 标记为成功，但实际跳过
 
         logger.info(f"TVBox管理器完成: 更新={results['update']}, 聚合={results['aggregate']}")
         return results
