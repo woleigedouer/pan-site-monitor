@@ -468,12 +468,27 @@ class PanSiteMonitor:
             commit_time_str = ""
             if remote_commit_date:
                 try:
-                    # Gitee API返回的时间格式: "2024-01-01T12:00:00+08:00"
+                    # Gitee API返回的时间格式: "2024-01-01T12:00:00+08:00" 或 "2024-01-01T12:00:00Z"
                     from datetime import datetime
-                    commit_datetime = datetime.fromisoformat(remote_commit_date.replace('Z', '+00:00'))
-                    commit_time_str = f" ({commit_datetime.strftime('%Y-%m-%d %H:%M:%S')})"
+
+                    # 处理不同的时间格式
+                    if remote_commit_date.endswith('Z'):
+                        # UTC时间格式
+                        commit_datetime = datetime.fromisoformat(remote_commit_date.replace('Z', '+00:00'))
+                    else:
+                        # 带时区的时间格式
+                        commit_datetime = datetime.fromisoformat(remote_commit_date)
+
+                    # 显示远程时间和本地时间
+                    remote_time_str = commit_datetime.strftime('%Y-%m-%d %H:%M:%S %Z')
+                    local_time = commit_datetime.astimezone()
+                    local_time_str = local_time.strftime('%Y-%m-%d %H:%M:%S')
+
+                    commit_time_str = f" (远程: {remote_time_str}, 本地: {local_time_str})"
                 except Exception as e:
                     logger.debug(f"解析提交时间失败: {e}")
+                    # 如果解析失败，直接显示原始时间
+                    commit_time_str = f" ({remote_commit_date})"
 
             logger.info(f"远程最新提交SHA: {remote_commit_sha[:8]}...{commit_time_str}")
 
