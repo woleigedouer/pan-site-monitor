@@ -35,16 +35,6 @@
       "木偶": "class=\"search-stat\"",
       "二小": "class=\"search-stat\"",
       "小斑": "class=\"search-stat\""
-    },
-    "url_weights": {
-      "木偶": {
-        "https://aliii.deno.dev": 60,
-        "http://149.88.87.72:5666": 60
-      },
-      "至臻": {
-        "http://www.xhww.net": 10,
-        "http://xhww.net": 10
-      }
     }
   },
   "tvbox": {
@@ -64,7 +54,6 @@
   },
   "url_tester": {
     "test_timeout": 15,
-    "default_weight": 50,
     "history_limit": 24,
     "proxy": {
       "enabled": false,

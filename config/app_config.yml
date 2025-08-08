@@ -42,15 +42,6 @@ sites:
     二小: "class=\"search-stat\""
     小斑: "class=\"search-stat\""
 
-  # URL权重配置 - 特定站点的URL权重设置
-  url_weights:
-    木偶:
-      "https://aliii.deno.dev": 60
-      "http://149.88.87.72:5666": 60
-    至臻:
-      "http://www.xhww.net": 10
-      "http://xhww.net": 10
-
 # TVBox配置 - TVBox资源管理相关设置
 tvbox:
   # Gitee仓库配置
@@ -72,7 +63,6 @@ tvbox:
 # URL测试器配置 - 站点可用性测试相关设置
 url_tester:
   test_timeout: 15        # 测试超时时间(秒)
-  default_weight: 50      # 默认权重
   history_limit: 24       # 历史记录限制
   
   # 代理配置

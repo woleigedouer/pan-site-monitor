@@ -104,11 +104,11 @@ class PanSiteMonitor:
         """加载配置文件，支持JSON和YAML格式"""
         # 最小默认配置结构
         default_config = {
-            "sites": {"mapping": {}, "search_paths": {}, "keyword_validation": {}, "url_weights": {}},
+            "sites": {"mapping": {}, "search_paths": {}, "keyword_validation": {}},
             "tvbox": {"local_json_dir": "", "output_path": "", "version_file": "",
                      "download_path": "", "extract_path": "", "old_path": "", "api_timeout": 10,
                      "download_timeout": 60, "download_chunk_size": 8192},
-            "url_tester": {"test_timeout": 15, "default_weight": 50,
+            "url_tester": {"test_timeout": 15,
                           "proxy": {"enabled": False, "proxies": {}}, "history_limit": 24},
             "github": {"owner": "", "repo": "", "branch": "main", "token": "",
                       "files_to_upload": [], "commit_message_template": "Update - {timestamp}",
@@ -913,30 +913,20 @@ class PanSiteMonitor:
 
             latency, has_keyword, error_info = self.test_url_availability(url, site_name)
 
-            # 获取URL权重
-            site_weights = self.config['sites'].get('url_weights', {}).get(site_name, {})
-            default_weight = self.config['url_tester'].get('default_weight', 50)
-            weight = site_weights.get(url, default_weight)
-
             if latency is not None:
-                # 成功的URL：计算综合得分
-                if has_keyword:
-                    score = weight / (latency + 0.1)  # 避免除零
-                else:
-                    score = (weight * 0.5) / (latency + 0.1)  # 无关键字减半
-
-                successful_urls[url] = (latency, has_keyword, weight, score)
-                url_results[url] = (latency, has_keyword, weight, None)
+                # 成功：仅记录延迟与关键字命中；不使用权重与得分
+                successful_urls[url] = latency
+                url_results[url] = (latency, has_keyword, None, None)
             else:
-                # 失败的URL：记录为失败状态，包含错误信息
-                url_results[url] = (None, False, weight, error_info)
+                # 失败：记录错误信息
+                url_results[url] = (None, False, None, error_info)
 
         if successful_urls:
-            # 选择最佳URL（得分最高）
-            best_url = max(successful_urls.keys(), key=lambda u: successful_urls[u][3])
-            best_latency, _, best_weight, best_score = successful_urls[best_url]
+            # 选择最佳URL（延迟最低）
+            best_url = min(successful_urls.keys(), key=lambda u: successful_urls[u])
+            best_latency = successful_urls[best_url]
 
-            self.log_message(f"[选择] 最佳URL: {best_url} (延迟: {best_latency:.2f}s, 权重: {best_weight}, 得分: {best_score:.2f})",
+            self.log_message(f"[选择] 最佳URL: {best_url} (延迟: {best_latency:.2f}s)",
                             site_name, "选择最佳")
 
             return {
@@ -1013,7 +1003,6 @@ class PanSiteMonitor:
                             "url": url,
                             "latency": round(latency, 2) if latency is not None else None,
                             "has_keyword": has_keyword,
-                            "weight": weight,
                             "is_best": url == result['best_url']
                         }
 
