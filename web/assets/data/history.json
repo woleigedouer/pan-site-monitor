@@ -2,13 +2,6 @@
   "玩偶": {
     "http://woggpan.wogg.lol": [
       {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "down",
-        "latency": null,
-        "is_best": false,
-        "error_detail": "状态码 567"
-      },
-      {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "down",
         "latency": null,
@@ -168,15 +161,16 @@
         "latency": null,
         "is_best": false,
         "error_detail": "连接失败"
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "down",
+        "latency": null,
+        "is_best": false,
+        "error_detail": "连接失败"
       }
     ],
     "https://wogg.xxooo.cf": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 1.772158,
-        "is_best": false
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -314,15 +308,15 @@
         "status": "up",
         "latency": 2.060415,
         "is_best": false
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 2.108445,
+        "is_best": false
       }
     ],
     "https://wogg.333232.xyz": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 0.67228,
-        "is_best": true
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -462,16 +456,15 @@
         "status": "up",
         "latency": 0.73169,
         "is_best": true
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.725056,
+        "is_best": false
       }
     ],
     "https://woggpan.333232.xyz": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "down",
-        "latency": null,
-        "is_best": false,
-        "error_detail": "连接失败"
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "down",
@@ -628,6 +621,13 @@
       },
       {
         "timestamp": "2025-08-11T00:01:26.495398",
+        "status": "down",
+        "latency": null,
+        "is_best": false,
+        "error_detail": "SSL错误"
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
         "status": "down",
         "latency": null,
         "is_best": false,
@@ -636,13 +636,6 @@
     ],
     "https://wogg.heshiheng.top": [
       {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "down",
-        "latency": null,
-        "is_best": false,
-        "error_detail": "连接失败"
-      },
-      {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "down",
         "latency": null,
@@ -802,15 +795,16 @@
         "latency": null,
         "is_best": false,
         "error_detail": "SSL错误"
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "down",
+        "latency": null,
+        "is_best": false,
+        "error_detail": "SSL错误"
       }
     ],
     "https://www.wogg.one": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 0.733273,
-        "is_best": false
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -949,15 +943,15 @@
         "status": "up",
         "latency": 0.763576,
         "is_best": false
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.740844,
+        "is_best": false
       }
     ],
     "https://www.wogg.lol": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 0.710981,
-        "is_best": false
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -1096,18 +1090,17 @@
         "status": "up",
         "latency": 0.762846,
         "is_best": false
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.724373,
+        "is_best": true
       }
     ]
   },
   "木偶": {
     "http://123.666291.xyz": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "down",
-        "latency": null,
-        "is_best": false,
-        "error_detail": "连接失败"
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "down",
@@ -1266,15 +1259,15 @@
         "status": "up",
         "latency": 0.277479,
         "is_best": true
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.277907,
+        "is_best": true
       }
     ],
     "https://123.91muou.icu": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 0.266002,
-        "is_best": false
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -1415,16 +1408,16 @@
         "latency": null,
         "is_best": false,
         "error_detail": "SSL错误"
-      }
-    ],
-    "https://mo.666291.xyz": [
+      },
       {
-        "timestamp": "2025-08-10T03:00:53.010019",
+        "timestamp": "2025-08-11T01:01:17.882327",
         "status": "down",
         "latency": null,
         "is_best": false,
-        "error_detail": "连接失败"
-      },
+        "error_detail": "SSL错误"
+      }
+    ],
+    "https://mo.666291.xyz": [
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "down",
@@ -1585,15 +1578,16 @@
         "latency": null,
         "is_best": false,
         "error_detail": "SSL错误"
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "down",
+        "latency": null,
+        "is_best": false,
+        "error_detail": "SSL错误"
       }
     ],
     "https://123.muouso.fun": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 0.238817,
-        "is_best": true
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -1734,17 +1728,18 @@
         "latency": null,
         "is_best": false,
         "error_detail": "SSL错误"
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "down",
+        "latency": null,
+        "is_best": false,
+        "error_detail": "SSL错误"
       }
     ]
   },
   "蜡笔": {
     "http://feimaoai.site": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 0.600381,
-        "is_best": false
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -1882,16 +1877,15 @@
         "status": "up",
         "latency": 0.35129,
         "is_best": true
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.465967,
+        "is_best": false
       }
     ],
     "http://www.labi88.sbs": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "down",
-        "latency": null,
-        "is_best": false,
-        "error_detail": "连接失败"
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "down",
@@ -2045,15 +2039,15 @@
         "status": "up",
         "latency": 0.493744,
         "is_best": false
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.022166,
+        "is_best": true
       }
     ],
     "https://feimao666.fun": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 0.909775,
-        "is_best": false
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -2191,15 +2185,15 @@
         "status": "up",
         "latency": 0.522075,
         "is_best": false
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.853656,
+        "is_best": false
       }
     ],
     "http://feimao888.fun": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 0.450278,
-        "is_best": true
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -2337,17 +2331,17 @@
         "status": "up",
         "latency": 0.499717,
         "is_best": false
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.314797,
+        "is_best": false
       }
     ]
   },
   "至臻": {
     "https://mihdr.top": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 0.975594,
-        "is_best": false
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -2486,15 +2480,15 @@
         "status": "up",
         "latency": 4.778264,
         "is_best": false
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.783898,
+        "is_best": false
       }
     ],
     "http://xiaomi666.fun": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 0.819129,
-        "is_best": false
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -2633,15 +2627,15 @@
         "status": "up",
         "latency": 0.133787,
         "is_best": true
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.179509,
+        "is_best": true
       }
     ],
     "http://www.miqk.cc": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 0.793159,
-        "is_best": true
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -2780,15 +2774,15 @@
         "status": "up",
         "latency": 5.084755,
         "is_best": false
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.654139,
+        "is_best": false
       }
     ],
     "https://xiaomiai.site": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 1.155077,
-        "is_best": false
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -2927,17 +2921,17 @@
         "status": "up",
         "latency": 0.28769,
         "is_best": false
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.213426,
+        "is_best": false
       }
     ]
   },
   "多多": {
     "https://tv.yydsys.top": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 0.750278,
-        "is_best": false
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -3086,15 +3080,15 @@
         "status": "up",
         "latency": 1.003314,
         "is_best": false
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 1.768706,
+        "is_best": false
       }
     ],
     "https://tv.yydsys.cc": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 1.370776,
-        "is_best": false
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -3232,15 +3226,15 @@
         "status": "up",
         "latency": 0.772261,
         "is_best": false
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.406704,
+        "is_best": true
       }
     ],
     "https://tv.214521.xyz": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 0.618841,
-        "is_best": true
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -3378,17 +3372,17 @@
         "status": "up",
         "latency": 0.715533,
         "is_best": true
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.483243,
+        "is_best": false
       }
     ]
   },
   "欧哥": {
     "https://woog.nxog.eu.org": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 0.788822,
-        "is_best": true
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -3526,18 +3520,17 @@
         "status": "up",
         "latency": 0.275545,
         "is_best": true
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.208129,
+        "is_best": true
       }
     ]
   },
   "二小": {
     "https://xhww.net": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "down",
-        "latency": null,
-        "is_best": false,
-        "error_detail": "连接失败"
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "down",
@@ -3694,15 +3687,16 @@
         "latency": null,
         "is_best": false,
         "error_detail": "超时"
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "down",
+        "latency": null,
+        "is_best": false,
+        "error_detail": "SSL错误"
       }
     ],
     "http://2xiaopan.fun": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 0.660904,
-        "is_best": false
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -3840,15 +3834,15 @@
         "status": "up",
         "latency": 1.243482,
         "is_best": false
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.729242,
+        "is_best": false
       }
     ],
     "https://erxiaofn.click": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 1.462549,
-        "is_best": false
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -3986,15 +3980,15 @@
         "status": "up",
         "latency": 0.269732,
         "is_best": true
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.323762,
+        "is_best": false
       }
     ],
     "https://erxiaofn.site": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 0.977916,
-        "is_best": false
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -4132,16 +4126,15 @@
         "status": "up",
         "latency": 0.279684,
         "is_best": false
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.292608,
+        "is_best": true
       }
     ],
     "https://www.xhww.net": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "down",
-        "latency": null,
-        "is_best": false,
-        "error_detail": "连接失败"
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "down",
@@ -4297,15 +4290,16 @@
         "latency": null,
         "is_best": false,
         "error_detail": "SSL错误"
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "down",
+        "latency": null,
+        "is_best": false,
+        "error_detail": "超时"
       }
     ],
     "https://xiaoer.5568.eu.org": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 0.593666,
-        "is_best": true
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -4450,16 +4444,16 @@
         "latency": null,
         "is_best": false,
         "error_detail": "超时"
-      }
-    ],
-    "http://wexfnw.999888456.xyz": [
+      },
       {
-        "timestamp": "2025-08-10T03:00:53.010019",
+        "timestamp": "2025-08-11T01:01:17.882327",
         "status": "down",
         "latency": null,
         "is_best": false,
         "error_detail": "超时"
-      },
+      }
+    ],
+    "http://wexfnw.999888456.xyz": [
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "down",
@@ -4616,6 +4610,13 @@
       },
       {
         "timestamp": "2025-08-11T00:01:26.495398",
+        "status": "down",
+        "latency": null,
+        "is_best": false,
+        "error_detail": "连接失败"
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
         "status": "down",
         "latency": null,
         "is_best": false,
@@ -4624,13 +4625,6 @@
     ],
     "http://89.213.49.249": [
       {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "down",
-        "latency": null,
-        "is_best": false,
-        "error_detail": "超时"
-      },
-      {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "down",
         "latency": null,
@@ -4786,6 +4780,13 @@
       },
       {
         "timestamp": "2025-08-11T00:01:26.495398",
+        "status": "down",
+        "latency": null,
+        "is_best": false,
+        "error_detail": "连接失败"
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
         "status": "down",
         "latency": null,
         "is_best": false,
@@ -4795,12 +4796,6 @@
   },
   "虎斑": {
     "http://103.45.162.207:20720": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 0.108302,
-        "is_best": true
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -4938,18 +4933,17 @@
         "status": "up",
         "latency": 0.112964,
         "is_best": true
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.108266,
+        "is_best": true
       }
     ]
   },
   "闪电": {
     "http://1.95.79.193": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "down",
-        "latency": null,
-        "is_best": false,
-        "error_detail": "状态码 500"
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "down",
@@ -5110,16 +5104,16 @@
         "latency": null,
         "is_best": false,
         "error_detail": "状态码 500"
-      }
-    ],
-    "http://1.95.79.193:666": [
+      },
       {
-        "timestamp": "2025-08-10T03:00:53.010019",
+        "timestamp": "2025-08-11T01:01:17.882327",
         "status": "down",
         "latency": null,
         "is_best": false,
         "error_detail": "状态码 500"
-      },
+      }
+    ],
+    "http://1.95.79.193:666": [
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "down",
@@ -5280,17 +5274,18 @@
         "latency": null,
         "is_best": false,
         "error_detail": "状态码 500"
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "down",
+        "latency": null,
+        "is_best": false,
+        "error_detail": "状态码 500"
       }
     ]
   },
   "小斑": {
     "http://xsayang.fun:12512": [
-      {
-        "timestamp": "2025-08-10T03:00:53.010019",
-        "status": "up",
-        "latency": 0.567815,
-        "is_best": true
-      },
       {
         "timestamp": "2025-08-10T04:01:41.282540",
         "status": "up",
@@ -5429,6 +5424,12 @@
         "timestamp": "2025-08-11T00:01:26.495398",
         "status": "up",
         "latency": 0.683888,
+        "is_best": true
+      },
+      {
+        "timestamp": "2025-08-11T01:01:17.882327",
+        "status": "up",
+        "latency": 0.687268,
         "is_best": true
       }
     ]
