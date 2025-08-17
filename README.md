@@ -116,7 +116,23 @@ python src/pan_site_monitor.py upload
 python src/pan_site_monitor.py all
 ```
 
+5. **快速模式（跳过TVBox）**
+```bash
+python src/pan_site_monitor.py quick
+```
+
 ### 命令选项
+
+#### 快速模式说明
+```bash
+# 快速模式：跳过TVBox管理，直接进行测速和上传
+python src/pan_site_monitor.py quick
+
+# 适用场景：
+# - data/test.json内容基本不变化时
+# - 需要快速执行测速和上传
+# - 不需要更新TVBox资源时
+```
 
 #### TVBox管理选项
 ```bash

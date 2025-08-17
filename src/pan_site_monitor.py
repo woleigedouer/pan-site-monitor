@@ -1312,8 +1312,8 @@ class PanSiteMonitor:
 def main():
     """主程序入口"""
     parser = argparse.ArgumentParser(description='Pan Site Monitor - TVBox资源站点监控工具')
-    parser.add_argument('command', choices=['tvbox', 'test', 'upload', 'all'],
-                       help='执行的命令: tvbox(TVBox管理), test(URL测试), upload(GitHub上传), all(全部)')
+    parser.add_argument('command', choices=['tvbox', 'test', 'upload', 'all', 'quick'],
+                       help='执行的命令: tvbox(TVBox管理), test(URL测试), upload(GitHub上传), all(全部), quick(快速模式：仅测速+上传)')
     parser.add_argument('--config', default=None, help='配置文件路径')
     parser.add_argument('--no-update', action='store_true', help='跳过TVBox版本检查')
     parser.add_argument('--no-aggregate', action='store_true', help='跳过数据聚合')
@@ -1339,6 +1339,24 @@ def main():
         elif args.command == 'upload':
             print("=== GitHub文件上传 ===")
             success = monitor.run_github_uploader()
+
+        elif args.command == 'quick':
+            print("=== 快速模式：测速+上传 ===")
+            print("ℹ️  跳过TVBox管理，直接使用data/test.json进行测速和上传")
+
+            # 1. URL测试
+            print("\n1. URL可用性测试")
+            test_results = monitor.run_url_tester()
+
+            if not test_results:
+                print("URL测试失败，跳过GitHub上传")
+                sys.exit(1)
+
+            # 2. GitHub上传
+            print("\n2. GitHub文件上传")
+            upload_success = monitor.run_github_uploader()
+
+            success = upload_success
 
         elif args.command == 'all':
             print("=== 执行完整流程 ===")
