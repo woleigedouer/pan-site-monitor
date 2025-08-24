@@ -192,8 +192,11 @@ export const renderer = {
             // 成功站点：显示除最佳URL外的其他URL
             urlsToShow = siteData.urls.filter(u => !u.is_best);
         } else {
-            // 失败站点：显示所有URL
-            urlsToShow = siteData.urls;
+            // 失败站点：按头部显示的URL进行过滤，避免重复
+            const headerUrl = this.findLastSuccessfulUrl(siteName, siteData);
+            urlsToShow = headerUrl
+                ? siteData.urls.filter(u => u.url !== headerUrl)
+                : siteData.urls;
         }
 
         if (urlsToShow.length === 0) {
