@@ -869,12 +869,14 @@ class PanSiteMonitor:
                 if has_keyword:
                     self.log_message(f"[成功] URL {test_url_str} 延迟: {latency:.2f}s{'，包含关键字 ' + keyword if keyword else ''}",
                                     site_name, "测试URL")
+                    return latency, has_keyword, None
                 else:
-                    self.log_message(f"[成功] URL {test_url_str} 延迟: {latency:.2f}s，但不包含关键字 '{keyword}'",
+                    # 无关键字的URL视为无效，返回失败状态
+                    self.log_message(f"[失败] URL {test_url_str} 延迟: {latency:.2f}s，但不包含关键字 '{keyword}'",
                                     site_name, "测试URL")
-                    self.log_message(f"[警告] 该URL返回200但无关键字，可能存在Cloudflare盾或其他反爬机制",
+                    self.log_message(f"[判定] 该URL返回200但无关键字，判定为无效（可能是域名过期、Cloudflare盾等）",
                                     site_name, "测试URL")
-                return latency, has_keyword, None
+                    return None, False, {"type": "invalid_content", "detail": "无关键字内容"}
             else:
                 error_detail = f"状态码 {response.status_code}"
                 self.log_message(f"[失败] URL {test_url_str} 返回HTTP错误: {error_detail}",
@@ -905,7 +907,7 @@ class PanSiteMonitor:
         self.log_message(f"[开始] 开始测试站点 {site_name} 的 {len(urls)} 个URL", site_name, "测试站点")
 
         url_results = {}
-        successful_urls = {}
+        valid_urls = {}  # 只包含有关键字的有效URL
 
         for url in urls:
             if not url or not url.strip():
@@ -913,20 +915,20 @@ class PanSiteMonitor:
 
             latency, has_keyword, error_info = self.test_url_availability(url, site_name)
 
-            if latency is not None:
-                # 成功：仅记录延迟与关键字命中；不使用权重与得分
-                successful_urls[url] = latency
+            if latency is not None and has_keyword:
+                # 成功：有延迟且包含关键字的URL才算有效
+                valid_urls[url] = latency
                 url_results[url] = (latency, has_keyword, None, None)
             else:
-                # 失败：记录错误信息
+                # 失败：记录错误信息（包括无关键字的情况）
                 url_results[url] = (None, False, None, error_info)
 
-        if successful_urls:
-            # 选择最佳URL（延迟最低）
-            best_url = min(successful_urls.keys(), key=lambda u: successful_urls[u])
-            best_latency = successful_urls[best_url]
+        # 选择有效URL中延迟最低的
+        if valid_urls:
+            best_url = min(valid_urls.keys(), key=lambda u: valid_urls[u])
+            best_latency = valid_urls[best_url]
 
-            self.log_message(f"[选择] 最佳URL: {best_url} (延迟: {best_latency:.2f}s)",
+            self.log_message(f"[选择] 最佳URL: {best_url} (延迟: {best_latency:.2f}s, 包含关键字)",
                             site_name, "选择最佳")
 
             return {
@@ -934,7 +936,7 @@ class PanSiteMonitor:
                 'url_results': url_results
             }
         else:
-            self.log_message(f"[失败] 站点 {site_name} 的所有URL都无法访问", site_name, "测试站点")
+            self.log_message(f"[失败] 站点 {site_name} 没有有效URL", site_name, "测试站点")
             return {'best_url': None, 'url_results': url_results}
 
     def run_url_tester(self):
