@@ -158,14 +158,27 @@ export const renderer = {
 
     // 创建失败站点的头部内容
     createFailedHeaderContent(siteName, siteData, index) {
-        // 对于失败站点，尝试找到上次成功的URL来显示历史信息
+        // 获取要在头部显示的URL
+        const headerDisplayUrl = this.getHeaderDisplayUrl(siteName, siteData);
         const lastSuccessfulUrl = this.findLastSuccessfulUrl(siteName, siteData);
-        const statusHistory = this.generateStatusHistory(siteName, lastSuccessfulUrl, null);
 
-        // 根据是否找到上次最佳URL来决定显示文本
-        const displayText = lastSuccessfulUrl
-            ? utils.sanitizeHTML(lastSuccessfulUrl)
-            : '所有URL均不可用';
+        // 为状态历史选择合适的URL和当前数据
+        let historyUrl = lastSuccessfulUrl;
+        let currentUrlData = null;
+
+        // 如果头部显示的是当前失败URL（不是历史成功URL），需要获取当前URL的数据
+        if (headerDisplayUrl && headerDisplayUrl !== lastSuccessfulUrl && siteData.urls) {
+            const currentUrlObj = siteData.urls.find(u => u.url === headerDisplayUrl);
+            if (currentUrlObj) {
+                historyUrl = headerDisplayUrl;
+                currentUrlData = currentUrlObj;
+            }
+        }
+
+        const statusHistory = this.generateStatusHistory(siteName, historyUrl, currentUrlData);
+
+        // 确定显示文本
+        const displayText = headerDisplayUrl ? utils.sanitizeHTML(headerDisplayUrl) : '暂无可用URL';
 
         return `
             <div class="status-indicator failed" role="img" aria-label="站点离线"></div>
@@ -181,6 +194,17 @@ export const renderer = {
         `;
     },
 
+    // 获取头部显示的URL（与createFailedHeaderContent逻辑保持一致）
+    getHeaderDisplayUrl(siteName, siteData) {
+        const lastSuccessfulUrl = this.findLastSuccessfulUrl(siteName, siteData);
+        if (lastSuccessfulUrl) {
+            return lastSuccessfulUrl;
+        } else if (siteData.urls && siteData.urls.length > 0) {
+            return siteData.urls[0].url;
+        }
+        return null;
+    },
+
     // 创建详情内容
     createDetailsContent(siteName, siteData) {
         if (!siteData.urls || siteData.urls.length === 0) {
@@ -193,7 +217,7 @@ export const renderer = {
             urlsToShow = siteData.urls.filter(u => !u.is_best);
         } else {
             // 失败站点：按头部显示的URL进行过滤，避免重复
-            const headerUrl = this.findLastSuccessfulUrl(siteName, siteData);
+            const headerUrl = this.getHeaderDisplayUrl(siteName, siteData);
             urlsToShow = headerUrl
                 ? siteData.urls.filter(u => u.url !== headerUrl)
                 : siteData.urls;
