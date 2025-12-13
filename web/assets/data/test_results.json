@@ -1,25 +1,25 @@
 {
-  "timestamp": "2025-12-13T19:01:04.862940",
+  "timestamp": "2025-12-13T21:01:16.596484",
   "summary": {
     "total_sites": 10,
-    "success_sites": 8,
-    "failed_sites": 2
+    "success_sites": 9,
+    "failed_sites": 1
   },
   "sites": {
     "玩偶": {
       "site_name": "玩偶",
-      "best_url": "https://wogg.xxooo.cf",
+      "best_url": "https://wogg.333232.xyz",
       "status": "success",
       "urls": [
         {
-          "url": "https://wogg.xxooo.cf",
-          "latency": 0.78,
+          "url": "https://wogg.333232.xyz",
+          "latency": 1.97,
           "has_keyword": true,
           "is_best": true
         },
         {
-          "url": "https://wogg.333232.xyz",
-          "latency": 1.8,
+          "url": "https://wogg.xxooo.cf",
+          "latency": 2.05,
           "has_keyword": true,
           "is_best": false
         },
@@ -48,19 +48,19 @@
       "urls": [
         {
           "url": "https://www.muou.site/",
-          "latency": 3.59,
+          "latency": 2.09,
           "has_keyword": true,
           "is_best": true
         },
         {
           "url": "https://www.muou.asia/",
-          "latency": 5.57,
+          "latency": 5.74,
           "has_keyword": true,
           "is_best": false
         },
         {
           "url": "https://666.666291.xyz",
-          "latency": 6.88,
+          "latency": 8.0,
           "has_keyword": true,
           "is_best": false
         }
@@ -73,13 +73,13 @@
       "urls": [
         {
           "url": "http://feimao888.fun",
-          "latency": 0.61,
+          "latency": 0.44,
           "has_keyword": true,
           "is_best": true
         },
         {
           "url": "https://feimao666.fun",
-          "latency": 1.79,
+          "latency": 0.89,
           "has_keyword": true,
           "is_best": false
         }
@@ -87,24 +87,28 @@
     },
     "至臻": {
       "site_name": "至臻",
-      "best_url": null,
-      "status": "failed",
+      "best_url": "https://mihdr.top",
+      "status": "success",
       "urls": [
         {
           "url": "https://mihdr.top",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "http_error",
-          "error_detail": "状态码 403"
+          "latency": 0.28,
+          "has_keyword": true,
+          "is_best": true
+        },
+        {
+          "url": "https://www.zhizhenpan.fun/",
+          "latency": 3.61,
+          "has_keyword": true,
+          "is_best": false
         },
         {
           "url": "http://www.miqk.cc",
           "latency": null,
           "has_keyword": false,
           "is_best": false,
-          "error_type": "http_error",
-          "error_detail": "状态码 530"
+          "error_type": "invalid_content",
+          "error_detail": "无关键字内容"
         },
         {
           "url": "https://www.mihdr.top/",
@@ -113,37 +117,29 @@
           "is_best": false,
           "error_type": "ssl_error",
           "error_detail": "SSL错误"
-        },
-        {
-          "url": "https://www.zhizhenpan.fun/",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "http_error",
-          "error_detail": "状态码 403"
         }
       ]
     },
     "多多": {
       "site_name": "多多",
-      "best_url": "https://tv.yydsys.top",
+      "best_url": "https://tv.yydsys.cc",
       "status": "success",
       "urls": [
         {
-          "url": "https://tv.yydsys.top",
-          "latency": 0.54,
+          "url": "https://tv.yydsys.cc",
+          "latency": 0.89,
           "has_keyword": true,
           "is_best": true
         },
         {
-          "url": "https://tv.214521.xyz",
-          "latency": 0.78,
+          "url": "https://tv.yydsys.top",
+          "latency": 1.05,
           "has_keyword": true,
           "is_best": false
         },
         {
-          "url": "https://tv.yydsys.cc",
-          "latency": 1.14,
+          "url": "https://tv.214521.xyz",
+          "latency": 2.53,
           "has_keyword": true,
           "is_best": false
         }
@@ -156,7 +152,7 @@
       "urls": [
         {
           "url": "https://woog.nxog.eu.org",
-          "latency": 0.8,
+          "latency": 1.27,
           "has_keyword": true,
           "is_best": true
         }
@@ -164,18 +160,24 @@
     },
     "二小": {
       "site_name": "二小",
-      "best_url": "https://erxiaofn.click",
+      "best_url": "https://erxiaofn.site",
       "status": "success",
       "urls": [
         {
-          "url": "https://erxiaofn.click",
-          "latency": 1.6,
+          "url": "https://erxiaofn.site",
+          "latency": 0.92,
           "has_keyword": true,
           "is_best": true
         },
         {
-          "url": "https://erxiaofn.site",
-          "latency": 5.63,
+          "url": "https://erxiaofn.click",
+          "latency": 1.3,
+          "has_keyword": true,
+          "is_best": false
+        },
+        {
+          "url": "http://2xiaopan.fun",
+          "latency": 2.78,
           "has_keyword": true,
           "is_best": false
         },
@@ -186,14 +188,6 @@
           "is_best": false,
           "error_type": "ssl_error",
           "error_detail": "SSL错误"
-        },
-        {
-          "url": "http://2xiaopan.fun",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "invalid_content",
-          "error_detail": "无关键字内容"
         },
         {
           "url": "https://www.xhww.net",
@@ -212,7 +206,7 @@
       "urls": [
         {
           "url": "http://103.45.162.207:20720",
-          "latency": 0.3,
+          "latency": 8.71,
           "has_keyword": true,
           "is_best": true
         }
@@ -240,7 +234,7 @@
       "urls": [
         {
           "url": "http://xsayang.fun:12512",
-          "latency": 0.51,
+          "latency": 0.5,
           "has_keyword": true,
           "is_best": true
         }
