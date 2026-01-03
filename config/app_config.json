@@ -2,18 +2,16 @@
   "sites": {
     "mapping": {
       "wogg.json": "玩偶",
-      "mogg.json": "木偶", 
+      "mogg.json": "木偶",
       "lb.json": "蜡笔",
       "zz.json": "至臻",
       "yyds.json": "多多",
       "og.json": "欧哥",
       "ex.json": "二小",
       "hb.json": "虎斑",
-      "sd.json": "闪电",
       "xbky.json": "小斑"
     },
     "search_paths": {
-      "闪电": "/index.php/vod/search.html?wd=仙台有树",
       "欧哥": "/index.php/vod/search.html?wd=仙台有树",
       "多多": "/index.php/vod/search.html?wd=仙台有树",
       "蜡笔": "/index.php/vod/search.html?wd=仙台有树",
@@ -25,7 +23,6 @@
       "小斑": "/index.php/vod/search.html?wd=仙台有树"
     },
     "keyword_validation": {
-      "闪电": "class=\"search-stat\"",
       "欧哥": "class=\"search-stat\"",
       "多多": "class=\"search-stat\"",
       "蜡笔": "class=\"search-stat\"",

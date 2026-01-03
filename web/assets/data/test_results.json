@@ -1,9 +1,9 @@
 {
   "timestamp": "2026-01-03T16:00:32.701728",
   "summary": {
-    "total_sites": 10,
+    "total_sites": 9,
     "success_sites": 9,
-    "failed_sites": 1
+    "failed_sites": 0
   },
   "sites": {
     "玩偶": {
@@ -28,14 +28,6 @@
           "latency": 1.75,
           "has_keyword": true,
           "is_best": false
-        },
-        {
-          "url": "https://www.wogg.lol",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "ssl_error",
-          "error_detail": "SSL错误"
         }
       ]
     },
@@ -174,22 +166,6 @@
           "latency": 0.99,
           "has_keyword": true,
           "is_best": false
-        },
-        {
-          "url": "https://xhww.net",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "ssl_error",
-          "error_detail": "SSL错误"
-        },
-        {
-          "url": "https://www.xhww.net",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "ssl_error",
-          "error_detail": "SSL错误"
         }
       ]
     },
@@ -203,21 +179,6 @@
           "latency": 0.12,
           "has_keyword": true,
           "is_best": true
-        }
-      ]
-    },
-    "闪电": {
-      "site_name": "闪电",
-      "best_url": null,
-      "status": "failed",
-      "urls": [
-        {
-          "url": "http://1.95.79.193",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "connection_error",
-          "error_detail": "连接失败"
         }
       ]
     },

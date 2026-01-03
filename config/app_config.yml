@@ -13,12 +13,10 @@ sites:
     og.json: "欧哥"        # 欧哥站点
     ex.json: "二小"        # 二小站点
     hb.json: "虎斑"        # 虎斑站点
-    sd.json: "闪电"        # 闪电站点
     xbky.json: "小斑"      # 小斑站点
 
   # 搜索路径 - 各站点的搜索URL路径
   search_paths:
-    闪电: "/index.php/vod/search.html?wd=仙台有树"
     欧哥: "/index.php/vod/search.html?wd=仙台有树"
     多多: "/index.php/vod/search.html?wd=仙台有树"
     蜡笔: "/index.php/vod/search.html?wd=仙台有树"
@@ -31,7 +29,6 @@ sites:
 
   # 关键字验证 - 用于验证搜索结果页面的关键字
   keyword_validation:
-    闪电: "class=\"search-stat\""
     欧哥: "class=\"search-stat\""
     多多: "class=\"search-stat\""
     蜡笔: "class=\"search-stat\""
