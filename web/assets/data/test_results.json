@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-01-06T05:00:13.751981",
+  "timestamp": "2026-01-06T06:00:14.111563",
   "summary": {
     "total_sites": 9,
     "success_sites": 9,
@@ -13,19 +13,19 @@
       "urls": [
         {
           "url": "https://wogg.333232.xyz",
-          "latency": 0.5,
+          "latency": 0.51,
           "has_keyword": true,
           "is_best": true
         },
         {
           "url": "https://www.wogg.one",
-          "latency": 0.52,
+          "latency": 0.55,
           "has_keyword": true,
           "is_best": false
         },
         {
           "url": "https://wogg.xxooo.cf",
-          "latency": 0.82,
+          "latency": 1.02,
           "has_keyword": true,
           "is_best": false
         }
@@ -38,18 +38,18 @@
       "urls": [
         {
           "url": "https://666.666291.xyz",
-          "latency": 0.31,
+          "latency": 0.3,
           "has_keyword": true,
           "is_best": true
         },
         {
-          "url": "https://www.muou.asia/",
-          "latency": 0.32,
+          "url": "https://www.muou.site/",
+          "latency": 0.31,
           "has_keyword": true,
           "is_best": false
         },
         {
-          "url": "https://www.muou.site/",
+          "url": "https://www.muou.asia/",
           "latency": 0.32,
           "has_keyword": true,
           "is_best": false
@@ -63,13 +63,13 @@
       "urls": [
         {
           "url": "http://feimao888.fun",
-          "latency": 0.44,
+          "latency": 0.46,
           "has_keyword": true,
           "is_best": true
         },
         {
           "url": "https://feimao666.fun",
-          "latency": 0.66,
+          "latency": 0.63,
           "has_keyword": true,
           "is_best": false
         }
@@ -82,7 +82,7 @@
       "urls": [
         {
           "url": "https://www.zhizhenpan.fun/",
-          "latency": 0.56,
+          "latency": 0.89,
           "has_keyword": true,
           "is_best": true
         },
@@ -107,8 +107,8 @@
           "latency": null,
           "has_keyword": false,
           "is_best": false,
-          "error_type": "http_error",
-          "error_detail": "状态码 404"
+          "error_type": "ssl_error",
+          "error_detail": "SSL错误"
         }
       ]
     },
@@ -119,19 +119,19 @@
       "urls": [
         {
           "url": "https://tv.yydsys.top",
-          "latency": 0.46,
+          "latency": 0.47,
           "has_keyword": true,
           "is_best": true
         },
         {
           "url": "https://tv.yydsys.cc",
-          "latency": 0.68,
+          "latency": 0.71,
           "has_keyword": true,
           "is_best": false
         },
         {
           "url": "https://tv.214521.xyz",
-          "latency": 1.09,
+          "latency": 1.12,
           "has_keyword": true,
           "is_best": false
         }
@@ -144,7 +144,7 @@
       "urls": [
         {
           "url": "https://woog.nxog.eu.org",
-          "latency": 0.77,
+          "latency": 0.76,
           "has_keyword": true,
           "is_best": true
         }
@@ -152,18 +152,18 @@
     },
     "二小": {
       "site_name": "二小",
-      "best_url": "https://erxiaofn.site",
+      "best_url": "https://erxiaofn.click",
       "status": "success",
       "urls": [
         {
-          "url": "https://erxiaofn.site",
+          "url": "https://erxiaofn.click",
           "latency": 0.95,
           "has_keyword": true,
           "is_best": true
         },
         {
-          "url": "https://erxiaofn.click",
-          "latency": 1.04,
+          "url": "https://erxiaofn.site",
+          "latency": 1.01,
           "has_keyword": true,
           "is_best": false
         },
@@ -172,8 +172,8 @@
           "latency": null,
           "has_keyword": false,
           "is_best": false,
-          "error_type": "invalid_content",
-          "error_detail": "无关键字内容"
+          "error_type": "http_error",
+          "error_detail": "状态码 404"
         }
       ]
     },
@@ -184,7 +184,7 @@
       "urls": [
         {
           "url": "http://103.45.162.207:20720",
-          "latency": 0.12,
+          "latency": 0.1,
           "has_keyword": true,
           "is_best": true
         }
