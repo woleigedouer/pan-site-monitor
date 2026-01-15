@@ -5,9 +5,9 @@
         -webkit-tap-highlight-color: transparent; /* 禁用iOS点击高亮 */
     }
     .header {
-        margin: 10px auto;
-        padding: 20px;
-        width: calc(100% - 20px);
+        margin: 20px auto 24px auto; /* 增加底部间距以匹配卡片间距 */
+        padding: 24px;
+        width: calc(100% - 32px); /* 调整宽度适配新的边距 */
     }
 
     .countdown-header h1 {
@@ -34,9 +34,9 @@
     }
 
     .container {
-        margin: 0 auto 10px auto;
+        margin: 0 auto 24px auto;
         padding: 0;
-        width: calc(100% - 20px);
+        width: calc(100% - 32px); /* 与 Header 宽度保持一致 (16px 左右边距) */
     }
 
     /* 重置为一致的布局结构 - 调整网格比例 */
@@ -84,12 +84,12 @@
 
     /* 主站点名称颜色 */
     .site-name {
-        color: #1e293b;
+        color: var(--color-text-main);
     }
 
     /* 备用域名站点名称颜色 - 保持与桌面端一致 */
     .backup-url-name {
-        color: #64748b;
+        color: var(--color-text-secondary);
     }
 
     /* 统一URL文本样式 - 移除截断处理 */
@@ -97,8 +97,8 @@
         font-size: 0.75rem;
         margin: 0;
         padding: 0;
-        font-family: 'Courier New', monospace;
-        color: #64748b;
+        font-family: var(--font-family-mono);
+        color: var(--color-text-secondary);
         /* 移除截断相关样式 */
         white-space: normal; /* 允许换行 */
         overflow: visible; /* 允许内容溢出 */
