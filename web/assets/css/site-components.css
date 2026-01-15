@@ -1,13 +1,16 @@
 @layer components {
-/* Uptime Kuma Style Header */
+/* Zen-iOS Hybrid Header */
 .header {
-    background: white;
-    border-radius: 12px;
-    margin: 20px auto 24px auto;
-    padding: 24px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    background: var(--color-bg-card);
+    backdrop-filter: blur(var(--backdrop-blur));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur));
+    border-radius: var(--radius-container);
+    margin: 40px auto 48px auto;
+    padding: 40px;
+    box-shadow: 0 0 0 1px var(--color-border-outer), var(--shadow-float);
+    border: 1px solid var(--color-border-inner);
     max-width: 1160px;
-    width: calc(100% - 40px);
+    width: calc(100% - 48px);
 }
 
 .header-content {
@@ -17,9 +20,9 @@
 /* Container */
 .container {
     max-width: 1160px;
-    margin: 0 auto 20px auto;
+    margin: 0 auto 40px auto;
     padding: 0;
-    width: calc(100% - 40px);
+    width: calc(100% - 48px);
 }
 
 /* Modern Loading State */
@@ -29,13 +32,13 @@
     align-items: center;
     justify-content: center;
     padding: var(--spacing-12) 0;
-    color: var(--color-gray-600);
+    color: var(--color-text-secondary);
 }
 
 .loading-spinner {
     width: 3rem;
     height: 3rem;
-    border: 3px solid var(--color-gray-200);
+    border: 3px solid rgba(0,0,0,0.1);
     border-top: 3px solid var(--color-primary);
     border-radius: 50%;
     animation: spin 1s linear infinite;
@@ -47,23 +50,27 @@
     100% { transform: rotate(360deg); }
 }
 
-/* Uptime Kuma Style Monitor Group */
+/* Zen-iOS Hybrid Monitor Group */
 .site-item {
-    background: white;
-    border-radius: 12px;
-    margin-bottom: 16px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    background: var(--color-bg-card);
+    backdrop-filter: blur(var(--backdrop-blur));
+    -webkit-backdrop-filter: blur(var(--backdrop-blur));
+    border-radius: var(--radius-card);
+    margin-bottom: 24px;
+    box-shadow: 0 0 0 1px var(--color-border-outer), var(--shadow-card);
+    border: 1px solid var(--color-border-inner);
     overflow: hidden;
+    transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* Uptime Kuma Style Monitor Item */
+/* Zen-iOS Hybrid Monitor Item */
 .site-header {
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
-    gap: 1rem;
-    padding: 16px 20px;
-    border-bottom: 1px solid #f1f5f9;
+    gap: 1.5rem;
+    padding: 24px 32px;
+    border-bottom: 1px solid rgba(0,0,0,0.03);
     transition: background-color 0.2s ease;
     cursor: pointer;
     height: var(--url-item-height);
@@ -71,65 +78,68 @@
 }
 
 .site-header:hover {
-    background: #f8fafc;
+    background: var(--color-bg-card-hover);
 }
 
 .site-item.failed .site-header:hover {
-    background: #f8fafc;
+    background: rgba(255, 59, 48, 0.05);
 }
 
 .site-info {
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
     min-width: 0;
 }
 
 .site-name {
-    font-weight: 600;
-    color: #1e293b;
+    font-weight: 700;
+    color: var(--color-text-main);
     flex-shrink: 0;
-    font-size: 1rem;
+    font-size: 1.125rem;
+    letter-spacing: -0.02em;
 }
 
 .site-item.failed .site-name {
-    color: #1e293b;
+    color: var(--color-text-main);
 }
 
 .best-url {
     font-size: 0.875rem;
-    color: #64748b;
-    font-family: 'Courier New', monospace;
+    color: var(--color-text-secondary);
+    font-family: var(--font-family-mono);
     flex: 1;
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    opacity: 0.8;
 }
 
 .failed-url {
-    color: #64748b;
+    color: var(--color-text-secondary);
     font-weight: 500;
 }
 
-/* Status Indicator (Uptime Kuma style) */
+/* Status Indicator */
 .status-indicator {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    margin-right: 12px;
+    margin-right: 4px;
     flex-shrink: 0;
+    position: relative;
 }
 
 .status-indicator.success {
-    background: #10b981;
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+    background: var(--color-success);
+    box-shadow: 0 0 10px rgba(52, 199, 89, 0.4);
 }
 
 .status-indicator.failed {
-    background: #ef4444;
-    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+    background: var(--color-danger);
+    box-shadow: 0 0 10px rgba(255, 59, 48, 0.4);
 }
 
 /* Monitor Stats */
@@ -141,10 +151,10 @@
 }
 
 .response-badge {
-    background: #dcfce7;
-    color: #166534;
-    padding: 4px 8px;
-    border-radius: 6px;
+    background: rgba(52, 199, 89, 0.1);
+    color: #248A3D;
+    padding: 6px 12px;
+    border-radius: 8px;
     font-size: 0.75rem;
     font-weight: 600;
     min-width: 80px;
@@ -155,72 +165,76 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    letter-spacing: 0.02em;
 }
 
 .response-badge.warning {
-    background: #fef3c7;
-    color: #92400e;
+    background: rgba(255, 159, 10, 0.1);
+    color: #C67700;
 }
 
 .response-badge.danger {
-    background: #fee2e2;
-    color: #991b1b;
+    background: rgba(255, 59, 48, 0.1);
+    color: #D70015;
 }
 
 /* Status History */
 .status-history {
     display: flex;
-    gap: 2px;
+    gap: 3px;
     margin-left: 0;
-    height: 20px;
+    height: 24px;
     align-items: center;
 }
 
 .backup-status-history {
     display: flex;
-    gap: 2px;
+    gap: 3px;
     margin-left: 0;
-    height: 20px;
+    height: 24px;
     align-items: center;
 }
 
-/* 统一所有状态点样式 */
+/* Zen-iOS Hybrid Status Dot */
 .status-dot {
     width: 6px;
-    height: 18px;
-    border-radius: 2px;
-    background: #e2e8f0;
+    height: 20px;
+    border-radius: 3px;
+    background: rgba(0,0,0,0.05);
     flex-shrink: 0;
     position: relative;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .status-dot:hover {
-    height: 20px;
-    transform: translateY(-2px);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    height: 28px;
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
 }
 
-/* 自定义工具提示 */
+/* Tooltip */
 .tooltip {
     position: fixed;
-    background: white;
-    color: #333;
-    padding: 6px 10px;
-    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: var(--color-text-main);
+    padding: 8px 12px;
+    border-radius: 12px;
     font-size: 12px;
     z-index: 1000;
     pointer-events: none;
     max-width: 300px;
     white-space: nowrap;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0,0,0,0.05);
     display: none;
     text-align: center;
-    border: 1px solid #eee;
+    border: none;
 }
 
-/* 工具提示中的状态文本颜色 */
+/* Tooltip Colors */
 .tooltip .status-online {
     color: var(--color-success);
     font-weight: 600;
@@ -231,19 +245,16 @@
     font-weight: 600;
 }
 
-/* 工具提示中的延迟文本颜色（绿色） */
 .tooltip .latency-text {
     color: var(--color-success);
     font-weight: 600;
 }
 
-/* 工具提示中的错误文本颜色（红色） */
 .tooltip .error-text {
     color: var(--color-danger);
     font-weight: 600;
 }
 
-/* 移除之前复杂的工具提示内部结构 */
 .tooltip .tooltip-time,
 .tooltip .tooltip-status,
 .tooltip .tooltip-latency {
@@ -251,7 +262,7 @@
     font-size: 12px;
     margin: 0;
     padding: 0;
-    font-weight: normal;
+    font-weight: 500;
     background: transparent;
     color: inherit;
 }
@@ -261,32 +272,32 @@
 }
 
 .status-dot.success, .status-dot.up {
-    background: #10b981;
-    box-shadow: 0 0 2px rgba(16, 185, 129, 0.4);
+    background: var(--color-success);
+    box-shadow: 0 0 4px rgba(52, 199, 89, 0.3);
 }
 
 .status-dot.failed, .status-dot.down {
-    background: #ef4444;
-    box-shadow: 0 0 2px rgba(239, 68, 68, 0.4);
+    background: var(--color-danger);
+    box-shadow: 0 0 4px rgba(255, 59, 48, 0.3);
 }
 
 .status-dot.no_data {
-    background: #cbd5e1;
+    background: rgba(0,0,0,0.1);
     opacity: 0.5;
 }
 
 /* Backup URLs Expansion Area */
 .site-details {
-    background: #f8fafc;
-    border-top: 1px solid #e2e8f0;
+    background: rgba(0,0,0,0.02);
+    border-top: 1px solid rgba(0,0,0,0.03);
     padding: 0;
     max-height: 0;
     overflow: hidden;
-    transition: max-height 0.3s ease, padding 0.3s ease;
+    transition: max-height 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), padding 0.3s ease;
+    box-shadow: inset 0 4px 12px rgba(0,0,0,0.02);
 }
 
 .site-item.expanded .site-details {
-    /* max-height will be set dynamically by JavaScript */
     padding: 0;
 }
 
@@ -298,9 +309,9 @@
     display: grid;
     grid-template-columns: auto 1fr auto;
     align-items: center;
-    gap: 1rem;
-    padding: 16px 20px;
-    border-bottom: 1px solid #e2e8f0;
+    gap: 1.5rem;
+    padding: 20px 32px;
+    border-bottom: 1px solid rgba(0,0,0,0.03);
     height: var(--url-item-height);
     box-sizing: border-box;
 }
@@ -313,23 +324,25 @@
     display: grid;
     grid-template-columns: auto 1fr;
     align-items: center;
-    gap: 1rem;
+    gap: 1.5rem;
     min-width: 0;
 }
 
 .backup-url-name {
     font-weight: 600;
-    color: #64748b;
+    color: var(--color-text-secondary);
     flex-shrink: 0;
     font-size: 0.9rem;
+    letter-spacing: 0.01em;
 }
 
 .url-text {
-    font-family: 'Courier New', monospace;
+    font-family: var(--font-family-mono);
     font-size: 0.875rem;
-    color: #475569;
+    color: var(--color-text-secondary);
     flex: 1;
     min-width: 0;
+    opacity: 0.8;
 }
 
 .backup-url-stats {

@@ -84,12 +84,12 @@
 
     /* 主站点名称颜色 */
     .site-name {
-        color: #1e293b;
+        color: var(--color-text-main);
     }
 
     /* 备用域名站点名称颜色 - 保持与桌面端一致 */
     .backup-url-name {
-        color: #64748b;
+        color: var(--color-text-secondary);
     }
 
     /* 统一URL文本样式 - 移除截断处理 */
@@ -97,8 +97,8 @@
         font-size: 0.75rem;
         margin: 0;
         padding: 0;
-        font-family: 'Courier New', monospace;
-        color: #64748b;
+        font-family: var(--font-family-mono);
+        color: var(--color-text-secondary);
         /* 移除截断相关样式 */
         white-space: normal; /* 允许换行 */
         overflow: visible; /* 允许内容溢出 */
