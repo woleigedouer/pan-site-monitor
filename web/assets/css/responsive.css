@@ -5,9 +5,9 @@
         -webkit-tap-highlight-color: transparent; /* 禁用iOS点击高亮 */
     }
     .header {
-        margin: 10px auto;
-        padding: 20px;
-        width: calc(100% - 20px);
+        margin: 20px auto 24px auto; /* 增加底部间距以匹配卡片间距 */
+        padding: 24px;
+        width: calc(100% - 32px); /* 调整宽度适配新的边距 */
     }
 
     .countdown-header h1 {
@@ -34,9 +34,9 @@
     }
 
     .container {
-        margin: 0 auto 10px auto;
+        margin: 0 auto 24px auto;
         padding: 0;
-        width: calc(100% - 20px);
+        width: calc(100% - 32px); /* 与 Header 宽度保持一致 (16px 左右边距) */
     }
 
     /* 重置为一致的布局结构 - 调整网格比例 */
