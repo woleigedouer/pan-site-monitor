@@ -33,6 +33,7 @@ class PanSiteMonitor:
         self.base_dir = Path(__file__).parent.parent.absolute()
         self.config = self._load_unified_config(config_file)
         self.last_site = None
+        self.session = requests.Session()  # 复用连接
         
     def _load_unified_config(self, config_file: str = None):
         """加载统一配置文件，支持JSON和YAML格式"""
@@ -852,55 +853,78 @@ class PanSiteMonitor:
 
 
 
-        try:
-            timeout = self.config.get('url_tester', {}).get('test_timeout', 15)
-            response = requests.get(
-                test_url_str,
-                timeout=timeout,
-                verify=verify_ssl,
-                proxies=proxies,
-                headers=headers,
-                allow_redirects=True
-            )
-            latency = response.elapsed.total_seconds()
+        # 重试机制：针对403/503等临时错误
+        max_retries = 2
+        retry_delay = 1  # 秒
 
-            if response.status_code == 200:
-                has_keyword = keyword in response.text if keyword else True
-                if has_keyword:
-                    self.log_message(f"[成功] URL {test_url_str} 延迟: {latency:.2f}s{'，包含关键字 ' + keyword if keyword else ''}",
+        for attempt in range(max_retries + 1):
+            try:
+                timeout = self.config.get('url_tester', {}).get('test_timeout', 15)
+                response = self.session.get(
+                    test_url_str,
+                    timeout=timeout,
+                    verify=verify_ssl,
+                    proxies=proxies,
+                    headers=headers,
+                    allow_redirects=True
+                )
+                latency = response.elapsed.total_seconds()
+
+                if response.status_code == 200:
+                    has_keyword = keyword in response.text if keyword else True
+                    if has_keyword:
+                        self.log_message(f"[成功] URL {test_url_str} 延迟: {latency:.2f}s{'，包含关键字 ' + keyword if keyword else ''}",
+                                        site_name, "测试URL")
+                        return latency, has_keyword, None
+                    else:
+                        # 无关键字的URL视为无效，返回失败状态
+                        self.log_message(f"[失败] URL {test_url_str} 延迟: {latency:.2f}s，但不包含关键字 '{keyword}'",
+                                        site_name, "测试URL")
+                        self.log_message(f"[判定] 该URL返回200但无关键字，判定为无效（可能是域名过期、Cloudflare盾等）",
+                                        site_name, "测试URL")
+                        return None, False, {"type": "invalid_content", "detail": "无关键字内容"}
+                elif response.status_code in [403, 503, 429] and attempt < max_retries:
+                    # 临时错误，重试
+                    import time
+                    self.log_message(f"[重试] URL {test_url_str} 返回{response.status_code}，{retry_delay}秒后重试 ({attempt + 1}/{max_retries})",
                                     site_name, "测试URL")
-                    return latency, has_keyword, None
+                    time.sleep(retry_delay)
+                    continue
                 else:
-                    # 无关键字的URL视为无效，返回失败状态
-                    self.log_message(f"[失败] URL {test_url_str} 延迟: {latency:.2f}s，但不包含关键字 '{keyword}'",
+                    error_detail = f"状态码 {response.status_code}"
+                    self.log_message(f"[失败] URL {test_url_str} 返回HTTP错误: {error_detail}",
                                     site_name, "测试URL")
-                    self.log_message(f"[判定] 该URL返回200但无关键字，判定为无效（可能是域名过期、Cloudflare盾等）",
+                    return None, None, {"type": "http_error", "detail": error_detail}
+            except requests.exceptions.Timeout:
+                if attempt < max_retries:
+                    import time
+                    self.log_message(f"[重试] URL {test_url_str} 超时，{retry_delay}秒后重试 ({attempt + 1}/{max_retries})",
                                     site_name, "测试URL")
-                    return None, False, {"type": "invalid_content", "detail": "无关键字内容"}
-            else:
-                error_detail = f"状态码 {response.status_code}"
-                self.log_message(f"[失败] URL {test_url_str} 返回HTTP错误: {error_detail}",
+                    time.sleep(retry_delay)
+                    continue
+                timeout = self.config.get('url_tester', {}).get('test_timeout', 15)
+                error_detail = f"请求超时 (>{timeout}s)"
+                self.log_message(f"[超时] URL {test_url_str} {error_detail}",
                                 site_name, "测试URL")
-                return None, None, {"type": "http_error", "detail": error_detail}
-
-        except requests.exceptions.Timeout:
-            timeout = self.config.get('url_tester', {}).get('test_timeout', 15)
-            error_detail = f"请求超时 (>{timeout}s)"
-            self.log_message(f"[超时] URL {test_url_str} {error_detail}",
-                            site_name, "测试URL")
-            return None, None, {"type": "timeout", "detail": "超时"}
-        except requests.exceptions.SSLError as e:
-            error_detail = f"SSL错误: {str(e)[:100]}"
-            self.log_message(f"[SSL错误] URL {test_url_str} {error_detail}", site_name, "测试URL")
-            return None, None, {"type": "ssl_error", "detail": "SSL错误"}
-        except requests.exceptions.ConnectionError as e:
-            error_detail = f"连接失败: {str(e)[:100]}"
-            self.log_message(f"[连接失败] URL {test_url_str} {error_detail}", site_name, "测试URL")
-            return None, None, {"type": "connection_error", "detail": "连接失败"}
-        except Exception as e:
-            error_detail = f"测试异常: {str(e)[:100]}"
-            self.log_message(f"[错误] URL {test_url_str} {error_detail}", site_name, "测试URL")
-            return None, None, {"type": "unknown_error", "detail": "未知错误"}
+                return None, None, {"type": "timeout", "detail": "超时"}
+            except requests.exceptions.SSLError as e:
+                error_detail = f"SSL错误: {str(e)[:100]}"
+                self.log_message(f"[SSL错误] URL {test_url_str} {error_detail}", site_name, "测试URL")
+                return None, None, {"type": "ssl_error", "detail": "SSL错误"}
+            except requests.exceptions.ConnectionError as e:
+                if attempt < max_retries:
+                    import time
+                    self.log_message(f"[重试] URL {test_url_str} 连接失败，{retry_delay}秒后重试 ({attempt + 1}/{max_retries})",
+                                    site_name, "测试URL")
+                    time.sleep(retry_delay)
+                    continue
+                error_detail = f"连接失败: {str(e)[:100]}"
+                self.log_message(f"[连接失败] URL {test_url_str} {error_detail}", site_name, "测试URL")
+                return None, None, {"type": "connection_error", "detail": "连接失败"}
+            except Exception as e:
+                error_detail = f"测试异常: {str(e)[:100]}"
+                self.log_message(f"[错误] URL {test_url_str} {error_detail}", site_name, "测试URL")
+                return None, None, {"type": "unknown_error", "detail": "未知错误"}
 
     def test_site_urls(self, site_name, urls):
         """测试单个站点的所有URL"""
@@ -909,7 +933,7 @@ class PanSiteMonitor:
         url_results = {}
         valid_urls = {}  # 只包含有关键字的有效URL
 
-        for url in urls:
+        for idx, url in enumerate(urls):
             if not url or not url.strip():
                 continue
 
@@ -922,6 +946,11 @@ class PanSiteMonitor:
             else:
                 # 失败：记录错误信息（包括无关键字的情况）
                 url_results[url] = (None, False, None, error_info)
+
+            # 请求间隔：避免触发反爬虫（最后一个URL不需要延迟）
+            if idx < len(urls) - 1:
+                import time
+                time.sleep(0.8)
 
         # 选择有效URL中延迟最低的
         if valid_urls:
