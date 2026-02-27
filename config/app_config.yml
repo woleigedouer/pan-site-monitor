@@ -8,6 +8,7 @@ sites:
     wogg.json: "玩偶"      # 玩偶站点
     mogg.json: "木偶"      # 木偶站点
     lb.json: "蜡笔"        # 蜡笔站点
+    sd.json: "闪电"        # 闪电站点
     zz.json: "至臻"        # 至臻站点
     yyds.json: "多多"      # 多多站点
     og.json: "欧哥"        # 欧哥站点
@@ -20,6 +21,7 @@ sites:
     欧哥: "/index.php/vod/search.html?wd=仙台有树"
     多多: "/index.php/vod/search.html?wd=仙台有树"
     蜡笔: "/index.php/vod/search.html?wd=仙台有树"
+    闪电: "/index.php/vod/search.html?wd=仙台有树"
     至臻: "/index.php/vod/search.html?wd=仙台有树"
     虎斑: "/index.php/vod/search.html?wd=仙台有树"
     玩偶: "/vodsearch/-------------.html?wd=仙台有树"  # 玩偶站点使用不同的搜索路径
@@ -32,6 +34,7 @@ sites:
     欧哥: "class=\"search-stat\""
     多多: "class=\"search-stat\""
     蜡笔: "class=\"search-stat\""
+    闪电: "class=\"search-stat\""
     至臻: "class=\"search-stat\""
     虎斑: "class=\"search-stat\""
     玩偶: "class=\"search-stat\""
