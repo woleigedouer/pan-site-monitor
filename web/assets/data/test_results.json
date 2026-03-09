@@ -141,14 +141,6 @@
           "latency": 1.02,
           "has_keyword": true,
           "is_best": false
-        },
-        {
-          "url": "https://duo.hidns.vip",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "ssl_error",
-          "error_detail": "SSL错误"
         }
       ]
     },
@@ -167,52 +159,14 @@
     },
     "二小": {
       "site_name": "二小",
-      "best_url": "https://wexwp.cc",
+      "best_url": "https://www.erixaopan.fun",
       "status": "success",
       "urls": [
-        {
-          "url": "https://wexwp.cc",
-          "latency": 1.3,
-          "has_keyword": true,
-          "is_best": true
-        },
         {
           "url": "https://www.erixaopan.fun",
           "latency": 1.34,
           "has_keyword": true,
-          "is_best": false
-        },
-        {
-          "url": "http://2xiaopan.fun",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "invalid_content",
-          "error_detail": "无关键字内容"
-        },
-        {
-          "url": "https://erxiaofn.click",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "ssl_error",
-          "error_detail": "SSL错误"
-        },
-        {
-          "url": "https://erxiaofn.site",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "ssl_error",
-          "error_detail": "SSL错误"
-        },
-        {
-          "url": "https://erixaopan.fun",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "ssl_error",
-          "error_detail": "SSL错误"
+          "is_best": true
         }
       ]
     },
