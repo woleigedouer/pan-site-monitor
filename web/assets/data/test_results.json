@@ -1,9 +1,9 @@
 {
   "timestamp": "2026-05-23T12:01:44.188676",
   "summary": {
-    "total_sites": 10,
-    "success_sites": 7,
-    "failed_sites": 3
+    "total_sites": 6,
+    "success_sites": 5,
+    "failed_sites": 1
   },
   "sites": {
     "玩偶": {
@@ -24,22 +24,6 @@
           "is_best": false,
           "error_type": "http_error",
           "error_detail": "状态码 403"
-        },
-        {
-          "url": "https://wogg.333232.xyz",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "connection_error",
-          "error_detail": "连接失败"
-        },
-        {
-          "url": "https://wogg4k.333232.xyz",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "connection_error",
-          "error_detail": "连接失败"
         }
       ]
     },
@@ -84,29 +68,6 @@
           "latency": 0.73,
           "has_keyword": true,
           "is_best": false
-        },
-        {
-          "url": "http://fmao.shop",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "invalid_content",
-          "error_detail": "无关键字内容"
-        }
-      ]
-    },
-    "闪电": {
-      "site_name": "闪电",
-      "best_url": null,
-      "status": "failed",
-      "urls": [
-        {
-          "url": "https://sd.sduc.site",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "http_error",
-          "error_detail": "状态码 525"
         }
       ]
     },
@@ -138,39 +99,6 @@
           "latency": 1.38,
           "has_keyword": true,
           "is_best": false
-        }
-      ]
-    },
-    "多多": {
-      "site_name": "多多",
-      "best_url": "https://tv.yydsys.top",
-      "status": "success",
-      "urls": [
-        {
-          "url": "https://tv.yydsys.top",
-          "latency": 0.84,
-          "has_keyword": true,
-          "is_best": true
-        },
-        {
-          "url": "https://yydsys.de5.net",
-          "latency": 0.94,
-          "has_keyword": true,
-          "is_best": false
-        },
-        {
-          "url": "https://tv.214521.xyz",
-          "latency": 1.42,
-          "has_keyword": true,
-          "is_best": false
-        },
-        {
-          "url": "https://tv.yydsys.cc",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "http_error",
-          "error_detail": "状态码 403"
         }
       ]
     },
@@ -217,72 +145,6 @@
           "latency": 0.99,
           "has_keyword": true,
           "is_best": false
-        },
-        {
-          "url": "https://www.erixaopan.fun",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "connection_error",
-          "error_detail": "连接失败"
-        },
-        {
-          "url": "https://2xiaopan.top",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "connection_error",
-          "error_detail": "连接失败"
-        }
-      ]
-    },
-    "虎斑": {
-      "site_name": "虎斑",
-      "best_url": "http://103.45.162.207:20720",
-      "status": "success",
-      "urls": [
-        {
-          "url": "http://103.45.162.207:20720",
-          "latency": 0.36,
-          "has_keyword": true,
-          "is_best": true
-        },
-        {
-          "url": "http://xhban.xyz:20720",
-          "latency": 0.5,
-          "has_keyword": true,
-          "is_best": false
-        },
-        {
-          "url": "http://154.222.27.33:20720",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "connection_error",
-          "error_detail": "连接失败"
-        }
-      ]
-    },
-    "小斑": {
-      "site_name": "小斑",
-      "best_url": null,
-      "status": "failed",
-      "urls": [
-        {
-          "url": "http://xsayang.fun:12512",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "connection_error",
-          "error_detail": "连接失败"
-        },
-        {
-          "url": "http://154.201.83.50:12512",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "connection_error",
-          "error_detail": "连接失败"
         }
       ]
     }
