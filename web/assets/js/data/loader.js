@@ -7,17 +7,20 @@ import { CONFIG } from '../config.js';
 import { state } from '../state.js';
 
 export const loader = {
+    syncHistoryData(historyData) {
+        state.siteHistoryData = historyData || {};
+        if (typeof window !== 'undefined') {
+            window.siteHistoryData = state.siteHistoryData;
+        }
+    },
+
     // 加载历史数据
     async loadHistoryData() {
         try {
             const response = await fetch('./assets/data/history.json');
             if (response.ok) {
                 const historyData = await response.json();
-                state.siteHistoryData = historyData;
-                // 同步全局变量
-                if (typeof window !== 'undefined') {
-                    window.siteHistoryData = historyData;
-                }
+                this.syncHistoryData(historyData);
                 return historyData;
             }
         } catch (e) {
@@ -26,37 +29,52 @@ export const loader = {
         return {}; // 如果加载失败返回空对象
     },
 
-    // 从多个数据源获取数据
+    normalizeMonitorData(data) {
+        if (data && data.history) {
+            this.syncHistoryData(data.history);
+        }
+        return data;
+    },
+
+    async fetchJson(url, label) {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`${label} HTTP ${response.status}`);
+        }
+
+        const data = await response.json();
+        return this.normalizeMonitorData(data);
+    },
+
+    // 从多个数据源获取数据，优先使用合并快照，失败时回退旧结构
     async fetchDataFromSources() {
         // 尝试API端点
         try {
             console.log('🔄 尝试从API加载数据...');
-            const response = await fetch('/api/data');
-
-            if (response.ok) {
-                const data = await response.json();
-                console.log('✅ 成功从API加载数据');
-                return data;
-            } else {
-                throw new Error(`API HTTP ${response.status}`);
-            }
+            const data = await this.fetchJson('/api/data', 'API');
+            console.log('✅ 成功从API加载数据');
+            return data;
         } catch (apiError) {
-            console.warn('⚠️ API加载失败，尝试本地文件:', apiError.message);
+            console.warn('⚠️ API加载失败，尝试本地合并文件:', apiError.message);
 
-            // 尝试本地文件
             try {
-                console.log('🔄 尝试从本地文件加载数据...');
-                const response = await fetch('./assets/data/test_results.json');
+                console.log('🔄 尝试从本地合并文件加载数据...');
+                const data = await this.fetchJson('./assets/data/monitor_data.json', 'Monitor file');
+                console.log('✅ 成功从本地合并文件加载数据');
+                return data;
+            } catch (monitorError) {
+                console.warn('⚠️ 本地合并文件加载失败，尝试旧结果文件:', monitorError.message);
 
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('✅ 成功从本地文件加载数据');
+                // 尝试旧结果文件
+                try {
+                    console.log('🔄 尝试从旧结果文件加载数据...');
+                    const data = await this.fetchJson('./assets/data/test_results.json', 'Legacy file');
+                    console.log('✅ 成功从旧结果文件加载数据');
                     return data;
-                } else {
-                    throw new Error(`Local file ${response.status}`);
+                } catch (legacyError) {
+                    throw new Error(`所有数据源加载失败: API(${apiError.message}), Monitor(${monitorError.message}), Legacy(${legacyError.message})`);
                 }
-            } catch (localError) {
-                throw new Error(`所有数据源加载失败: API(${apiError.message}), Local(${localError.message})`);
             }
         }
     },
@@ -102,11 +120,13 @@ export const loader = {
         let errorDetails = null;
 
         try {
-            // 首先尝试加载历史数据
-            await this.loadHistoryData();
-
             // 尝试从不同源加载数据
             data = await this.fetchDataFromSources();
+
+            // 旧结果文件不包含历史数据，按需回退加载独立历史文件
+            if (!data.history) {
+                await this.loadHistoryData();
+            }
 
             if (data) {
                 // 需要从renderer模块导入renderSites函数

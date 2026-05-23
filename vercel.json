@@ -14,7 +14,11 @@
     },
     {
       "source": "/api/data",
-      "destination": "/web/assets/data/test_results.json"
+      "destination": "/web/assets/data/monitor_data.json"
+    },
+    {
+      "source": "/monitor_data.json",
+      "destination": "/web/assets/data/monitor_data.json"
     },
     {
       "source": "/test_results.json",

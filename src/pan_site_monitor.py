@@ -1056,10 +1056,31 @@ class PanSiteMonitor:
             self.log_message(f"[成功] 测试结果已保存到: {output_file}", step="保存结果")
             
             # 更新历史数据
-            self.update_history(results)
+            history_data = self.update_history(results)
+            if history_data is not None:
+                self.save_monitor_data(json_data, history_data)
 
         except Exception as e:
             self.log_message(f"[错误] 保存测试结果失败: {e}", step="保存结果")
+
+    def save_monitor_data(self, test_data: Dict[str, Any], history_data: Dict[str, Any]):
+        """保存前端使用的合并数据快照"""
+        try:
+            output_file = self.base_dir / "web" / "assets" / "data" / "monitor_data.json"
+            os.makedirs(output_file.parent, exist_ok=True)
+
+            monitor_data = {
+                **test_data,
+                "history": history_data
+            }
+
+            with open(output_file, 'w', encoding='utf-8') as f:
+                json.dump(monitor_data, f, ensure_ascii=False, indent=2)
+
+            self.log_message(f"[成功] 合并监控数据已保存到: {output_file}", step="保存结果")
+
+        except Exception as e:
+            self.log_message(f"[错误] 保存合并监控数据失败: {e}", step="保存结果")
             
     def update_history(self, results):
         """更新URL历史状态记录（按网站分类）
@@ -1138,9 +1159,11 @@ class PanSiteMonitor:
                 json.dump(history_data, f, ensure_ascii=False, indent=2)
             
             self.log_message(f"[成功] URL历史记录已更新: {history_file}", step="历史记录")
+            return history_data
         
         except Exception as e:
             self.log_message(f"[错误] 更新历史记录失败: {e}", step="历史记录")
+            return None
 
     # ==================== GitHub上传功能 ====================
 

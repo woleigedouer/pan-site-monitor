@@ -70,12 +70,8 @@
     "token": "请设置环境变量 GITHUB_TOKEN",
     "files_to_upload": [
       {
-        "local_path": "web/assets/data/test_results.json",
-        "github_path": "web/assets/data/test_results.json"
-      },
-      {
-        "local_path": "web/assets/data/history.json",
-        "github_path": "web/assets/data/history.json"
+        "local_path": "web/assets/data/monitor_data.json",
+        "github_path": "web/assets/data/monitor_data.json"
       }
     ],
     "commit_message_template": "Update test results - {timestamp}",
