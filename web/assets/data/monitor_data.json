@@ -1,9 +1,9 @@
 {
   "timestamp": "2026-06-23T08:00:48.346352",
   "summary": {
-    "total_sites": 10,
+    "total_sites": 9,
     "success_sites": 9,
-    "failed_sites": 1
+    "failed_sites": 0
   },
   "sites": {
     "玩偶": {
@@ -238,21 +238,6 @@
           "latency": 0.49,
           "has_keyword": true,
           "is_best": true
-        }
-      ]
-    },
-    "小斑": {
-      "site_name": "小斑",
-      "best_url": null,
-      "status": "failed",
-      "urls": [
-        {
-          "url": "http://103.45.162.207:12512",
-          "latency": null,
-          "has_keyword": false,
-          "is_best": false,
-          "error_type": "connection_error",
-          "error_detail": "连接失败"
         }
       ]
     }
@@ -4567,178 +4552,6 @@
           "status": "up",
           "latency": 0.488931,
           "is_best": true
-        }
-      ]
-    },
-    "小斑": {
-      "http://103.45.162.207:12512": [
-        {
-          "timestamp": "2026-06-22T09:00:52.829398",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-22T10:01:09.398782",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-22T11:01:23.007576",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-22T12:00:58.933270",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-22T13:01:38.581032",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-22T14:02:00.604082",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-22T15:01:02.887236",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-22T16:01:31.122911",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-22T17:01:15.988651",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-22T18:01:08.673463",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-22T19:01:42.398848",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-22T20:01:10.894431",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-22T21:01:41.876770",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-22T22:02:27.764635",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-22T23:01:53.760557",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-23T00:02:44.448839",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-23T01:01:20.494626",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-23T02:01:30.605205",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-23T03:01:14.723777",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-23T04:01:09.741982",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-23T05:00:49.035996",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-23T06:00:48.991549",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-23T07:00:46.772816",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
-        },
-        {
-          "timestamp": "2026-06-23T08:00:48.360021",
-          "status": "down",
-          "latency": null,
-          "is_best": false,
-          "error_detail": "连接失败"
         }
       ]
     }
