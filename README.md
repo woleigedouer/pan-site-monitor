@@ -39,9 +39,7 @@ pan-site-monitor/
 │       │   ├── site-components.css  # 头部、站点卡片、状态指示器等组件
 │       │   └── responsive.css   # 移动端适配样式
 │       ├── data/           # 前端数据文件
-│       │   ├── monitor_data.json   # 合并监控数据（当前结果 + 历史记录）
-│       │   ├── test_results.json   # 测试结果数据
-│       │   └── history.json        # 历史监控数据
+│       │   └── monitor_data.json   # 合并监控数据（当前结果 + 历史记录）
 │       └── js/             # JavaScript模块
 │           ├── main.js     # 模块加载器（支持ES6模块和回退）
 │           ├── app.js      # 主应用入口和初始化

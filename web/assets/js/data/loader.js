@@ -14,21 +14,6 @@ export const loader = {
         }
     },
 
-    // 加载历史数据
-    async loadHistoryData() {
-        try {
-            const response = await fetch('./assets/data/history.json');
-            if (response.ok) {
-                const historyData = await response.json();
-                this.syncHistoryData(historyData);
-                return historyData;
-            }
-        } catch (e) {
-            console.error('加载历史数据失败:', e);
-        }
-        return {}; // 如果加载失败返回空对象
-    },
-
     normalizeMonitorData(data) {
         if (data && data.history) {
             this.syncHistoryData(data.history);
@@ -47,7 +32,7 @@ export const loader = {
         return this.normalizeMonitorData(data);
     },
 
-    // 从多个数据源获取数据，优先使用合并快照，失败时回退旧结构
+    // 从合并快照获取数据，优先使用部署环境的API路径
     async fetchDataFromSources() {
         // 尝试API端点
         try {
@@ -64,17 +49,7 @@ export const loader = {
                 console.log('✅ 成功从本地合并文件加载数据');
                 return data;
             } catch (monitorError) {
-                console.warn('⚠️ 本地合并文件加载失败，尝试旧结果文件:', monitorError.message);
-
-                // 尝试旧结果文件
-                try {
-                    console.log('🔄 尝试从旧结果文件加载数据...');
-                    const data = await this.fetchJson('./assets/data/test_results.json', 'Legacy file');
-                    console.log('✅ 成功从旧结果文件加载数据');
-                    return data;
-                } catch (legacyError) {
-                    throw new Error(`所有数据源加载失败: API(${apiError.message}), Monitor(${monitorError.message}), Legacy(${legacyError.message})`);
-                }
+                throw new Error(`所有数据源加载失败: API(${apiError.message}), Monitor(${monitorError.message})`);
             }
         }
     },
@@ -120,13 +95,8 @@ export const loader = {
         let errorDetails = null;
 
         try {
-            // 尝试从不同源加载数据
+            // 加载合并监控数据
             data = await this.fetchDataFromSources();
-
-            // 旧结果文件不包含历史数据，按需回退加载独立历史文件
-            if (!data.history) {
-                await this.loadHistoryData();
-            }
 
             if (data) {
                 // 需要从renderer模块导入renderSites函数
@@ -144,6 +114,5 @@ export const loader = {
 
 // 向后兼容：将数据加载函数暴露到全局
 if (typeof window !== 'undefined') {
-    window.loadHistoryData = loader.loadHistoryData.bind(loader);
     window.loadData = loader.loadData.bind(loader);
 }

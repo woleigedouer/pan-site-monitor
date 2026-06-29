@@ -45,7 +45,6 @@ export const MonitorApp = {
         renderer: renderer,
         // 向后兼容的方法映射
         loadData: loader.loadData.bind(loader),
-        loadHistoryData: loader.loadHistoryData.bind(loader),
         generateStatusHistory: renderer.generateStatusHistory.bind(renderer)
     },
 

@@ -20,14 +20,6 @@
       "source": "/monitor_data.json",
       "destination": "/web/assets/data/monitor_data.json"
     },
-    {
-      "source": "/test_results.json",
-      "destination": "/web/assets/data/test_results.json"
-    },
-    {
-      "source": "/history.json",
-      "destination": "/web/assets/data/history.json"
-    },
 
     {
       "source": "/assets/(.*)",

@@ -991,7 +991,7 @@ class PanSiteMonitor:
                 results[site_name] = {'best_url': None, 'url_results': {}}
 
         # 保存结果
-        self.save_test_results(results)
+        self.save_monitor_results(results)
 
         # 统计结果
         success_count = sum(1 for result in results.values() if result['best_url'])
@@ -1000,12 +1000,9 @@ class PanSiteMonitor:
         self.log_message(f"[完成] URL测试完成: {success_count}/{total_count} 个站点测试成功", step="主程序")
         return results
 
-    def save_test_results(self, results):
-        """保存测试结果到JSON文件"""
+    def save_monitor_results(self, results):
+        """保存前端使用的单一监控数据文件"""
         try:
-            output_file = self.base_dir / "web" / "assets" / "data" / "test_results.json"
-            os.makedirs(output_file.parent, exist_ok=True)
-
             # 构建JSON数据
             json_data = {
                 "timestamp": datetime.now().isoformat(),
@@ -1049,19 +1046,13 @@ class PanSiteMonitor:
 
                 json_data['sites'][site_name] = site_data
 
-            # 保存到文件
-            with open(output_file, 'w', encoding='utf-8') as f:
-                json.dump(json_data, f, ensure_ascii=False, indent=2)
-
-            self.log_message(f"[成功] 测试结果已保存到: {output_file}", step="保存结果")
-            
             # 更新历史数据
             history_data = self.update_history(results)
             if history_data is not None:
                 self.save_monitor_data(json_data, history_data)
 
         except Exception as e:
-            self.log_message(f"[错误] 保存测试结果失败: {e}", step="保存结果")
+            self.log_message(f"[错误] 保存监控数据失败: {e}", step="保存结果")
 
     def save_monitor_data(self, test_data: Dict[str, Any], history_data: Dict[str, Any]):
         """保存前端使用的合并数据快照"""
@@ -1085,23 +1076,23 @@ class PanSiteMonitor:
     def update_history(self, results):
         """更新URL历史状态记录（按网站分类）
         
-        将URL测试结果保存到历史记录文件(web/assets/data/history.json)中，用于前端展示URL状态的历史变化。
+        从合并数据文件(web/assets/data/monitor_data.json)读取历史记录，
+        并返回更新后的历史数据，用于前端展示URL状态的历史变化。
         采用按站点分类的嵌套格式存储: {"站点名": {"URL": [历史记录列表]}}
         每个URL最多保留配置文件中指定数量的最新历史记录。
         """
         try:
-            history_file = self.base_dir / "web" / "assets" / "data" / "history.json"
-
-            # 确保目录存在
-            os.makedirs(history_file.parent, exist_ok=True)
-            
             # 读取现有历史记录
+            monitor_file = self.base_dir / "web" / "assets" / "data" / "monitor_data.json"
             history_data = {}
             
-            if history_file.exists():
+            if monitor_file.exists():
                 try:
-                    with open(history_file, 'r', encoding='utf-8') as f:
-                        history_data = json.load(f)
+                    with open(monitor_file, 'r', encoding='utf-8') as f:
+                        monitor_data = json.load(f)
+                    existing_history = monitor_data.get("history", {})
+                    if isinstance(existing_history, dict):
+                        history_data = existing_history
                 except Exception as e:
                     self.log_message(f"[警告] 读取历史数据失败: {e}", step="历史记录")
             
@@ -1154,11 +1145,7 @@ class PanSiteMonitor:
 
                         history_data[site_name][url].append(history_record)
             
-            # 保存历史数据
-            with open(history_file, 'w', encoding='utf-8') as f:
-                json.dump(history_data, f, ensure_ascii=False, indent=2)
-            
-            self.log_message(f"[成功] URL历史记录已更新: {history_file}", step="历史记录")
+            self.log_message("[成功] URL历史记录已更新", step="历史记录")
             return history_data
         
         except Exception as e:
