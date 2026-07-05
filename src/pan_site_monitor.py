@@ -12,9 +12,10 @@ import shutil
 import logging
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, List, Tuple, Optional, Any
+from typing import Dict, List, Optional, Any
 import argparse
 import sys
+from urllib.parse import urljoin
 
 try:
     import yaml
@@ -821,7 +822,6 @@ class PanSiteMonitor:
 
         # 安全地拼接URL和搜索路径
         if search_path:
-            from urllib.parse import urljoin
             base_url = url.strip()
             # 确保base_url以斜杠结尾，以便正确拼接
             if not base_url.endswith('/'):
@@ -831,6 +831,9 @@ class PanSiteMonitor:
             test_url_str = url.strip()
 
         keyword = self.config['sites'].get('keyword_validation', {}).get(site_name)
+
+        # 同一 IP 不同端口的站点会共享 Cookie 域，逐 URL 清理可避免串站误判。
+        self.session.cookies.clear()
 
         # 设置代理
         proxies = None
